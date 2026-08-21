@@ -11,22 +11,22 @@
       font-family: 'Shippori Mincho', "Yu Mincho", serif;
       background-color: #ffffff;
       color: #111111;
-      line-height: 1.6;
+      line-height: 1.9;
     }
 
-    /* 上部ナビゲーション */
+    /* 上部ナビゲーション（ゆとりを持たせた配置） */
     .top-nav {
       position: sticky; top: 0; background: #fff; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 20px; border-bottom: 1px solid #eee;
+      padding: 16px 24px; border-bottom: 1px solid #eee;
     }
-    .site-title { font-size: 1.4rem; font-weight: 700; text-decoration: none; color: inherit; }
-    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .site-title { font-size: 1.4rem; font-weight: 700; text-decoration: none; color: inherit; letter-spacing: 0.05em; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
     .search-box input {
-      border: 1px solid #ddd; background: #f9f9f9; padding: 4px 8px;
-      border-radius: 4px; font-size: 0.8rem; width: 120px;
+      border: 1px solid #ddd; background: #fafafa; padding: 6px 12px;
+      border-radius: 4px; font-size: 0.85rem; width: 130px; outline: none;
     }
-    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; }
 
     /* 全画面メニュー */
     #overlay-menu {
@@ -38,47 +38,63 @@
     #overlay-menu.active { opacity: 1; visibility: visible; }
     .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2rem; color: #fff; background: none; border: none; }
     .menu-list { list-style: none; text-align: center; }
-    .menu-list li { margin: 20px 0; }
-    .menu-list a { color: #fff; text-decoration: none; font-size: 1.2rem; }
+    .menu-list li { margin: 24px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.1em; }
 
-    /* セクション共通 */
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .section-h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-
-    /* 岩波文庫風 ジャンル別カラーライン設定 */
-    .line-blue   { border-bottom: 3px solid #2b5b84; } /* 評論（青） */
-    .line-green  { border-bottom: 3px solid #2d7d46; } /* 随筆（緑） */
-    .line-red    { border-bottom: 3px solid #c83935; } /* 小説（赤） */
-    .line-yellow { border-bottom: 3px solid #d9a01b; } /* 詩歌（黄） */
-
-    /* 最新の文章（横スクロール） */
-    .card-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; }
-    .card-item {
-      min-width: 200px; max-width: 200px; border: 1px solid #e0e0e0;
-      padding: 15px; text-decoration: none; color: inherit; background: #fff;
+    /* 全体コンテナ（ゆとりを持たせる） */
+    .container { max-width: 640px; margin: 0 auto; padding: 32px 24px 60px; }
+    .section-h2 {
+      font-size: 1.25rem; font-weight: 700; margin-top: 40px; margin-bottom: 20px;
+      border-bottom: 1px solid #eee; padding-bottom: 8px; letter-spacing: 0.05em;
     }
-    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; display: inline-block; padding-bottom: 2px; }
-    .card-meta { font-size: 0.75rem; color: #777; margin-top: 6px; }
-    .btn-all { display: block; text-align: center; border: 1px solid #ccc; padding: 8px; margin: 15px 0 30px; text-decoration: none; color: #333; font-size: 0.9rem; }
 
-    /* ジャンル一覧 */
-    .genre-list { list-style: none; margin-bottom: 30px; }
+    /* 最新の文章（カード型・ゆったり） */
+    .card-scroll { display: flex; overflow-x: auto; gap: 18px; padding-bottom: 12px; }
+    .card-item {
+      min-width: 220px; max-width: 220px; border: 1px solid #e2e2e2;
+      padding: 18px; text-decoration: none; color: inherit; background: #fff;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; display: inline-block; }
+    .card-meta { font-size: 0.78rem; color: #888; }
+    .btn-all {
+      display: block; text-align: center; border: 1px solid #ddd; padding: 10px;
+      margin: 20px 0 40px; text-decoration: none; color: #444; font-size: 0.9rem; letter-spacing: 0.05em;
+    }
+
+    /* Tシャツの色に合わせたジャンル枠スタイル */
+    .genre-list { list-style: none; margin-bottom: 40px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 15px; border: 1px solid #eee; margin-bottom: 8px; text-decoration: none; color: inherit;
+      padding: 16px 20px; margin-bottom: 12px; text-decoration: none; color: #111;
+      font-weight: bold; border-radius: 4px; transition: transform 0.1s ease;
     }
+    .genre-item:active { transform: scale(0.99); }
+
+    /* 各カラー定義（Tシャツ画像準拠） */
+    .genre-blue { background-color: rgba(0, 160, 220, 0.08); border-left: 6px solid #00a0dc; }   /* 評論（シアンブルー） */
+    .genre-green { background-color: rgba(0, 180, 110, 0.08); border-left: 6px solid #00b46e; }  /* 随筆（エメラルドグリーン） */
+    .genre-red { background-color: rgba(255, 60, 110, 0.08); border-left: 6px solid #ff3c6e; }    /* 小説（ピンクレッド） */
+    .genre-yellow { background-color: rgba(255, 210, 0, 0.12); border-left: 6px solid #ffd200; }  /* 詩歌（イエロー） */
+
+    /* カラーライン（人気の文章・記事見出し用） */
+    .line-blue   { border-bottom: 3px solid #00a0dc; }
+    .line-green  { border-bottom: 3px solid #00b46e; }
+    .line-red    { border-bottom: 3px solid #ff3c6e; }
+    .line-yellow { border-bottom: 3px solid #ffd200; }
 
     /* 人気の文章 */
-    .popular-list { list-style: none; margin-bottom: 30px; }
-    .popular-item { padding: 12px 0; border-bottom: 1px dashed #eee; text-decoration: none; color: inherit; display: block; }
-    .popular-title { font-weight: 700; font-size: 0.95rem; display: inline-block; }
+    .popular-list { list-style: none; margin-bottom: 40px; }
+    .popular-item { padding: 16px 0; border-bottom: 1px dashed #eee; text-decoration: none; color: inherit; display: block; }
+    .popular-title { font-weight: 700; font-size: 1rem; display: inline-block; margin-bottom: 4px; }
 
     /* このサイトについて・フッター */
-    .about-site-box { background: #fdfdfd; border: 1px solid #eee; padding: 20px; text-align: center; margin-bottom: 20px; }
-    .sns-links { margin: 15px 0; font-size: 0.85rem; color: #555; }
-    .footer-links { list-style: none; text-align: center; font-size: 0.85rem; line-height: 2; margin-bottom: 20px; }
+    .about-site-box { background: #fafafa; border: 1px solid #eee; padding: 24px; text-align: center; margin-top: 50px; margin-bottom: 30px; }
+    .about-site-box h3 { font-size: 1.1rem; margin-bottom: 12px; }
+    .sns-links { font-size: 0.88rem; color: #555; line-height: 2; }
+    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.2; margin-bottom: 30px; }
     .footer-links a { color: #555; text-decoration: none; }
-    footer { text-align: center; font-size: 0.8rem; color: #aaa; padding-bottom: 30px; }
+    footer { text-align: center; font-size: 0.8rem; color: #aaa; padding-bottom: 40px; }
   </style>
 </head>
 <body>
@@ -105,7 +121,7 @@
   <div class="container">
 
     <!-- 最新の文章 -->
-    <h2 class="section-h2">最新の文章</h2>
+    <h2 class="section-h2" style="margin-top:0;">最新の文章</h2>
     <div class="card-scroll">
       <a href="hajimene.html" class="card-item">
         <span class="card-title line-green">はじめに</span>
@@ -118,13 +134,13 @@
     </div>
     <a href="#" class="btn-all">一覧 ＞</a>
 
-    <!-- ジャンル -->
+    <!-- ジャンル（Tシャツカラーの背景＆左枠線） -->
     <h2 class="section-h2">ジャンル</h2>
     <div class="genre-list">
-      <a href="#" class="genre-item"><span>評論もどき（青）</span><span>2 ＞</span></a>
-      <a href="#" class="genre-item"><span>随筆（緑）</span><span>5 ＞</span></a>
-      <a href="#" class="genre-item"><span>小説（赤）</span><span>4 ＞</span></a>
-      <a href="#" class="genre-item"><span>詩歌（黄）</span><span>1 ＞</span></a>
+      <a href="#" class="genre-item genre-blue"><span>評論もどき</span><span>2 ＞</span></a>
+      <a href="#" class="genre-item genre-green"><span>随筆</span><span>5 ＞</span></a>
+      <a href="#" class="genre-item genre-red"><span>小説</span><span>4 ＞</span></a>
+      <a href="#" class="genre-item genre-yellow"><span>詩歌</span><span>1 ＞</span></a>
     </div>
 
     <!-- 人気の文章 -->
@@ -155,7 +171,7 @@
 
     <!-- フッターリンク -->
     <ul class="footer-links">
-      <li><a href="terms.html">サイトのご利用について（著作権等）</a></li>
+      <li><a href="terms.html">サイトのご利用について</a></li>
       <li><a href="help.html">ヘルプ</a></li>
       <li><a href="contact.html">お問合せ</a></li>
     </ul>
