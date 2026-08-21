@@ -44,8 +44,9 @@
       backdrop-filter: blur(5px);
     }
     
+    /* 「北風小僧」フォントそのまま少し拡大 (1.5rem -> 1.75rem) */
     .brand-logo {
-      font-size: 1.5rem; font-weight: 800; text-decoration: none; color: #000;
+      font-size: 1.75rem; font-weight: 800; text-decoration: none; color: #000;
       letter-spacing: 0.18em; text-transform: uppercase;
       text-shadow: 0.5px 0 0 #000;
     }
@@ -102,14 +103,21 @@
     .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
       min-width: 230px; max-width: 230px; min-height: 200px; border: 1px solid #e0e0e0;
-      padding: 38px 20px; text-decoration: none; color: inherit; background: #fff;
-      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 38px 20px 20px; text-decoration: none; color: inherit; background: #fff;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
       transition: border-color 0.2s;
     }
     .card-item:hover { border-color: #111; }
     .card-title-wrap { margin-bottom: 20px; }
     .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
-    .card-meta { font-size: 0.78rem; color: #888; margin-top: 15px; }
+    .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 0.78rem; color: #888; }
+    
+    /* 共有ボタン (…) */
+    .share-btn {
+      background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
+      padding: 2px 6px; border-radius: 4px; line-height: 1;
+    }
+    .share-btn:hover { background-color: #f0f0f0; color: #000; }
 
     /* 新潮社風ボタン */
     .btn-shincho {
@@ -146,7 +154,7 @@
     .genre-red    { background-color: #f1789a; }
     .genre-yellow { background-color: #f7d358; }
 
-    /* 人気の文章 */
+    /* 人気の作品 */
     .popular-list { list-style: none; margin-bottom: 15px; }
     .popular-item { padding: 16px 0; border-bottom: 1px dashed #ddd; text-decoration: none; color: inherit; display: block; }
     .popular-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: inline-block; }
@@ -218,7 +226,7 @@
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="list.html">文章一覧</a></li>
+      <li><a href="list.html">作品一覧</a></li>
       <li><a href="about.html">私について</a></li>
       <li><a href="contact.html">お問い合わせ</a></li>
       <li><a href="contact.html">感想を送る</a></li>
@@ -234,9 +242,9 @@
 
   <div class="container">
 
-    <!-- 最新の文章 -->
+    <!-- 最新の作品 -->
     <div class="section-header" style="margin-top:0;">
-      <h2 class="section-h2">最新の文章</h2>
+      <h2 class="section-h2">最新の作品</h2>
       <span class="section-sub">NEW</span>
     </div>
     <div class="card-scroll" id="latest-container">
@@ -250,15 +258,15 @@
       <span class="section-sub">CATEGORIES</span>
     </div>
     <div class="genre-list">
-      <a href="list.html?genre=blue" class="genre-item genre-blue"><span>評論もどき</span><span id="count-blue">0 ＞</span></a>
+      <a href="list.html?genre=blue" class="genre-item genre-blue"><span>評論風</span><span id="count-blue">0 ＞</span></a>
       <a href="list.html?genre=green" class="genre-item genre-green"><span>随筆</span><span id="count-green">0 ＞</span></a>
       <a href="list.html?genre=red" class="genre-item genre-red"><span>小説</span><span id="count-red">0 ＞</span></a>
       <a href="list.html?genre=yellow" class="genre-item genre-yellow"><span>詩歌</span><span id="count-yellow">0 ＞</span></a>
     </div>
 
-    <!-- 人気の文章 -->
+    <!-- 人気の作品 -->
     <div class="section-header">
-      <h2 class="section-h2">人気の文章</h2>
+      <h2 class="section-h2">人気の作品</h2>
       <span class="section-sub">POPULAR</span>
     </div>
     <div class="popular-list" id="popular-container">
@@ -299,17 +307,17 @@
   </div>
 
   <script>
-    /* 文章データ */
+    /* 作品データ一覧（全6作品） */
     const articles = [
-      { title: "作品タイトル5", url: "article5.html", date: "2026.08.27", length: "約1,500字", colorClass: "line-blue" },
-      { title: "作品タイトル4", url: "article4.html", date: "2026.08.26", length: "約1,000字", colorClass: "line-red" },
-      { title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue" },
-      { title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green" },
-      { title: "旧作品1", url: "article1.html", date: "2026.07.29", length: "約2,000字", colorClass: "line-yellow" },
-      { title: "旧作品2", url: "article0.html", date: "2026.07.15", length: "約800字", colorClass: "line-green" }
+      { id: 5, title: "作品タイトル5", url: "article5.html", date: "2026.08.27", length: "約1,500字", colorClass: "line-blue" },
+      { id: 4, title: "作品タイトル4", url: "article4.html", date: "2026.08.26", length: "約1,000字", colorClass: "line-red" },
+      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue" },
+      { id: "h", title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green" },
+      { id: 1, title: "旧作品1", url: "article1.html", date: "2026.07.29", length: "約2,000字", colorClass: "line-yellow" },
+      { id: 0, title: "旧作品2", url: "article0.html", date: "2026.07.15", length: "約800字", colorClass: "line-green" }
     ];
 
-    /* 人気の文章リスト */
+    /* 人気の作品リスト */
     const popularArticles = [
       { rank: 1, title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue" },
       { rank: 2, title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green" },
@@ -327,7 +335,7 @@
     changeBarColor();
     setInterval(changeBarColor, 20000);
 
-    /* 画像スライダー制御（5秒自動 ＆ タップ切替） */
+    /* 画像スライダー制御 */
     let currentSlide = 0;
     const slides = document.querySelectorAll('.hero-slide');
     
@@ -343,7 +351,19 @@
       slideTimer = setInterval(nextSlide, 5000);
     });
 
-    /* 最新文章の描画 */
+    /* 共有機能 */
+    function shareArticle(event, title, url) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(window.location.origin + '/' + url);
+        alert('作品リンクをクリップボードにコピーしました');
+      }
+    }
+
+    /* 最新作品の描画 */
     const latestContainer = document.getElementById('latest-container');
     const latestArticles = articles.slice(0, 5);
     latestArticles.forEach(item => {
@@ -352,20 +372,20 @@
           <div class="card-title-wrap">
             <span class="card-title"><span class="${item.colorClass}">${item.title}</span></span>
           </div>
-          <div class="card-meta">${item.date}｜${item.length}</div>
+          <div>
+            <div style="font-size:0.78rem; color:#888;">${item.date}</div>
+            <div class="card-meta-row">
+              <span>${item.length}</span>
+              <button class="share-btn" onclick="shareArticle(event, '${item.title}', '${item.url}')">…</button>
+            </div>
+          </div>
         </a>
       `;
     });
 
-    /* ジャンル別の作品数を自動集計・同期 */
+    /* ジャンル別の実際の作品数を正確に自動算出 */
     function updateGenreCounts() {
-      const counts = {
-        'line-blue': 0,
-        'line-green': 0,
-        'line-red': 0,
-        'line-yellow': 0
-      };
-
+      const counts = { 'line-blue': 0, 'line-green': 0, 'line-red': 0, 'line-yellow': 0 };
       articles.forEach(item => {
         if (counts.hasOwnProperty(item.colorClass)) {
           counts[item.colorClass]++;
@@ -379,7 +399,7 @@
     }
     updateGenreCounts();
 
-    /* 人気文章（TOP5件を表示） */
+    /* 人気作品（TOP5件を表示） */
     function renderPopular() {
       const container = document.getElementById('popular-container');
       container.innerHTML = '';
@@ -388,7 +408,10 @@
         container.innerHTML += `
           <a href="${item.url}" class="popular-item">
             ${item.rank}. <span class="popular-title"><span class="${item.colorClass}">${item.title}</span></span>
-            <div class="card-meta">${item.date}｜${item.length}</div>
+            <div class="card-meta-row">
+              <span>${item.date}｜${item.length}</span>
+              <button class="share-btn" onclick="shareArticle(event, '${item.title}', '${item.url}')">…</button>
+            </div>
           </a>
         `;
       });
