@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>北風小僧</title>
+  <title>北風小僧の思考ノート</title>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,205 +14,159 @@
       line-height: 1.6;
     }
 
-    /* オープニング */
-    #opening {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background-color: #1a1a1a; color: #ffffff;
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999;
-      animation: fadeOut 0.8s ease forwards; animation-delay: 2.0s;
-    }
-    .opening-text {
-      font-size: 1.2rem; letter-spacing: 0.2em;
-      opacity: 0; transform: translateY(15px);
-      animation: fadeInUp 1.2s ease forwards; animation-delay: 0.3s;
-    }
-
-    /* 上部固定バー（検索バー ＆ ハンバーガーボタン） */
+    /* 上部ナビゲーション */
     .top-nav {
       position: sticky; top: 0; background: #fff; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 12px 20px; border-bottom: 1px solid #eee;
     }
-    
-    /* 検索エリア */
-    .search-box {
-      display: flex; align-items: center; background: #f4f4f4;
-      padding: 6px 12px; border-radius: 20px; width: 65%;
-    }
+    .site-title { font-size: 1.4rem; font-weight: 700; text-decoration: none; color: inherit; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
     .search-box input {
-      border: none; background: transparent; outline: none;
-      width: 100%; font-size: 0.85rem; font-family: inherit; margin-left: 6px;
+      border: 1px solid #ddd; background: #f9f9f9; padding: 4px 8px;
+      border-radius: 4px; font-size: 0.8rem; width: 120px;
     }
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
 
-    /* メニューボタン */
-    .menu-btn {
-      background: none; border: none; cursor: pointer;
-      display: flex; flex-direction: column; gap: 5px; padding: 5px;
-    }
-    .menu-btn span {
-      display: block; width: 22px; height: 2px; background-color: #111;
-    }
-
-    /* 新潮社風 全画面オーバーレイメニュー */
+    /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(0, 0, 0, 0.92); color: #fff;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 10000; opacity: 0; visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s;
     }
     #overlay-menu.active { opacity: 1; visibility: visible; }
-    
-    .close-btn {
-      position: absolute; top: 20px; right: 25px;
-      font-size: 2rem; color: #fff; background: none; border: none; cursor: pointer;
-    }
-    
+    .close-btn { position: absolute; top: 20px; right: 25px; font-size: 2rem; color: #fff; background: none; border: none; }
     .menu-list { list-style: none; text-align: center; }
-    .menu-list li { margin: 24px 0; }
-    .menu-list a {
-      color: #fff; text-decoration: none; font-size: 1.25rem;
-      letter-spacing: 0.1em; transition: color 0.2s;
+    .menu-list li { margin: 20px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.2rem; }
+
+    /* セクション共通 */
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .section-h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+    /* 岩波文庫風 ジャンル別カラーライン設定 */
+    .line-blue   { border-bottom: 3px solid #2b5b84; } /* 評論（青） */
+    .line-green  { border-bottom: 3px solid #2d7d46; } /* 随筆（緑） */
+    .line-red    { border-bottom: 3px solid #c83935; } /* 小説（赤） */
+    .line-yellow { border-bottom: 3px solid #d9a01b; } /* 詩歌（黄） */
+
+    /* 最新の文章（横スクロール） */
+    .card-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; }
+    .card-item {
+      min-width: 200px; max-width: 200px; border: 1px solid #e0e0e0;
+      padding: 15px; text-decoration: none; color: inherit; background: #fff;
     }
-    .menu-list a.site-brand {
-      font-size: 1.6rem; font-weight: bold; border-bottom: 1px solid #555; padding-bottom: 8px;
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; display: inline-block; padding-bottom: 2px; }
+    .card-meta { font-size: 0.75rem; color: #777; margin-top: 6px; }
+    .btn-all { display: block; text-align: center; border: 1px solid #ccc; padding: 8px; margin: 15px 0 30px; text-decoration: none; color: #333; font-size: 0.9rem; }
+
+    /* ジャンル一覧 */
+    .genre-list { list-style: none; margin-bottom: 30px; }
+    .genre-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 15px; border: 1px solid #eee; margin-bottom: 8px; text-decoration: none; color: inherit;
     }
 
-    /* メインエリア */
-    header { padding: 25px 20px 15px; max-width: 800px; margin: 0 auto; }
-    .site-title { font-size: 1.8rem; font-weight: 700; }
-    .subtitle { color: #777; font-size: 0.85rem; margin-top: 4px; }
+    /* 人気の文章 */
+    .popular-list { list-style: none; margin-bottom: 30px; }
+    .popular-item { padding: 12px 0; border-bottom: 1px dashed #eee; text-decoration: none; color: inherit; display: block; }
+    .popular-title { font-weight: 700; font-size: 0.95rem; display: inline-block; }
 
-    #main-content {
-      opacity: 0; max-width: 800px; margin: 0 auto; padding: 10px 0 40px;
-      animation: fadeInMain 1s ease forwards; animation-delay: 2.4s;
-    }
-
-    .section-title {
-      padding: 0 20px; font-size: 1.1rem; font-weight: 700;
-      margin-bottom: 16px; display: flex; align-items: center;
-    }
-    .section-title::after {
-      content: ""; flex: 1; height: 1px; background-color: #eee; margin-left: 15px;
-    }
-
-    .card-container {
-      display: flex; overflow-x: auto; padding: 10px 20px 25px; gap: 16px;
-    }
-    .card {
-      min-width: 260px; max-width: 260px; background: #fff;
-      border: 1px solid #e2e2e2; padding: 24px 20px; text-decoration: none;
-      color: inherit; display: flex; flex-direction: column;
-    }
-    .card-category {
-      font-size: 0.95rem; font-weight: 700; display: inline-block;
-      margin-bottom: 8px; position: relative;
-    }
-    .card-category::after {
-      content: ""; position: absolute; left: 0; bottom: -4px;
-      width: 100%; height: 3px; background-color: #ffd700;
-    }
-    .card-date { font-size: 0.75rem; color: #888; margin: 12px 0 8px; }
-    .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
-    .card-body-text { display: none; } /* 検索用テキスト隠し領域 */
-
-    footer {
-      text-align: center; color: #aaa; font-size: 0.8rem;
-      padding: 30px 0; border-top: 1px solid #eee;
-    }
-
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-    @keyframes fadeInMain { to { opacity: 1; } }
+    /* このサイトについて・フッター */
+    .about-site-box { background: #fdfdfd; border: 1px solid #eee; padding: 20px; text-align: center; margin-bottom: 20px; }
+    .sns-links { margin: 15px 0; font-size: 0.85rem; color: #555; }
+    .footer-links { list-style: none; text-align: center; font-size: 0.85rem; line-height: 2; margin-bottom: 20px; }
+    .footer-links a { color: #555; text-decoration: none; }
+    footer { text-align: center; font-size: 0.8rem; color: #aaa; padding-bottom: 30px; }
   </style>
 </head>
 <body>
 
-  <!-- オープニング -->
-  <div id="opening"><p class="opening-text">思考を紡ぐ場所へ。</p></div>
-
-  <!-- 上部固定ナビゲーション（検索・メニュー） -->
+  <!-- ナビゲーション -->
   <div class="top-nav">
-    <div class="search-box">
-      🔍 <input type="text" id="searchInput" placeholder="記事やキーワードを検索..." onkeyup="filterArticles()">
+    <a href="index.html" class="site-title">北風小僧</a>
+    <div class="nav-right">
+      <div class="search-box"><input type="text" placeholder="検索..."></div>
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
-    <button class="menu-btn" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 
-  <!-- 全画面オーバーレイメニュー -->
+  <!-- 全画面メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="index.html" class="site-brand">北風小僧</a></li>
+      <li><a href="index.html">ホーム</a></li>
       <li><a href="about.html">私について</a></li>
       <li><a href="contact.html">お問合せ</a></li>
     </ul>
   </div>
 
-  <header>
-    <div class="site-title">北風小僧</div>
-    <div class="subtitle">日々の独り言と日記</div>
-  </header>
+  <div class="container">
 
-  <!-- メインコンテンツ -->
-  <div id="main-content">
-    <div class="section-title" id="sectionHeader">最新のノート</div>
-
-    <div class="card-container" id="cardContainer">
-
-      <!-- 記事1 -->
-      <a href="hajimene.html" class="card">
-        <div><span class="card-category">はじめに</span></div>
-        <div class="card-date">2026.08.21</div>
-        <div class="card-title">ホームページを開設しました</div>
-        <span class="card-body-text">開設 思考 日記 挨拶 はじめまして</span>
+    <!-- 最新の文章 -->
+    <h2 class="section-h2">最新の文章</h2>
+    <div class="card-scroll">
+      <a href="hajimene.html" class="card-item">
+        <span class="card-title line-green">はじめに</span>
+        <div class="card-meta">2026.08.21｜約300字</div>
       </a>
-
-      <!-- 記事2 -->
-      <a href="article2.html" class="card">
-        <div><span class="card-category">思考</span></div>
-        <div class="card-date">2026.08.22</div>
-        <div class="card-title"恐怖の構造</div>
-        <span class="card-body-text">新潮社 フォント 明朝体 Webデザイン</span>
+      <a href="article2.html" class="card-item">
+        <span class="card-title line-blue">恐怖の構造</span>
+        <div class="card-meta">2026.08.26｜約1,200字</div>
       </a>
+    </div>
+    <a href="#" class="btn-all">一覧 ＞</a>
 
+    <!-- ジャンル -->
+    <h2 class="section-h2">ジャンル</h2>
+    <div class="genre-list">
+      <a href="#" class="genre-item"><span>評論もどき（青）</span><span>2 ＞</span></a>
+      <a href="#" class="genre-item"><span>随筆（緑）</span><span>5 ＞</span></a>
+      <a href="#" class="genre-item"><span>小説（赤）</span><span>4 ＞</span></a>
+      <a href="#" class="genre-item"><span>詩歌（黄）</span><span>1 ＞</span></a>
     </div>
 
+    <!-- 人気の文章 -->
+    <h2 class="section-h2">人気の文章</h2>
+    <div class="popular-list">
+      <a href="#" class="popular-item">
+        1. <span class="popular-title line-blue">〇〇について</span>
+        <div class="card-meta">2026.08.13｜約800字</div>
+      </a>
+      <a href="#" class="popular-item">
+        2. <span class="popular-title line-green">〇〇と〇〇</span>
+        <div class="card-meta">2026.08.11｜約1,500字</div>
+      </a>
+      <a href="#" class="popular-item">
+        3. <span class="popular-title line-red">〇〇〇</span>
+        <div class="card-meta">2026.07.29｜約2,000字</div>
+      </a>
+    </div>
+
+    <!-- このサイトについて -->
+    <div class="about-site-box">
+      <h3>このサイトについて</h3>
+      <div class="sns-links">
+        <p>Gmail: xxx@gmail.com</p>
+        <p>X (Twitter): @xxx</p>
+      </div>
+    </div>
+
+    <!-- フッターリンク -->
+    <ul class="footer-links">
+      <li><a href="terms.html">サイトのご利用について（著作権等）</a></li>
+      <li><a href="help.html">ヘルプ</a></li>
+      <li><a href="contact.html">お問合せ</a></li>
+    </ul>
+
     <footer>&copy; 北風小僧</footer>
+
   </div>
 
   <script>
-    /* メニュー開閉機能 */
     function toggleMenu() {
       document.getElementById('overlay-menu').classList.toggle('active');
-    }
-
-    /* リアルタイムキーワード検索機能 */
-    function filterArticles() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.getElementsByClassName('card');
-      let hasResults = false;
-
-      for (let i = 0; i < cards.length; i++) {
-        const title = cards[i].querySelector('.card-title').innerText.toLowerCase();
-        const category = cards[i].querySelector('.card-category').innerText.toLowerCase();
-        const bodyText = cards[i].querySelector('.card-body-text').innerText.toLowerCase();
-
-        // 見出し、カテゴリ、本文キーワードのいずれかにヒットするか判定
-        if (title.includes(input) || category.includes(input) || bodyText.includes(input)) {
-          cards[i].style.display = "flex";
-          hasResults = true;
-        } else {
-          cards[i].style.display = "none";
-        }
-      }
-
-      // 検索中の見出し表示切り替え
-      const header = document.getElementById('sectionHeader');
-      header.innerText = input ? "検索結果" : "最新のノート";
     }
   </script>
 </body>
