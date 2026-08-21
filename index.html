@@ -129,7 +129,7 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル（文字を少しだけ太く: font-weight: 600） */
+    /* ジャンル */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
@@ -250,10 +250,10 @@
       <span class="section-sub">CATEGORIES</span>
     </div>
     <div class="genre-list">
-      <a href="list.html?genre=blue" class="genre-item genre-blue"><span>評論もどき</span><span>2 ＞</span></a>
-      <a href="list.html?genre=green" class="genre-item genre-green"><span>随筆</span><span>5 ＞</span></a>
-      <a href="list.html?genre=red" class="genre-item genre-red"><span>小説</span><span>4 ＞</span></a>
-      <a href="list.html?genre=yellow" class="genre-item genre-yellow"><span>詩歌</span><span>1 ＞</span></a>
+      <a href="list.html?genre=blue" class="genre-item genre-blue"><span>評論もどき</span><span id="count-blue">0 ＞</span></a>
+      <a href="list.html?genre=green" class="genre-item genre-green"><span>随筆</span><span id="count-green">0 ＞</span></a>
+      <a href="list.html?genre=red" class="genre-item genre-red"><span>小説</span><span id="count-red">0 ＞</span></a>
+      <a href="list.html?genre=yellow" class="genre-item genre-yellow"><span>詩歌</span><span id="count-yellow">0 ＞</span></a>
     </div>
 
     <!-- 人気の文章 -->
@@ -356,6 +356,28 @@
         </a>
       `;
     });
+
+    /* ジャンル別の作品数を自動集計・同期 */
+    function updateGenreCounts() {
+      const counts = {
+        'line-blue': 0,
+        'line-green': 0,
+        'line-red': 0,
+        'line-yellow': 0
+      };
+
+      articles.forEach(item => {
+        if (counts.hasOwnProperty(item.colorClass)) {
+          counts[item.colorClass]++;
+        }
+      });
+
+      document.getElementById('count-blue').innerText = `${counts['line-blue']} ＞`;
+      document.getElementById('count-green').innerText = `${counts['line-green']} ＞`;
+      document.getElementById('count-red').innerText = `${counts['line-red']} ＞`;
+      document.getElementById('count-yellow').innerText = `${counts['line-yellow']} ＞`;
+    }
+    updateGenreCounts();
 
     /* 人気文章（TOP5件を表示） */
     function renderPopular() {
