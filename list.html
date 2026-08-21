@@ -69,6 +69,7 @@
       font-size: 0.8rem; color: #888; border-top: 1px dashed #eee; padding-top: 10px; margin-top: 10px;
     }
 
+    /* 追加：共有ボタン */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
       padding: 2px 6px; border-radius: 4px; line-height: 1;
@@ -155,6 +156,7 @@
       { id: 0, title: "旧作品2", url: "article0.html", date: "2026.07.15", length: "約800字", colorClass: "line-green", genre: "green" }
     ];
 
+    /* 追加：共有処理 */
     function shareArticle(event, title, url) {
       event.preventDefault();
       event.stopPropagation();
@@ -193,7 +195,6 @@
       renderArticles(genre);
     }
 
-    /* URLクエリパラメータ(?genre=blue等)の読み込み処理 */
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const genreParam = params.get('genre');
