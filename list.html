@@ -58,26 +58,37 @@
       margin-bottom: 20px;
     }
 
+    /* 横いっぱいの薄い区切り線 */
+    .thin-divider {
+      border: 0;
+      border-top: 1px solid #e0e0e0;
+      margin-left: -24px;
+      margin-right: -24px;
+    }
+
     /* コントロールエリア（並び替え・絞り込み） */
     .control-bar {
       display: flex; justify-content: space-between; align-items: center;
-      padding-bottom: 12px; margin-bottom: 25px; border-bottom: 1px solid #111;
+      padding: 12px 0;
       font-size: 0.9rem;
     }
     .sort-controls { display: flex; align-items: center; gap: 8px; }
     .select-box {
       border: none; background: none; font-family: inherit; font-size: 0.9rem;
-      font-weight: bold; cursor: pointer; outline: none;
+      font-weight: bold; cursor: pointer; outline: none; color: #111111;
     }
     .order-btn {
-      background: none; border: 1px solid #ccc; border-radius: 3px;
-      padding: 2px 6px; cursor: pointer; font-size: 0.8rem;
+      background: none; border: 1px solid #111111; border-radius: 2px;
+      padding: 2px 8px; cursor: pointer; font-size: 0.8rem; color: #111111;
+      font-family: inherit;
     }
 
     .filter-btn {
       background: none; border: none; font-family: inherit; font-size: 0.9rem;
-      font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px;
+      font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      color: #111111;
     }
+    .filter-icon { font-size: 1rem; line-height: 1; }
 
     /* カラー別下線 */
     .line-blue   { border-bottom: 2px solid #4ba3e3; padding-bottom: 2px; }
@@ -85,7 +96,7 @@
     .line-red    { border-bottom: 2px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 2px solid #f6d155; padding-bottom: 2px; }
 
-    /* 作品リスト（手書きレイアウト再現） */
+    /* 作品リスト */
     .article-list { list-style: none; margin-bottom: 30px; }
     .article-item {
       padding: 16px 0; border-bottom: 1px dashed #e0e0e0; text-decoration: none;
@@ -123,7 +134,7 @@
     }
     .page-submit-btn {
       background: none; border: 1px solid #111; padding: 4px 10px;
-      cursor: pointer; font-family: inherit; font-size: 0.85rem;
+      cursor: pointer; font-family: inherit; font-size: 0.85rem; color: #111;
     }
 
     /* 絞り込みモーダル */
@@ -134,13 +145,14 @@
     }
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-content {
-      background: #fff; width: 85%; max-width: 360px; padding: 25px; border-radius: 4px;
+      background: #fff; width: 85%; max-width: 360px; padding: 25px; border-radius: 0px;
+      border: 1px solid #111;
     }
-    .modal-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    .modal-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 8px; color: #111; }
     .color-filter-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .color-filter-item {
-      padding: 10px 14px; cursor: pointer; font-size: 0.9rem; font-weight: 500;
-      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; cursor: pointer; font-size: 0.92rem; font-weight: 500;
+      display: flex; justify-content: space-between; align-items: center; color: #000000;
     }
 
     /* フッター黒エリア */
@@ -207,6 +219,9 @@
 
     <h1 class="page-title">作品一覧</h1>
 
+    <!-- 作品一覧と新着順の間の薄い横一線 -->
+    <hr class="thin-divider">
+
     <!-- コントロールバー -->
     <div class="control-bar">
       <div class="sort-controls">
@@ -218,9 +233,12 @@
       </div>
 
       <button class="filter-btn" onclick="openFilterModal()">
-        絞り込み ⚙
+        絞り込み <span class="filter-icon">⏚</span>
       </button>
     </div>
+
+    <!-- 新着順の下の薄い横一線 -->
+    <hr class="thin-divider" style="margin-bottom: 15px;">
 
     <!-- 作品一覧リスト -->
     <div class="article-list" id="article-list-container"></div>
@@ -240,13 +258,13 @@
   <!-- 絞り込みモーダル -->
   <div class="modal-overlay" id="filter-modal" onclick="closeFilterModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-title">色によるジャンル絞り込み</div>
+      <div class="modal-title">ジャンル絞り込み</div>
       <ul class="color-filter-list">
         <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">すべて表示</li>
-        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">青色ジャンル（評論もどき）</li>
-        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('line-green')">緑色ジャンル（随筆）</li>
-        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('line-red')">赤色ジャンル（小説）</li>
-        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('line-yellow')">黄色ジャンル（詩歌）</li>
+        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">評論もどき</li>
+        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('line-green')">随筆</li>
+        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('line-red')">小説</li>
+        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('line-yellow')">詩歌</li>
       </ul>
     </div>
   </div>
