@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品詳細｜北風小僧</title>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Shippori Mincho', serif; background-color: #fff; color: #111; line-height: 1.8; }
+    .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid #111; }
+    .brand-logo { font-size: 1.3rem; font-weight: 800; text-decoration: none; color: #111; letter-spacing: 0.15em; }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+    .container { max-width: 500px; margin: 0 auto; padding: 40px 24px 60px; text-align: center; }
+    .title-area { text-align: left; margin-bottom: 25px; }
+    .work-title { font-size: 2rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .title-divider { border: 0; border-top: 2px solid #111; margin-bottom: 12px; }
+    .meta-info { display: flex; justify-content: space-between; font-size: 0.9rem; color: #444; }
+    .genre-label { font-size: 1.1rem; font-weight: 700; text-align: left; margin-bottom: 50px; }
+    .btn-group { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 50px; }
+    .read-btn {
+      display: block; width: 100%; max-width: 300px; padding: 16px 0; border: 2px solid #111;
+      background: #fff; color: #111; font-family: inherit; font-size: 1.2rem; font-weight: 700;
+      letter-spacing: 0.2em; text-decoration: none; text-align: center; cursor: pointer;
+    }
+    .read-btn.primary { background: #111; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="top-nav">
+    <a href="index.html" class="brand-logo">北風小僧</a>
+    <div class="nav-right">
+      <button class="icon-btn">🔍</button>
+      <button class="icon-btn">☰</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="title-area">
+      <h1 class="work-title" id="work-title">--</h1>
+      <hr class="title-divider">
+      <div class="meta-info">
+        <span id="work-date">--</span>
+        <span id="work-length">--</span>
+      </div>
+    </div>
+
+    <div class="genre-label" id="work-genre">--</div>
+
+    <div class="btn-group" id="btn-group"></div>
+  </div>
+
+  <!-- データファイルの読み込み -->
+  <script src="data.js"></script>
+  <script>
+    // URLから作品IDを取得（例: novel-cover.html?id=kajin）
+    const urlParams = new URLSearchParams(window.location.search);
+    const workId = urlParams.get('id') || 'kajin';
+    const work = worksData[workId];
+
+    if (work) {
+      document.title = `${work.title}｜北風小僧`;
+      document.getElementById('work-title').innerText = work.title;
+      document.getElementById('work-date').innerText = work.date;
+      document.getElementById('work-length').innerText = work.length;
+      document.getElementById('work-genre').innerText = work.genre;
+
+      const savedBookmark = localStorage.getItem(`bookmark_${workId}`);
+      const btnGroup = document.getElementById('btn-group');
+
+      if (savedBookmark) {
+        btnGroup.innerHTML = `
+          <a href="novel-reader.html?id=${workId}&page=${savedBookmark}" class="read-btn primary">続きから読む (P.${savedBookmark})</a>
+          <a href="novel-reader.html?id=${workId}&page=1" class="read-btn">最初から読む</a>
+        `;
+      } else {
+        btnGroup.innerHTML = `
+          <a href="novel-reader.html?id=${workId}&page=1" class="read-btn">読む</a>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
