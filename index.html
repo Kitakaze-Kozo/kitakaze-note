@@ -52,14 +52,12 @@
 
     .nav-right { display: flex; align-items: center; gap: 20px; }
     
-    /* シンプルなSVG虫眼鏡アイコン */
     .search-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
     .search-btn svg { width: 18px; height: 18px; stroke: #111; stroke-width: 2.2; fill: none; }
 
-    /* 少し大きめにしたメニュー3本線 */
     .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
 
-    /* 全画面メニュー（ホーム削除、お問い合わせへ変更） */
+    /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(10, 10, 10, 0.96); color: #fff;
@@ -72,18 +70,15 @@
     .menu-list li { margin: 28px 0; }
     .menu-list a { color: #fff; text-decoration: none; font-size: 1.3rem; letter-spacing: 0.15em; }
 
-    /* コンテナ */
-    .container { max-width: 680px; margin: 0 auto; padding: 0 24px 60px; }
-
-    /* 北風小僧と最新文章の間の画像スライダー */
+    /* 横余白なしのフルサイズ画像スライダー */
     .hero-slider-wrapper {
-      margin: 25px 0 35px;
-      position: relative;
       width: 100%;
-      height: 240px;
+      height: 260px;
+      position: relative;
       overflow: hidden;
       cursor: pointer;
       background-color: #f4f4f4;
+      margin-bottom: 35px;
     }
     .hero-slide {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -96,6 +91,9 @@
       background: rgba(0, 0, 0, 0.6); color: #fff;
       font-size: 0.7rem; padding: 3px 8px; letter-spacing: 0.05em; pointer-events: none;
     }
+
+    /* メインコンテンツ枠 */
+    .container { max-width: 680px; margin: 0 auto; padding: 0 24px 45px; }
 
     /* 見出しヘッダー */
     .section-header {
@@ -118,7 +116,7 @@
     .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
     .card-meta { font-size: 0.78rem; color: #888; margin-top: 15px; }
 
-    /* 新潮社風：タップ/クリックすると背景が「黒」になるボタン */
+    /* 新潮社風ボタン（タップで黒化） */
     .btn-shincho {
       display: block; text-align: center; border: 1px solid #111; padding: 14px;
       margin: 10px 0 45px; text-decoration: none; color: #111; font-size: 0.9rem;
@@ -136,21 +134,23 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル（文字色はすべて黒で統一） */
+    /* ジャンル（解決策1：濃い文字＋微白シャドウで視認性向上） */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 20px; margin-bottom: 12px; text-decoration: none;
       font-weight: 700; font-size: 1rem; border-radius: 0px;
-      color: #111111 !important; /* 文字色はすべて黒色統一 */
-      transition: opacity 0.2s;
+      color: #1a1a1a !important; 
+      text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.05em;
+      transition: transform 0.15s ease, opacity 0.2s;
     }
-    .genre-item:hover { opacity: 0.85; }
+    .genre-item:hover { opacity: 0.9; transform: translateY(-1px); }
     
-    .genre-blue   { background-color: #4ba3e3; }
-    .genre-green  { background-color: #3cb878; }
-    .genre-red    { background-color: #f06292; }
-    .genre-yellow { background-color: #f6d155; }
+    .genre-blue   { background-color: #5baed7; }
+    .genre-green  { background-color: #52be80; }
+    .genre-red    { background-color: #f1789a; }
+    .genre-yellow { background-color: #f7d358; }
 
     /* 人気の文章 */
     .popular-list { list-style: none; margin-bottom: 15px; }
@@ -158,32 +158,28 @@
     .popular-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: inline-block; }
 
     /* 感想を送る */
-    .feedback-box { margin-bottom: 45px; }
+    .feedback-box { margin-bottom: 0px; }
 
-    /* 新潮社風：完全に黒背景の「私について / このサイトについて」領域 */
-    .about-black-section {
+    /* 【新潮社風】感想を送るより下をすべて黒背景にする全体エリア */
+    .footer-dark-section {
       background-color: #111111;
       color: #ffffff;
-      padding: 40px 24px;
+      width: 100%;
+      padding: 50px 24px 40px;
       margin-top: 60px;
-      margin-bottom: 40px;
+    }
+    .footer-dark-inner {
+      max-width: 680px;
+      margin: 0 auto;
       text-align: center;
     }
-    .about-black-section h3 {
-      font-size: 1.2rem; margin-bottom: 18px; font-weight: 700;
-      letter-spacing: 0.12em; border-bottom: 1px dashed #444;
-      padding-bottom: 12px; display: inline-block;
-    }
-    .about-black-section .info-text {
-      font-size: 0.9rem; color: #ccc; line-height: 2.2; margin-bottom: 20px;
-    }
-    .about-black-section a { color: #fff; text-decoration: underline; }
 
-    /* フッターリンク */
-    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.4; margin-bottom: 35px; }
-    .footer-links a { color: #444; text-decoration: none; }
+    /* フッターナビ（ご指示の4項目へ統一） */
+    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
+    .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #ffffff; }
     
-    footer { text-align: center; font-size: 0.82rem; color: #888; border-top: 1px solid #eee; padding-top: 25px; }
+    .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
 
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
@@ -210,7 +206,7 @@
     </div>
   </div>
 
-  <!-- メニュー（ホーム削除、お問い合わせに変更） -->
+  <!-- メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
@@ -220,16 +216,15 @@
     </ul>
   </div>
 
-  <div class="container">
+  <!-- 画面横幅いっぱいのフルサイズ写真スライダー（余白なし） -->
+  <div class="hero-slider-wrapper" onclick="nextSlide()" title="タップで画像変更">
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80');"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1000&q=80');"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1000&q=80');"></div>
+    <div class="hero-slider-hint">TAP TO CHANGE</div>
+  </div>
 
-    <!-- 北風小僧と最新文章の間の画像スライダー（5秒自動 ＆ タップ変更） -->
-    <div class="hero-slider-wrapper" onclick="nextSlide()" title="タップで画像変更">
-      <!-- 写真URLは自由に差し替え可能です -->
-      <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80');"></div>
-      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1000&q=80');"></div>
-      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1000&q=80');"></div>
-      <div class="hero-slider-hint">TAP TO CHANGE</div>
-    </div>
+  <div class="container">
 
     <!-- 最新の文章 -->
     <div class="section-header" style="margin-top:0;">
@@ -241,7 +236,7 @@
     </div>
     <a href="list.html" class="btn-shincho">文章一覧 ＞</a>
 
-    <!-- ジャンル（文字色はすべて黒統一） -->
+    <!-- ジャンル -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
@@ -272,26 +267,21 @@
       <a href="contact.html" class="btn-shincho">作品の感想・メッセージを送る ＞</a>
     </div>
 
-    <!-- 黒背景：私について / このサイトについて 統合領域 -->
-    <div class="about-black-section">
-      <h3>私について / このサイトについて</h3>
-      <div class="info-text">
-        <p>北风小僧（きたかぜこぞう）の思考と創作の記録領域。</p>
-        <p>Gmail: xxx@gmail.com ｜ X: @xxx</p>
-      </div>
-      <a href="about.html" style="font-size:0.85rem; letter-spacing:0.08em;">詳しいプロフィールを見る ＞</a>
+  </div>
+
+  <!-- 新潮社風：感想を送るより下を全面黒背景にするエリア -->
+  <div class="footer-dark-section">
+    <div class="footer-dark-inner">
+      <!-- フッターナビ（ご指定の4項目） -->
+      <ul class="footer-links">
+        <li><a href="about.html">私について</a></li>
+        <li><a href="terms.html">サイトのご利用</a></li>
+        <li><a href="help.html">ヘルプ</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+
+      <div class="dark-copyright">&copy; 北風小僧</div>
     </div>
-
-    <!-- フッターリンク（お問い合わせ表記に統一） -->
-    <ul class="footer-links">
-      <li><a href="about.html">私について</a></li>
-      <li><a href="terms.html">サイトのご利用</a></li>
-      <li><a href="help.html">ヘルプ</a></li>
-      <li><a href="contact.html">お問い合わせ</a></li>
-    </ul>
-
-    <footer>&copy; 北風小僧</footer>
-
   </div>
 
   <script>
@@ -320,7 +310,7 @@
     ];
 
     /* カラーバー自動切り替え */
-    const colors = ['#4ba3e3', '#3cb878', '#f06292', '#f6d155'];
+    const colors = ['#5baed7', '#52be80', '#f1789a', '#f7d358'];
     function changeBarColor() {
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       document.getElementById('top-color-bar').style.backgroundColor = randomColor;
@@ -339,7 +329,6 @@
     }
     let slideTimer = setInterval(nextSlide, 5000);
 
-    // 手動タップ時はタイマーをリセットして5秒カウントを再スタート
     document.querySelector('.hero-slider-wrapper').addEventListener('click', () => {
       clearInterval(slideTimer);
       slideTimer = setInterval(nextSlide, 5000);
