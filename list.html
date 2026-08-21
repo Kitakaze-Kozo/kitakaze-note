@@ -164,6 +164,22 @@
     .color-filter-item {
       padding: 12px 16px; cursor: pointer; font-size: 0.92rem; font-weight: 500;
       display: flex; justify-content: space-between; align-items: center; color: #000000;
+      user-select: none;
+    }
+    .color-filter-item label {
+      display: flex; justify-content: space-between; align-items: center; width: 100%; cursor: pointer;
+    }
+    .color-filter-item input[type="checkbox"] {
+      margin-right: 10px; transform: scale(1.2); cursor: pointer;
+    }
+
+    .modal-submit-btn {
+      display: block; width: 100%; border: 1px solid #111; background: #111; color: #fff;
+      padding: 10px; margin-top: 18px; font-family: inherit; font-size: 0.9rem; font-weight: bold;
+      cursor: pointer; text-align: center;
+    }
+    .modal-submit-btn:hover {
+      background: #333;
     }
 
     /* フッター黒エリア */
@@ -259,27 +275,58 @@
 
   </div>
 
-  <!-- 絞り込みモーダル（作品数も自動表示） -->
+  <!-- 絞り込みモーダル（複数選択対応） -->
   <div class="modal-overlay" id="filter-modal" onclick="closeFilterModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="modal-title">ジャンル絞り込み</div>
       <ul class="color-filter-list">
-        <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">
-          <span>すべて表示</span><span id="modal-count-all"></span>
+        <li class="color-filter-item" style="background:#f4f4f4;">
+          <label>
+            <div>
+              <input type="checkbox" value="all" id="chk-all" onchange="toggleAllCheck(this)">
+              <span>すべて表示</span>
+            </div>
+            <span id="modal-count-all"></span>
+          </label>
         </li>
-        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('blue')">
-          <span>評論風</span><span id="modal-count-blue"></span>
+        <li class="color-filter-item" style="background:#5baed7;">
+          <label>
+            <div>
+              <input type="checkbox" name="genre-chk" value="blue" onchange="toggleGenreCheck()">
+              <span>評論風</span>
+            </div>
+            <span id="modal-count-blue"></span>
+          </label>
         </li>
-        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('green')">
-          <span>随筆</span><span id="modal-count-green"></span>
+        <li class="color-filter-item" style="background:#52be80;">
+          <label>
+            <div>
+              <input type="checkbox" name="genre-chk" value="green" onchange="toggleGenreCheck()">
+              <span>随筆</span>
+            </div>
+            <span id="modal-count-green"></span>
+          </label>
         </li>
-        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('red')">
-          <span>小説</span><span id="modal-count-red"></span>
+        <li class="color-filter-item" style="background:#f1789a;">
+          <label>
+            <div>
+              <input type="checkbox" name="genre-chk" value="red" onchange="toggleGenreCheck()">
+              <span>小説</span>
+            </div>
+            <span id="modal-count-red"></span>
+          </label>
         </li>
-        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('yellow')">
-          <span>詩歌</span><span id="modal-count-yellow"></span>
+        <li class="color-filter-item" style="background:#f7d358;">
+          <label>
+            <div>
+              <input type="checkbox" name="genre-chk" value="yellow" onchange="toggleGenreCheck()">
+              <span>詩歌</span>
+            </div>
+            <span id="modal-count-yellow"></span>
+          </label>
         </li>
       </ul>
+      <button class="modal-submit-btn" onclick="applyColorFilter()">適用する</button>
     </div>
   </div>
 
@@ -301,7 +348,7 @@
   </div>
 
   <script>
-    /* トップページと完全に同期した共通マスターデータベース */
+    /* 共通マスターデータベース */
     const allArticles = [
       { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, genre: "green" },
       { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, genre: "blue" },
@@ -321,7 +368,7 @@
     const itemsPerPage = 10;
     let currentSort = "date";
     let isDescending = true;
-    let currentColorFilter = "all";
+    let selectedGenres = ["all"]; // 配列で複数ジャンルを保持
 
     /* URLパラメータ解析・読み込み機能 */
     function initParams() {
@@ -334,7 +381,43 @@
 
       const genreParam = params.get('genre');
       if (genreParam) {
-        currentColorFilter = genreParam;
+        selectedGenres = [genreParam];
+      }
+      syncCheckboxesWithState();
+    }
+
+    /* チェックボックスの状態を現在のselectedGenresと同期 */
+    function syncCheckboxesWithState() {
+      const chkAll = document.getElementById('chk-all');
+      const genreChks = document.querySelectorAll('input[name="genre-chk"]');
+
+      if (selectedGenres.includes("all") || selectedGenres.length === 0) {
+        chkAll.checked = true;
+        genreChks.forEach(chk => chk.checked = false);
+      } else {
+        chkAll.checked = false;
+        genreChks.forEach(chk => {
+          chk.checked = selectedGenres.includes(chk.value);
+        });
+      }
+    }
+
+    /* 「すべて表示」を押したときの制御 */
+    function toggleAllCheck(allInput) {
+      if (allInput.checked) {
+        const genreChks = document.querySelectorAll('input[name="genre-chk"]');
+        genreChks.forEach(chk => chk.checked = false);
+      }
+    }
+
+    /* 個別ジャンルを押したときの制御 */
+    function toggleGenreCheck() {
+      const chkAll = document.getElementById('chk-all');
+      const genreChks = document.querySelectorAll('input[name="genre-chk"]:checked');
+      if (genreChks.length > 0) {
+        chkAll.checked = false;
+      } else {
+        chkAll.checked = true;
       }
     }
 
@@ -357,8 +440,8 @@
     function getProcessedArticles() {
       let list = [...allArticles];
 
-      if (currentColorFilter !== "all") {
-        list = list.filter(item => item.genre === currentColorFilter);
+      if (!selectedGenres.includes("all") && selectedGenres.length > 0) {
+        list = list.filter(item => selectedGenres.includes(item.genre));
       }
 
       list.sort((a, b) => {
@@ -468,13 +551,24 @@
     }
 
     function openFilterModal() {
+      syncCheckboxesWithState();
       document.getElementById('filter-modal').classList.add('active');
     }
     function closeFilterModal(e) {
       document.getElementById('filter-modal').classList.remove('active');
     }
-    function applyColorFilter(color) {
-      currentColorFilter = color;
+
+    /* 「適用する」ボタンを押して絞り込みを実行 */
+    function applyColorFilter() {
+      const chkAll = document.getElementById('chk-all');
+      const genreChks = document.querySelectorAll('input[name="genre-chk"]:checked');
+
+      if (chkAll.checked || genreChks.length === 0) {
+        selectedGenres = ["all"];
+      } else {
+        selectedGenres = Array.from(genreChks).map(chk => chk.value);
+      }
+
       closeFilterModal();
       currentPage = 1;
       render();
