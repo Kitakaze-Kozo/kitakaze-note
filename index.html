@@ -15,7 +15,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 1. 最上部ランダムカラーバー */
+    /* 最上部ランダムカラーバー */
     #top-color-bar {
       height: 5px;
       width: 100%;
@@ -36,11 +36,11 @@
       animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
-    /* ナビゲーションバー */
+    /* ナビゲーションバー（下に線を配置） */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 24px; border-bottom: 1px solid #e0e0e0;
+      padding: 14px 24px; border-bottom: 1px solid #111111;
       backdrop-filter: blur(5px);
     }
     
@@ -67,8 +67,8 @@
     #overlay-menu.active { opacity: 1; visibility: visible; }
     .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
     .menu-list { list-style: none; text-align: center; }
-    .menu-list li { margin: 28px 0; }
-    .menu-list a { color: #fff; text-decoration: none; font-size: 1.3rem; letter-spacing: 0.15em; }
+    .menu-list li { margin: 24px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
     /* 横余白なしのフルサイズ画像スライダー */
     .hero-slider-wrapper {
@@ -86,11 +86,6 @@
       opacity: 0; transition: opacity 0.8s ease-in-out;
     }
     .hero-slide.active { opacity: 1; }
-    .hero-slider-hint {
-      position: absolute; bottom: 10px; right: 12px;
-      background: rgba(0, 0, 0, 0.6); color: #fff;
-      font-size: 0.7rem; padding: 3px 8px; letter-spacing: 0.05em; pointer-events: none;
-    }
 
     /* メインコンテンツ枠 */
     .container { max-width: 680px; margin: 0 auto; padding: 0 24px 45px; }
@@ -103,7 +98,7 @@
     .section-h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.08em; }
     .section-sub { font-size: 0.75rem; color: #777; }
 
-    /* 最新の文章（上下余白つき） */
+    /* 最新の文章 */
     .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
       min-width: 230px; max-width: 230px; border: 1px solid #e0e0e0;
@@ -116,7 +111,7 @@
     .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
     .card-meta { font-size: 0.78rem; color: #888; margin-top: 15px; }
 
-    /* 新潮社風ボタン（タップで黒化） */
+    /* 新潮社風ボタン */
     .btn-shincho {
       display: block; text-align: center; border: 1px solid #111; padding: 14px;
       margin: 10px 0 45px; text-decoration: none; color: #111; font-size: 0.9rem;
@@ -134,15 +129,18 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル（解決策1：濃い文字＋微白シャドウで視認性向上） */
+    /* ジャンル */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 20px; margin-bottom: 12px; text-decoration: none;
-      font-weight: 700; font-size: 1rem; border-radius: 0px;
-      color: #1a1a1a !important; 
-      text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.7);
-      letter-spacing: 0.05em;
+      font-weight: 800; font-size: 1.02rem; border-radius: 0px;
+      color: #000000 !important; 
+      text-shadow: 
+        0 0 6px rgba(255, 255, 255, 0.9),
+        0 0 10px rgba(255, 255, 255, 0.8),
+        1px 1px 1px rgba(255, 255, 255, 1);
+      letter-spacing: 0.08em;
       transition: transform 0.15s ease, opacity 0.2s;
     }
     .genre-item:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -160,7 +158,7 @@
     /* 感想を送る */
     .feedback-box { margin-bottom: 0px; }
 
-    /* 【新潮社風】感想を送るより下をすべて黒背景にする全体エリア */
+    /* フッター黒エリア */
     .footer-dark-section {
       background-color: #111111;
       color: #ffffff;
@@ -174,7 +172,21 @@
       text-align: center;
     }
 
-    /* フッターナビ（ご指示の4項目へ統一） */
+    /* 連絡先エリア */
+    .contact-info-box {
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px dashed #333333;
+      font-size: 0.88rem;
+      color: #cccccc;
+      line-height: 2.2;
+    }
+    .contact-info-box a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* フッターナビ */
     .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
     .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: #ffffff; }
@@ -206,22 +218,22 @@
     </div>
   </div>
 
-  <!-- メニュー -->
+  <!-- メニュー（お問い合わせの下に「感想を送る」を追加） -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
       <li><a href="list.html">文章一覧</a></li>
       <li><a href="about.html">私について</a></li>
       <li><a href="contact.html">お問い合わせ</a></li>
+      <li><a href="contact.html">感想を送る</a></li>
     </ul>
   </div>
 
-  <!-- 画面横幅いっぱいのフルサイズ写真スライダー（余白なし） -->
-  <div class="hero-slider-wrapper" onclick="nextSlide()" title="タップで画像変更">
+  <!-- フルサイズ写真スライダー -->
+  <div class="hero-slider-wrapper" onclick="nextSlide()">
     <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80');"></div>
     <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1000&q=80');"></div>
     <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1000&q=80');"></div>
-    <div class="hero-slider-hint">TAP TO CHANGE</div>
   </div>
 
   <div class="container">
@@ -269,13 +281,19 @@
 
   </div>
 
-  <!-- 新潮社風：感想を送るより下を全面黒背景にするエリア -->
+  <!-- フッター黒エリア -->
   <div class="footer-dark-section">
     <div class="footer-dark-inner">
-      <!-- フッターナビ（ご指定の4項目） -->
+      
+      <div class="contact-info-box">
+        <p>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></p>
+        <p>Twitter (X): <a href="https://twitter.com/xxx" target="_blank" rel="noopener">@xxx</a></p>
+      </div>
+
+      <!-- フッターナビ -->
       <ul class="footer-links">
         <li><a href="about.html">私について</a></li>
-        <li><a href="terms.html">サイトのご利用</a></li>
+        <li><a href="terms.html">サイトのご利用について</a></li>
         <li><a href="help.html">ヘルプ</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
