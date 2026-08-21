@@ -259,16 +259,26 @@
 
   </div>
 
-  <!-- 絞り込みモーダル -->
+  <!-- 絞り込みモーダル（作品数も自動表示） -->
   <div class="modal-overlay" id="filter-modal" onclick="closeFilterModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="modal-title">ジャンル絞り込み</div>
       <ul class="color-filter-list">
-        <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">すべて表示</li>
-        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">評論風</li>
-        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('line-green')">随筆</li>
-        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('line-red')">小説</li>
-        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('line-yellow')">詩歌</li>
+        <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">
+          <span>すべて表示</span><span id="modal-count-all"></span>
+        </li>
+        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('blue')">
+          <span>評論風</span><span id="modal-count-blue"></span>
+        </li>
+        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('green')">
+          <span>随筆</span><span id="modal-count-green"></span>
+        </li>
+        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('red')">
+          <span>小説</span><span id="modal-count-red"></span>
+        </li>
+        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('yellow')">
+          <span>詩歌</span><span id="modal-count-yellow"></span>
+        </li>
       </ul>
     </div>
   </div>
@@ -293,18 +303,18 @@
   <script>
     /* トップページと完全に同期した共通マスターデータベース */
     const allArticles = [
-      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, colorClass: "line-green" },
-      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, colorClass: "line-blue" },
-      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, colorClass: "line-blue" },
-      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, colorClass: "line-red" },
-      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, colorClass: "line-yellow" },
-      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, colorClass: "line-green" },
-      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, colorClass: "line-green" },
-      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, colorClass: "line-blue" },
-      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, colorClass: "line-yellow" },
-      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, colorClass: "line-red" },
-      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, colorClass: "line-green" },
-      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, colorClass: "line-blue" }
+      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, genre: "green" },
+      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, genre: "blue" },
+      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, genre: "blue" },
+      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, genre: "red" },
+      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, genre: "yellow" },
+      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, genre: "green" },
+      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, genre: "green" },
+      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, genre: "blue" },
+      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, genre: "yellow" },
+      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, genre: "red" },
+      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, genre: "green" },
+      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, genre: "blue" }
     ];
 
     let currentPage = 1;
@@ -324,18 +334,31 @@
 
       const genreParam = params.get('genre');
       if (genreParam) {
-        if (genreParam === 'blue') currentColorFilter = 'line-blue';
-        if (genreParam === 'green') currentColorFilter = 'line-green';
-        if (genreParam === 'red') currentColorFilter = 'line-red';
-        if (genreParam === 'yellow') currentColorFilter = 'line-yellow';
+        currentColorFilter = genreParam;
       }
+    }
+
+    /* モーダル表示用の作品数計算・表示機能 */
+    function updateModalCounts() {
+      const counts = { all: allArticles.length, blue: 0, green: 0, red: 0, yellow: 0 };
+      allArticles.forEach(item => {
+        if (counts.hasOwnProperty(item.genre)) {
+          counts[item.genre]++;
+        }
+      });
+
+      document.getElementById('modal-count-all').innerText = `(${counts.all})`;
+      document.getElementById('modal-count-blue').innerText = `(${counts.blue})`;
+      document.getElementById('modal-count-green').innerText = `(${counts.green})`;
+      document.getElementById('modal-count-red').innerText = `(${counts.red})`;
+      document.getElementById('modal-count-yellow').innerText = `(${counts.yellow})`;
     }
 
     function getProcessedArticles() {
       let list = [...allArticles];
 
       if (currentColorFilter !== "all") {
-        list = list.filter(item => item.colorClass === currentColorFilter);
+        list = list.filter(item => item.genre === currentColorFilter);
       }
 
       list.sort((a, b) => {
@@ -390,7 +413,7 @@
           container.innerHTML += `
             <a href="${item.url}" class="article-item">
               <div class="article-title-wrap">
-                <span class="article-title"><span class="${item.colorClass}">${item.title}</span></span>
+                <span class="article-title"><span class="line-${item.genre}">${item.title}</span></span>
               </div>
               <div class="article-meta-row">
                 <span>${item.date}</span>
@@ -463,6 +486,7 @@
 
     /* 初期処理 */
     initParams();
+    updateModalCounts();
     render();
   </script>
 </body>
