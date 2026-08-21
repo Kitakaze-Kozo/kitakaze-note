@@ -58,7 +58,7 @@
       margin-bottom: 20px;
     }
 
-    /* 横いっぱいの薄い区切り線 */
+    /* 横幅いっぱいの薄い線 */
     .thin-divider {
       border: 0;
       border-top: 1px solid #e0e0e0;
@@ -66,7 +66,7 @@
       margin-right: -24px;
     }
 
-    /* コントロールエリア（並び替え・絞り込み） */
+    /* コントロールエリア */
     .control-bar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 12px 0;
@@ -169,7 +169,6 @@
       text-align: center;
     }
 
-    /* 連絡先エリア */
     .contact-info-box {
       margin-bottom: 30px;
       padding-bottom: 25px;
@@ -178,12 +177,8 @@
       color: #cccccc;
       line-height: 2.2;
     }
-    .contact-info-box a {
-      color: #ffffff;
-      text-decoration: underline;
-    }
+    .contact-info-box a { color: #ffffff; text-decoration: underline; }
 
-    /* フッターナビ */
     .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
     .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: #ffffff; }
@@ -219,7 +214,6 @@
 
     <h1 class="page-title">作品一覧</h1>
 
-    <!-- 作品一覧と新着順の間の薄い横一線 -->
     <hr class="thin-divider">
 
     <!-- コントロールバー -->
@@ -237,7 +231,6 @@
       </button>
     </div>
 
-    <!-- 新着順の下の薄い横一線 -->
     <hr class="thin-divider" style="margin-bottom: 15px;">
 
     <!-- 作品一覧リスト -->
@@ -272,25 +265,21 @@
   <!-- フッター黒エリア -->
   <div class="footer-dark-section">
     <div class="footer-dark-inner">
-      
       <div class="contact-info-box">
         <p>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></p>
         <p>Twitter (X): <a href="https://twitter.com/xxx" target="_blank" rel="noopener">@xxx</a></p>
       </div>
-
       <ul class="footer-links">
         <li><a href="about.html">私について</a></li>
         <li><a href="terms.html">サイトのご利用について</a></li>
         <li><a href="help.html">ヘルプ</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
-
       <div class="dark-copyright">&copy; 北風小僧</div>
     </div>
   </div>
 
   <script>
-    /* 全作品サンプルデータ */
     const allArticles = [
       { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, colorClass: "line-green" },
       { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, colorClass: "line-blue" },
@@ -308,20 +297,37 @@
 
     let currentPage = 1;
     const itemsPerPage = 10;
-    let currentSort = "date"; // 'date' or 'popular'
-    let isDescending = true;  // true: 降順, false: 昇順
+    let currentSort = "date";
+    let isDescending = true;
     let currentColorFilter = "all";
 
-    /* リスト制御処理 */
+    /* URLパラメータ解析・読み込み機能 */
+    function initParams() {
+      const params = new URLSearchParams(window.location.search);
+      
+      /* 並び順パラメータ check */
+      if (params.get('sort') === 'popular') {
+        currentSort = 'popular';
+        document.getElementById('sort-select').value = 'popular';
+      }
+
+      /* ジャンル絞り込みパラメータ check */
+      const genreParam = params.get('genre');
+      if (genreParam) {
+        if (genreParam === 'blue') currentColorFilter = 'line-blue';
+        if (genreParam === 'green') currentColorFilter = 'line-green';
+        if (genreParam === 'red') currentColorFilter = 'line-red';
+        if (genreParam === 'yellow') currentColorFilter = 'line-yellow';
+      }
+    }
+
     function getProcessedArticles() {
       let list = [...allArticles];
 
-      /* 1. 色絞り込み */
       if (currentColorFilter !== "all") {
         list = list.filter(item => item.colorClass === currentColorFilter);
       }
 
-      /* 2. 並び替え */
       list.sort((a, b) => {
         let valA, valB;
         if (currentSort === "date") {
@@ -342,7 +348,6 @@
       return list;
     }
 
-    /* 描画メイン関数 */
     function render() {
       const articles = getProcessedArticles();
       const totalPages = Math.ceil(articles.length / itemsPerPage) || 1;
@@ -350,7 +355,6 @@
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
 
-      /* リスト部分の描画 */
       const container = document.getElementById('article-list-container');
       container.innerHTML = '';
 
@@ -375,7 +379,6 @@
         });
       }
 
-      /* ページネーション部分の描画 */
       const pagination = document.getElementById('pagination-container');
       pagination.innerHTML = '';
 
@@ -389,14 +392,12 @@
       }
     }
 
-    /* 並び替え変更 */
     function changeSort() {
       currentSort = document.getElementById('sort-select').value;
       currentPage = 1;
       render();
     }
 
-    /* 昇順・降順切り替え */
     function toggleOrder() {
       isDescending = !isDescending;
       const btn = document.getElementById('order-toggle-btn');
@@ -405,14 +406,12 @@
       render();
     }
 
-    /* ページ移動 */
     function goToPage(page) {
       currentPage = page;
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ページ検索入力移動 */
     function jumpToPage() {
       const input = document.getElementById('page-input').value;
       if (input) {
@@ -420,7 +419,6 @@
       }
     }
 
-    /* モーダル操作 */
     function openFilterModal() {
       document.getElementById('filter-modal').classList.add('active');
     }
@@ -434,12 +432,12 @@
       render();
     }
 
-    /* メニュー開閉 */
     function toggleMenu() {
       document.getElementById('overlay-menu').classList.toggle('active');
     }
 
-    /* 初期実行 */
+    /* 初期処理 */
+    initParams();
     render();
   </script>
 </body>
