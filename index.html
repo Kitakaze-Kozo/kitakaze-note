@@ -129,27 +129,13 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル（白枠に囲まれた黒文字＝袋文字仕様） */
+    /* ジャンル（シンプルな黒字） */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 20px; margin-bottom: 12px; text-decoration: none;
       font-weight: 800; font-size: 1.05rem; border-radius: 0px;
       color: #000000 !important; 
-      
-      /* くっきりした白い縁取り（袋文字）処理 */
-      -webkit-text-stroke: 1.2px #ffffff;
-      paint-order: stroke fill;
-      text-shadow: 
-        2px  2px 0 #fff,
-       -2px  2px 0 #fff,
-        2px -2px 0 #fff,
-       -2px -2px 0 #fff,
-        2px  0px 0 #fff,
-       -2px  0px 0 #fff,
-        0px  2px 0 #fff,
-        0px -2px 0 #fff;
-
       letter-spacing: 0.08em;
       transition: transform 0.15s ease, opacity 0.2s;
     }
@@ -258,7 +244,7 @@
     </div>
     <a href="list.html" class="btn-shincho">文章一覧 ＞</a>
 
-    <!-- ジャンル（白枠＋黒文字） -->
+    <!-- ジャンル（黒字） -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
