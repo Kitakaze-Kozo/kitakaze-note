@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>読書｜北風小僧</title>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #faf8f5; color: #111; font-family: 'Shippori Mincho', serif; }
+    
+    .controls {
+      position: fixed; left: 0; width: 100%; z-index: 200; background: rgba(255, 255, 255, 0.95);
+      transition: opacity 0.25s ease; opacity: 0; pointer-events: none;
+    }
+    .controls.active { opacity: 1; pointer-events: auto; }
+    
+    .reader-header { top: 0; height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; }
+    .reader-footer { bottom: 0; height: 45px; display: flex; justify-content: center; align-items: center; border-top: 1px solid #ddd; font-size: 0.85rem; }
+    .ctrl-btn { background: none; border: none; font-family: inherit; font-size: 0.95rem; cursor: pointer; color: #111; }
+    .bookmark-btn.bookmarked { color: #d9534f; font-weight: bold; }
+
+    .touch-zone { position: fixed; top: 0; bottom: 0; z-index: 100; }
+    .zone-left { left: 0; width: 35%; }
+    .zone-center { left: 35%; width: 30%; }
+    .zone-right { right: 0; width: 35%; }
+
+    .book-viewport { width: 100%; height: 100%; padding: 60px 20px; }
+    .pages-container {
+      height: 100%; writing-mode: vertical-rl; -webkit-writing-mode: vertical-rl;
+      display: flex; flex-direction: column; transition: transform 0.3s ease;
+    }
+    .page {
+      min-width: 100vw; height: 100%; padding: 0 5vw;
+      font-size: 1.05rem; line-height: 2.1; letter-spacing: 0.08em;
+      white-space: pre-wrap; text-align: justify; flex-shrink: 0;
+    }
+    .cover-page { display: flex; justify-content: center; align-items: center; text-align: center; }
+    .cover-title { font-size: 2.2rem; font-weight: 800; letter-spacing: 0.2em; }
+  </style>
+</head>
+<body>
+
+  <div class="controls reader-header" id="controls-header">
+    <button class="ctrl-btn" id="back-btn">← 戻る</button>
+    <button class="ctrl-btn bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()">🔖 栞をはさむ</button>
+  </div>
+
+  <div class="touch-zone zone-left" onclick="nextPage()"></div>
+  <div class="touch-zone zone-center" onclick="toggleControls()"></div>
+  <div class="touch-zone zone-right" onclick="prevPage()"></div>
+
+  <div class="book-viewport">
+    <div class="pages-container" id="pages-container"></div>
+  </div>
+
+  <div class="controls reader-footer" id="controls-footer">
+    <span id="page-counter">1 / 1 ページ</span>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const workId = urlParams.get('id') || 'kajin';
+    const work = worksData[workId];
+    
+    let currentPage = parseInt(urlParams.get('page')) || 1;
+    let totalPages = 1;
+    const container = document.getElementById('pages-container');
+
+    if (work && work.pages) {
+      document.title = `${work.title}｜北風小僧`;
+      document.getElementById('back-btn').onclick = () => location.href = `novel-cover.html?id=${workId}`;
+
+      // 表紙ページの生成
+      let html = `
+        <div class="page cover-page">
+          <div>
+            <h1 class="cover-title">${work.title}</h1>
+            <p style="margin-top: 20px;">北風小僧 著</p>
+            <p style="margin-top: 40px; font-size: 0.85rem; color: #666;">${work.date}<br>${work.length}</p>
+          </div>
+        </div>
+      `;
+
+      // 本文ページの生成
+      work.pages.forEach(pText => {
+        html += `<div class="page">${pText}</div>`;
+      });
+
+      container.innerHTML = html;
+      totalPages = work.pages.length + 1; // 表紙分+1
+      goToPage(currentPage);
+    }
+
+    function goToPage(page) {
+      currentPage = Math.max(1, Math.min(page, totalPages));
+      const offset = (currentPage - 1) * 100;
+      container.style.transform = `translateX(${offset}vw)`;
+      document.getElementById('page-counter').innerText = `${currentPage} / ${totalPages} ページ`;
+      updateBookmarkUI();
+    }
+
+    function nextPage() { if (currentPage < totalPages) goToPage(currentPage + 1); }
+    function prevPage() { if (currentPage > 1) goToPage(currentPage - 1); }
+
+    function toggleControls() {
+      document.getElementById('controls-header').classList.toggle('active');
+      document.getElementById('controls-footer').classList.toggle('active');
+    }
+
+    function toggleBookmark() {
+      const saved = localStorage.getItem(`bookmark_${workId}`);
+      if (saved == currentPage) {
+        localStorage.removeItem(`bookmark_${workId}`);
+      } else {
+        localStorage.setItem(`bookmark_${workId}`, currentPage);
+      }
+      updateBookmarkUI();
+    }
+
+    function updateBookmarkUI() {
+      const saved = localStorage.getItem(`bookmark_${workId}`);
+      const btn = document.getElementById('bookmark-btn');
+      if (saved == currentPage) {
+        btn.innerText = "🔖 栞あり";
+        btn.classList.add('bookmarked');
+      } else {
+        btn.innerText = "🔖 栞をはさむ";
+        btn.classList.remove('bookmarked');
+      }
+    }
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+    document.addEventListener('touchend', e => {
+      const diffX = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0) prevPage();
+        else nextPage();
+      }
+    });
+  </script>
+</body>
+</html>
