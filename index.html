@@ -15,7 +15,14 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 全画面オープニング演出 */
+    /* 1. 最上部のランダム＆20秒ごとに変わるカラーバー */
+    #top-color-bar {
+      height: 5px;
+      width: 100%;
+      transition: background-color 1s ease;
+    }
+
+    /* オープニング演出（句読点なし） */
     #opening {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: #111111; color: #ffffff;
@@ -29,36 +36,24 @@
       animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
-    /* 上部ナビゲーション */
+    /* 上部ナビゲーション（ロゴサイズ調整・マーク削除） */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 16px 24px; border-bottom: 1px solid #e0e0e0;
+      padding: 14px 24px; border-bottom: 1px solid #e0e0e0;
       backdrop-filter: blur(5px);
     }
-    
-    /* 1番上の「北風小僧」ロゴ（サイズ拡大・新潮社風印章つき） */
     .brand-logo {
-      font-size: 2.2rem; font-weight: 800; text-decoration: none; color: #111;
-      letter-spacing: 0.08em; display: flex; align-items: center; gap: 10px;
-      line-height: 1;
-    }
-    .brand-stamp {
-      display: inline-flex; justify-content: center; align-items: center;
-      width: 32px; height: 32px; border: 1.5px solid #111; border-radius: 50%;
-      font-size: 1rem; font-weight: bold; font-family: serif;
+      font-size: 1.4rem; font-weight: 700; text-decoration: none; color: #111;
+      letter-spacing: 0.08em;
     }
 
-    .nav-right { display: flex; align-items: center; gap: 16px; }
-    .search-box input {
-      border: 1px solid #ccc; background: #fcfcfc; padding: 8px 12px;
-      border-radius: 20px; font-size: 0.85rem; width: 140px; outline: none;
-      font-family: inherit; transition: border-color 0.2s;
-    }
-    .search-box input:focus { border-color: #111; }
-    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.5rem; padding: 4px; color: #111; }
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    /* 検索を虫眼鏡マークのみに変更 */
+    .search-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #111; }
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.4rem; color: #111; }
 
-    /* 新潮社風 全画面オーバーレイメニュー */
+    /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(10, 10, 10, 0.95); color: #fff;
@@ -68,110 +63,97 @@
     #overlay-menu.active { opacity: 1; visibility: visible; }
     .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
     .menu-list { list-style: none; text-align: center; }
-    .menu-list li { margin: 28px 0; }
-    .menu-list a { color: #fff; text-decoration: none; font-size: 1.35rem; letter-spacing: 0.15em; transition: opacity 0.2s; }
-    .menu-list a:hover { opacity: 0.7; }
-    .menu-brand { font-size: 2rem; font-weight: bold; border-bottom: 1px dashed #555; padding-bottom: 12px; margin-bottom: 10px; display: inline-block; }
+    .menu-list li { margin: 24px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
-    /* メインコンテナ */
-    .container { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+    /* コンテナ */
+    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 60px; }
     
     .section-header {
       display: flex; justify-content: space-between; align-items: flex-end;
-      margin-top: 50px; margin-bottom: 24px; border-bottom: 2px solid #111; padding-bottom: 8px;
+      margin-top: 45px; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 8px;
     }
-    .section-h2 { font-size: 1.35rem; font-weight: 700; letter-spacing: 0.08em; }
-    .section-sub { font-size: 0.8rem; color: #777; font-weight: normal; }
+    .section-h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.08em; }
+    .section-sub { font-size: 0.75rem; color: #777; }
 
-    /* 最新の文章（新潮社風カルーセル） */
-    .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
-    .card-scroll::-webkit-scrollbar { height: 4px; }
-    .card-scroll::-webkit-scrollbar-thumb { background: #bbb; border-radius: 2px; }
-    
+    /* 最新の文章（新潮社風：カードの下に十分な余白を持たせる） */
+    .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
-      min-width: 240px; max-width: 240px; border: 1px solid #e0e0e0;
-      padding: 24px 20px; text-decoration: none; color: inherit; background: #fff;
+      min-width: 230px; max-width: 230px; border: 1px solid #e0e0e0;
+      padding: 22px 18px; text-decoration: none; color: inherit; background: #fff;
       display: flex; flex-direction: column; justify-content: space-between;
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      transition: border-color 0.2s;
     }
-    .card-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    
-    .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; display: inline-block; line-height: 1.5; }
-    .card-meta { font-size: 0.78rem; color: #888; letter-spacing: 0.05em; }
+    .card-item:hover { border-color: #111; }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
+    .card-meta { font-size: 0.78rem; color: #888; }
     
     .btn-all {
       display: block; text-align: center; border: 1px solid #111; padding: 12px;
-      margin: 24px 0 50px; text-decoration: none; color: #111; font-size: 0.95rem;
-      font-weight: bold; letter-spacing: 0.1em; transition: background 0.2s, color 0.2s;
+      margin: 10px 0 45px; text-decoration: none; color: #111; font-size: 0.9rem;
+      font-weight: bold; letter-spacing: 0.08em;
     }
-    .btn-all:hover { background: #111; color: #fff; }
 
-    /* Tシャツカラー準拠のジャンル枠 */
-    .genre-list { list-style: none; margin-bottom: 50px; }
+    /* 短いカラーバー（見出し下） */
+    .line-blue   { border-bottom: 3px solid #00a0dc; padding-bottom: 2px; }
+    .line-green  { border-bottom: 3px solid #00b46e; padding-bottom: 2px; }
+    .line-red    { border-bottom: 3px solid #ff3c6e; padding-bottom: 2px; }
+    .line-yellow { border-bottom: 3px solid #ffd200; padding-bottom: 2px; }
+
+    /* 長方形・単色のジャンル枠（角丸・グラデーションなし） */
+    .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 18px 24px; margin-bottom: 14px; text-decoration: none; color: #111;
-      font-weight: 700; font-size: 1.05rem; border-radius: 4px;
-      transition: transform 0.15 ease, box-shadow 0.15s ease;
+      padding: 16px 20px; margin-bottom: 12px; text-decoration: none; color: #111;
+      font-weight: 700; font-size: 1rem; border-radius: 0px; /* 完全な長方形 */
     }
-    .genre-item:hover { transform: translateX(4px); }
-
-    .genre-blue   { background-color: rgba(0, 160, 220, 0.08); border-left: 8px solid #00a0dc; }
-    .genre-green  { background-color: rgba(0, 180, 110, 0.08); border-left: 8px solid #00b46e; }
-    .genre-red    { background-color: rgba(255, 60, 110, 0.08); border-left: 8px solid #ff3c6e; }
-    .genre-yellow { background-color: rgba(255, 210, 0, 0.12); border-left: 8px solid #ffd200; }
-
-    /* カラーアンダーライン */
-    .line-blue   { border-bottom: 3px solid #00a0dc; }
-    .line-green  { border-bottom: 3px solid #00b46e; }
-    .line-red    { border-bottom: 3px solid #ff3c6e; }
-    .line-yellow { border-bottom: 3px solid #ffd200; }
+    .genre-blue   { background-color: #00a0dc; color: #fff; }
+    .genre-green  { background-color: #00b46e; color: #fff; }
+    .genre-red    { background-color: #ff3c6e; color: #fff; }
+    .genre-yellow { background-color: #ffd200; color: #111; }
 
     /* 人気の文章 */
-    .popular-list { list-style: none; margin-bottom: 50px; }
-    .popular-item { padding: 18px 0; border-bottom: 1px dashed #ddd; text-decoration: none; color: inherit; display: block; }
-    .popular-title { font-weight: 700; font-size: 1.05rem; display: inline-block; margin-bottom: 6px; }
+    .popular-list { list-style: none; margin-bottom: 15px; }
+    .popular-item { padding: 16px 0; border-bottom: 1px dashed #ddd; text-decoration: none; color: inherit; display: block; }
+    .popular-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: inline-block; }
 
     /* フッター領域 */
-    .about-site-box { background: #fbfbfb; border: 1px solid #eaeaea; padding: 30px; text-align: center; margin-top: 60px; margin-bottom: 40px; }
-    .about-site-box h3 { font-size: 1.15rem; margin-bottom: 16px; letter-spacing: 0.08em; }
-    .sns-links { font-size: 0.9rem; color: #555; line-height: 2.2; }
+    .about-site-box { background: #fbfbfb; border: 1px solid #eaeaea; padding: 26px; text-align: center; margin-top: 50px; margin-bottom: 35px; }
+    .about-site-box h3 { font-size: 1.1rem; margin-bottom: 12px; }
+    .sns-links { font-size: 0.88rem; color: #555; line-height: 2; }
 
-    .footer-links { list-style: none; text-align: center; font-size: 0.9rem; line-height: 2.4; margin-bottom: 40px; }
-    .footer-links a { color: #444; text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: #000; text-decoration: underline; }
+    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.4; margin-bottom: 35px; }
+    .footer-links a { color: #444; text-decoration: none; }
     
-    footer { text-align: center; font-size: 0.85rem; color: #999; padding-bottom: 50px; border-top: 1px solid #eee; padding-top: 30px; }
+    footer { text-align: center; font-size: 0.82rem; color: #888; border-top: 1px solid #eee; padding-top: 25px; }
 
-    /* アニメーション */
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
   </style>
 </head>
 <body>
 
-  <!-- 全画面オープニング演出 -->
+  <!-- 最上部の自動切替カラーバー -->
+  <div id="top-color-bar"></div>
+
+  <!-- 全画面オープニング演出（「。」なし） -->
   <div id="opening">
-    <p class="opening-text">思考を紡ぐ場所へ。</p>
+    <p class="opening-text">思考を紡ぐ場所へ</p>
   </div>
 
-  <!-- 上部ナビゲーションバー（大きくした北風小僧ロゴ） -->
+  <!-- 上部ナビゲーション -->
   <div class="top-nav">
-    <a href="index.html" class="brand-logo">
-      <span class="brand-stamp">北</span>
-      北風小僧
-    </a>
+    <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <div class="search-box"><input type="text" placeholder="キーワード検索..."></div>
+      <button class="search-btn" title="検索">🔍</button>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- 全画面黒メニュー -->
+  <!-- 全画面オーバーレイメニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="index.html" class="menu-brand">北風小僧</a></li>
       <li><a href="index.html">ホーム</a></li>
       <li><a href="list.html">文章一覧</a></li>
       <li><a href="about.html">私について</a></li>
@@ -181,25 +163,17 @@
 
   <div class="container">
 
-    <!-- 最新の文章 -->
+    <!-- 最新の文章（最大5件を表示） -->
     <div class="section-header" style="margin-top:0;">
       <h2 class="section-h2">最新の文章</h2>
-      <span class="section-sub">NEW ARRIVALS</span>
+      <span class="section-sub">NEW</span>
     </div>
-    <div class="card-scroll">
-      <a href="hajimene.html" class="card-item">
-        <span class="card-title line-green">はじめに</span>
-        <div class="card-meta">2026.08.21｜約300字</div>
-      </a>
-      <a href="article2.html" class="card-item">
-        <span class="card-title line-blue">恐怖の構造</span>
-        <div class="card-meta">2026.08.26｜約1,200字</div>
-      </a>
+    <div class="card-scroll" id="latest-container">
+      <!-- JavaScriptにより最新5件が自動展開されます -->
     </div>
-    <!-- 一覧を押すと文章一覧ページへジャンプ -->
-    <a href="list.html" class="btn-all">すべての文章一覧を見る ＞</a>
+    <a href="list.html" class="btn-all">文章一覧 ＞</a>
 
-    <!-- ジャンル -->
+    <!-- ジャンル（単色・長方形） -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
@@ -211,25 +185,15 @@
       <a href="list.html" class="genre-item genre-yellow"><span>詩歌</span><span>1 ＞</span></a>
     </div>
 
-    <!-- 人気の文章 -->
+    <!-- 人気の文章（初期5件／すべて見るで10件） -->
     <div class="section-header">
       <h2 class="section-h2">人気の文章</h2>
       <span class="section-sub">POPULAR</span>
     </div>
-    <div class="popular-list">
-      <a href="#" class="popular-item">
-        1. <span class="popular-title line-blue">〇〇について</span>
-        <div class="card-meta">2026.08.13｜約800字</div>
-      </a>
-      <a href="#" class="popular-item">
-        2. <span class="popular-title line-green">〇〇と〇〇</span>
-        <div class="card-meta">2026.08.11｜約1,500字</div>
-      </a>
-      <a href="#" class="popular-item">
-        3. <span class="popular-title line-red">〇〇〇</span>
-        <div class="card-meta">2026.07.29｜約2,000字</div>
-      </a>
+    <div class="popular-list" id="popular-container">
+      <!-- JavaScriptにより人気記事が表示されます -->
     </div>
+    <button id="show-more-popular" class="btn-all" onclick="showMorePopular()" style="width:100%; cursor:pointer; background:none;">すべて見る ＞</button>
 
     <!-- このサイトについて -->
     <div class="about-site-box">
@@ -240,18 +204,90 @@
       </div>
     </div>
 
-    <!-- フッターリンク -->
+    <!-- フッターリンク（私について、サイトのご利用） -->
     <ul class="footer-links">
-      <li><a href="terms.html">サイトのご利用について（著作権等）</a></li>
+      <li><a href="about.html">私について</a></li>
+      <li><a href="terms.html">サイトのご利用</a></li>
       <li><a href="help.html">ヘルプ</a></li>
       <li><a href="contact.html">お問合せ</a></li>
     </ul>
 
-    <footer>&copy; 北風小僧 All Rights Reserved.</footer>
+    <footer>&copy; 北風小僧</footer>
 
   </div>
 
   <script>
+    /* ========================================================
+       1. 文章データ管理（追加時は配列の「一番上」に書いてください）
+       ※左から順（最新順）に並び、自動的にトップ5件が最新欄に置かれます。
+    ======================================================== */
+    const articles = [
+      { title: "作品タイトル5", url: "article5.html", date: "2026.08.27", length: "約1,500字", colorClass: "line-blue" },
+      { title: "作品タイトル4", url: "article4.html", date: "2026.08.26", length: "約1,000字", colorClass: "line-red" },
+      { title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue" },
+      { title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green" },
+      { title: "旧作品1", url: "article1.html", date: "2026.07.29", length: "約2,000字", colorClass: "line-yellow" },
+      { title: "旧作品2", url: "article0.html", date: "2026.07.15", length: "約800字", colorClass: "line-green" }
+    ];
+
+    /* 人気の文章リスト（最大10個設定） */
+    const popularArticles = [
+      { rank: 1, title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue" },
+      { rank: 2, title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green" },
+      { rank: 3, title: "作品タイトル5", url: "article5.html", date: "2026.08.27", length: "約1,500字", colorClass: "line-blue" },
+      { rank: 4, title: "作品タイトル4", url: "article4.html", date: "2026.08.26", length: "約1,000字", colorClass: "line-red" },
+      { rank: 5, title: "旧作品1", url: "article1.html", date: "2026.07.29", length: "約2,000字", colorClass: "line-yellow" },
+      /* 以下「すべて見る」で表示される6〜10位 */
+      { rank: 6, title: "人気の文章 6", url: "#", date: "2026.06.10", length: "約1,100字", colorClass: "line-green" },
+      { rank: 7, title: "人気の文章 7", url: "#", date: "2026.06.01", length: "約900字", colorClass: "line-blue" },
+      { rank: 8, title: "人気の文章 8", url: "#", date: "2026.05.20", length: "約1,800字", colorClass: "line-red" },
+      { rank: 9, title: "人気の文章 9", url: "#", date: "2026.05.11", length: "約700字", colorClass: "line-yellow" },
+      { rank: 10, title: "人気の文章 10", url: "#", date: "2026.04.30", length: "約2,500字", colorClass: "line-blue" }
+    ];
+
+    /* 2. 最上部バーの色ランダム＆20秒切替制御 */
+    const colors = ['#00a0dc', '#00b46e', '#ff3c6e', '#ffd200'];
+    function changeBarColor() {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById('top-color-bar').style.backgroundColor = randomColor;
+    }
+    changeBarColor();
+    setInterval(changeBarColor, 20000); // 20秒（20000ミリ秒）ごと
+
+    /* 3. 最新文章（最大5件）の初期描画 */
+    const latestContainer = document.getElementById('latest-container');
+    const latestArticles = articles.slice(0, 5); // 先頭（最新）の5つを取得
+    latestArticles.forEach(item => {
+      latestContainer.innerHTML += `
+        <a href="${item.url}" class="card-item">
+          <div><span class="card-title"><span class="${item.colorClass}">${item.title}</span></span></div>
+          <div class="card-meta">${item.date}｜${item.length}</div>
+        </a>
+      `;
+    });
+
+    /* 4. 人気文章の描画制御 */
+    function renderPopular(limit) {
+      const container = document.getElementById('popular-container');
+      container.innerHTML = '';
+      const list = popularArticles.slice(0, limit);
+      list.forEach(item => {
+        container.innerHTML += `
+          <a href="${item.url}" class="popular-item">
+            ${item.rank}. <span class="popular-title"><span class="${item.colorClass}">${item.title}</span></span>
+            <div class="card-meta">${item.date}｜${item.length}</div>
+          </a>
+        `;
+      });
+    }
+    renderPopular(5); // 初期は5個表示
+
+    function showMorePopular() {
+      renderPopular(10); // 10個表示に変更
+      document.getElementById('show-more-popular').style.display = 'none'; // ボタンを非表示
+    }
+
+    /* メニュー開閉 */
     function toggleMenu() {
       document.getElementById('overlay-menu').classList.toggle('active');
     }
