@@ -115,7 +115,7 @@
       display: flex; gap: 12px; align-items: center;
     }
 
-    /* 追加：共有ボタン */
+    /* 共有ボタン */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
       padding: 0 4px; line-height: 1; font-family: inherit;
@@ -214,7 +214,7 @@
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="list.html">文章一覧</a></li>
+      <li><a href="list.html">作品一覧</a></li>
       <li><a href="about.html">私について</a></li>
       <li><a href="contact.html">お問い合わせ</a></li>
       <li><a href="contact.html">感想を送る</a></li>
@@ -265,7 +265,7 @@
       <div class="modal-title">ジャンル絞り込み</div>
       <ul class="color-filter-list">
         <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">すべて表示</li>
-        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">評論もどき</li>
+        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">評論風</li>
         <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('line-green')">随筆</li>
         <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('line-red')">小説</li>
         <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('line-yellow')">詩歌</li>
@@ -291,19 +291,20 @@
   </div>
 
   <script>
+    /* トップページと完全に同期した共通マスターデータベース */
     const allArticles = [
       { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, colorClass: "line-green" },
       { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, colorClass: "line-blue" },
       { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, colorClass: "line-blue" },
       { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, colorClass: "line-red" },
       { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, colorClass: "line-yellow" },
-      { id: 6, title: "忘却の地平", url: "#", date: "2026.06.30", length: "12,314文字", popularRank: 6, colorClass: "line-green" },
-      { id: 7, title: "言葉の余白", url: "#", date: "2026.06.15", length: "8,900文字", popularRank: 7, colorClass: "line-green" },
-      { id: 8, title: "夜の思考実験", url: "#", date: "2026.05.28", length: "19,200文字", popularRank: 8, colorClass: "line-blue" },
-      { id: 9, title: "断章", url: "#", date: "2026.05.10", length: "4,500文字", popularRank: 9, colorClass: "line-yellow" },
-      { id: 10, title: "夏至の日に", url: "#", date: "2026.04.30", length: "12,314文字", popularRank: 10, colorClass: "line-red" },
-      { id: 11, title: "春の終わり", url: "#", date: "2026.04.15", length: "9,800文字", popularRank: 11, colorClass: "line-green" },
-      { id: 12, title: "記憶の構造", url: "#", date: "2026.03.20", length: "15,600文字", popularRank: 12, colorClass: "line-blue" }
+      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, colorClass: "line-green" },
+      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, colorClass: "line-green" },
+      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, colorClass: "line-blue" },
+      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, colorClass: "line-yellow" },
+      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, colorClass: "line-red" },
+      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, colorClass: "line-green" },
+      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, colorClass: "line-blue" }
     ];
 
     let currentPage = 1;
@@ -316,13 +317,11 @@
     function initParams() {
       const params = new URLSearchParams(window.location.search);
       
-      /* 並び順パラメータ check */
       if (params.get('sort') === 'popular') {
         currentSort = 'popular';
         document.getElementById('sort-select').value = 'popular';
       }
 
-      /* ジャンル絞り込みパラメータ check */
       const genreParam = params.get('genre');
       if (genreParam) {
         if (genreParam === 'blue') currentColorFilter = 'line-blue';
@@ -359,7 +358,7 @@
       return list;
     }
 
-    /* 追加：共有処理機能 */
+    /* 共有処理機能 */
     function shareArticle(event, title, url) {
       event.preventDefault();
       event.stopPropagation();
