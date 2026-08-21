@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>作品一覧｜北風小僧</title>
+  <title>作品一覧 - 北風小僧</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,33 +15,27 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    #top-color-bar { height: 5px; width: 100%; }
+
     /* ナビゲーションバー */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 24px; border-bottom: 1px solid #111111;
-      backdrop-filter: blur(5px);
     }
-    
     .brand-logo {
-      font-size: 1.5rem; font-weight: 800; text-decoration: none; color: #000;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      text-shadow: 0.5px 0 0 #000;
+      font-size: 1.75rem; font-weight: 800; text-decoration: none; color: #000;
+      letter-spacing: 0.18em; text-transform: uppercase; text-shadow: 0.5px 0 0 #000;
     }
-
     .nav-right { display: flex; align-items: center; gap: 20px; }
-    
-    .search-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
-    .search-btn svg { width: 18px; height: 18px; stroke: #111; stroke-width: 2.2; fill: none; }
-
-    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; padding: 2px; }
 
     /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(10, 10, 10, 0.96); color: #fff;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
     }
     #overlay-menu.active { opacity: 1; visibility: visible; }
     .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
@@ -49,161 +43,70 @@
     .menu-list li { margin: 24px 0; }
     .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
-    /* メインコンテンツ枠 */
-    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 50px; }
+    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 60px; }
 
-    /* ページタイトル */
-    .page-title {
-      font-size: 1.4rem; font-weight: 700; letter-spacing: 0.08em;
-      margin-bottom: 20px;
-    }
+    .page-title { font-size: 1.4rem; font-weight: 800; border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 25px; letter-spacing: 0.1em; }
 
-    /* 横幅いっぱいの薄い線 */
-    .thin-divider {
-      border: 0;
-      border-top: 1px solid #e0e0e0;
-      margin-left: -24px;
-      margin-right: -24px;
-    }
-
-    /* コントロールエリア */
-    .control-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 0;
-      font-size: 0.9rem;
-    }
-    .sort-controls { display: flex; align-items: center; gap: 8px; }
-    .select-box {
-      border: none; background: none; font-family: inherit; font-size: 0.9rem;
-      font-weight: bold; cursor: pointer; outline: none; color: #111111;
-    }
-    .order-btn {
-      background: none; border: 1px solid #111111; border-radius: 2px;
-      padding: 2px 8px; cursor: pointer; font-size: 0.8rem; color: #111111;
-      font-family: inherit;
-    }
-
+    /* フィルタボタン群 */
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
     .filter-btn {
-      background: none; border: none; font-family: inherit; font-size: 0.9rem;
-      font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;
-      color: #111111;
+      border: 1px solid #ddd; background: #f9f9f9; padding: 6px 14px; font-size: 0.82rem;
+      cursor: pointer; font-family: inherit; font-weight: 600; border-radius: 0px;
     }
-    .filter-icon { font-size: 1rem; line-height: 1; }
+    .filter-btn.active { border-color: #111; background: #111; color: #fff; }
 
-    /* カラー別下線 */
-    .line-blue   { border-bottom: 2px solid #4ba3e3; padding-bottom: 2px; }
-    .line-green  { border-bottom: 2px solid #3cb878; padding-bottom: 2px; }
-    .line-red    { border-bottom: 2px solid #f06292; padding-bottom: 2px; }
-    .line-yellow { border-bottom: 2px solid #f6d155; padding-bottom: 2px; }
-
-    /* 作品リスト */
-    .article-list { list-style: none; margin-bottom: 30px; }
-    .article-item {
-      padding: 16px 0; border-bottom: 1px dashed #e0e0e0; text-decoration: none;
-      color: inherit; display: block;
+    /* 作品カード */
+    .article-card {
+      border: 1px solid #e0e0e0; padding: 22px 20px 16px; margin-bottom: 18px;
+      text-decoration: none; color: inherit; display: block; background: #fff;
+      transition: border-color 0.2s;
     }
-    .article-item:hover { opacity: 0.8; }
-    .article-title-wrap { margin-bottom: 8px; }
-    .article-title { font-weight: 700; font-size: 1.05rem; }
-    
-    .article-meta-row {
+    .article-card:hover { border-color: #111; }
+    .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; display: inline-block; }
+
+    .card-meta-row {
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.82rem; color: #666;
+      font-size: 0.8rem; color: #888; border-top: 1px dashed #eee; padding-top: 10px; margin-top: 10px;
     }
 
-    /* ページネーション */
-    .pagination {
-      display: flex; justify-content: center; align-items: center; gap: 12px;
-      margin: 35px 0 25px; font-size: 1rem;
+    .share-btn {
+      background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
+      padding: 2px 6px; border-radius: 4px; line-height: 1;
     }
-    .page-num {
-      text-decoration: none; color: #111; padding: 2px 8px; cursor: pointer;
-    }
-    .page-num.active {
-      border: 1px solid #111; font-weight: bold;
-    }
+    .share-btn:hover { background-color: #f0f0f0; color: #000; }
 
-    /* ページ検索 */
-    .page-search-box {
-      display: flex; justify-content: center; align-items: center; gap: 10px;
-      margin-bottom: 40px; font-size: 0.88rem;
-    }
-    .page-input {
-      width: 60px; padding: 4px 8px; text-align: center;
-      border: 1px solid #ccc; font-family: inherit; font-size: 0.88rem;
-    }
-    .page-submit-btn {
-      background: none; border: 1px solid #111; padding: 4px 10px;
-      cursor: pointer; font-family: inherit; font-size: 0.85rem; color: #111;
-    }
-
-    /* 絞り込みモーダル */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.2s;
-    }
-    .modal-overlay.active { opacity: 1; visibility: visible; }
-    .modal-content {
-      background: #fff; width: 85%; max-width: 360px; padding: 25px; border-radius: 0px;
-      border: 1px solid #111;
-    }
-    .modal-title { font-size: 1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #111; padding-bottom: 8px; color: #111; }
-    .color-filter-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .color-filter-item {
-      padding: 12px 16px; cursor: pointer; font-size: 0.92rem; font-weight: 500;
-      display: flex; justify-content: space-between; align-items: center; color: #000000;
-    }
+    .line-blue   { border-bottom: 3px solid #4ba3e3; padding-bottom: 2px; }
+    .line-green  { border-bottom: 3px solid #3cb878; padding-bottom: 2px; }
+    .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
+    .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
     /* フッター黒エリア */
     .footer-dark-section {
-      background-color: #111111;
-      color: #ffffff;
-      width: 100%;
-      padding: 50px 24px 40px;
-      margin-top: 60px;
+      background-color: #111111; color: #ffffff; width: 100%; padding: 50px 24px 40px; margin-top: 60px;
     }
-    .footer-dark-inner {
-      max-width: 680px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .contact-info-box {
-      margin-bottom: 30px;
-      padding-bottom: 25px;
-      border-bottom: 1px dashed #333333;
-      font-size: 0.88rem;
-      color: #cccccc;
-      line-height: 2.2;
-    }
-    .contact-info-box a { color: #ffffff; text-decoration: underline; }
-
+    .footer-dark-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+    .contact-info-box { margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px dashed #333; font-size: 0.88rem; color: #ccc; line-height: 2.2; }
+    .contact-info-box a { color: #fff; text-decoration: underline; }
     .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
-    .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: #ffffff; }
-    
-    .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
+    .footer-links a { color: #ccc; text-decoration: none; }
+    .dark-copyright { text-align: center; font-size: 0.82rem; color: #777; border-top: 1px solid #222; padding-top: 25px; }
   </style>
 </head>
 <body>
 
-  <!-- ナビゲーション -->
+  <div id="top-color-bar" style="background-color: #5baed7;"></div>
+
   <div class="top-nav">
     <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <button class="search-btn" title="検索">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
-      </button>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="list.html">文章一覧</a></li>
+      <li><a href="list.html">作品一覧</a></li>
       <li><a href="about.html">私について</a></li>
       <li><a href="contact.html">お問い合わせ</a></li>
       <li><a href="contact.html">感想を送る</a></li>
@@ -211,58 +114,21 @@
   </div>
 
   <div class="container">
-
     <h1 class="page-title">作品一覧</h1>
 
-    <hr class="thin-divider">
-
-    <!-- コントロールバー -->
-    <div class="control-bar">
-      <div class="sort-controls">
-        <select id="sort-select" class="select-box" onchange="changeSort()">
-          <option value="date">新着順</option>
-          <option value="popular">人気順</option>
-        </select>
-        <button id="order-toggle-btn" class="order-btn" onclick="toggleOrder()">↓ 降順</button>
-      </div>
-
-      <button class="filter-btn" onclick="openFilterModal()">
-        絞り込み <span class="filter-icon">⏚</span>
-      </button>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterGenre('all', this)">すべて</button>
+      <button class="filter-btn" onclick="filterGenre('blue', this)">評論風</button>
+      <button class="filter-btn" onclick="filterGenre('green', this)">随筆</button>
+      <button class="filter-btn" onclick="filterGenre('red', this)">小説</button>
+      <button class="filter-btn" onclick="filterGenre('yellow', this)">詩歌</button>
     </div>
 
-    <hr class="thin-divider" style="margin-bottom: 15px;">
-
-    <!-- 作品一覧リスト -->
-    <div class="article-list" id="article-list-container"></div>
-
-    <!-- ページネーション -->
-    <div class="pagination" id="pagination-container"></div>
-
-    <!-- ページ検索 -->
-    <div class="page-search-box">
-      <span>ページ検索</span>
-      <input type="number" id="page-input" class="page-input" min="1">
-      <button class="page-submit-btn" onclick="jumpToPage()">移動</button>
-    </div>
-
-  </div>
-
-  <!-- 絞り込みモーダル -->
-  <div class="modal-overlay" id="filter-modal" onclick="closeFilterModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-title">ジャンル絞り込み</div>
-      <ul class="color-filter-list">
-        <li class="color-filter-item" style="background:#f4f4f4;" onclick="applyColorFilter('all')">すべて表示</li>
-        <li class="color-filter-item" style="background:#5baed7;" onclick="applyColorFilter('line-blue')">評論もどき</li>
-        <li class="color-filter-item" style="background:#52be80;" onclick="applyColorFilter('line-green')">随筆</li>
-        <li class="color-filter-item" style="background:#f1789a;" onclick="applyColorFilter('line-red')">小説</li>
-        <li class="color-filter-item" style="background:#f7d358;" onclick="applyColorFilter('line-yellow')">詩歌</li>
-      </ul>
+    <div id="articles-list">
+      <!-- JavaScriptで描画 -->
     </div>
   </div>
 
-  <!-- フッター黒エリア -->
   <div class="footer-dark-section">
     <div class="footer-dark-inner">
       <div class="contact-info-box">
@@ -280,165 +146,70 @@
   </div>
 
   <script>
-    const allArticles = [
-      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, colorClass: "line-green" },
-      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, colorClass: "line-blue" },
-      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, colorClass: "line-blue" },
-      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, colorClass: "line-red" },
-      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, colorClass: "line-yellow" },
-      { id: 6, title: "忘却の地平", url: "#", date: "2026.06.30", length: "12,314文字", popularRank: 6, colorClass: "line-green" },
-      { id: 7, title: "言葉の余白", url: "#", date: "2026.06.15", length: "8,900文字", popularRank: 7, colorClass: "line-green" },
-      { id: 8, title: "夜の思考実験", url: "#", date: "2026.05.28", length: "19,200文字", popularRank: 8, colorClass: "line-blue" },
-      { id: 9, title: "断章", url: "#", date: "2026.05.10", length: "4,500文字", popularRank: 9, colorClass: "line-yellow" },
-      { id: 10, title: "夏至の日に", url: "#", date: "2026.04.30", length: "12,314文字", popularRank: 10, colorClass: "line-red" },
-      { id: 11, title: "春の終わり", url: "#", date: "2026.04.15", length: "9,800文字", popularRank: 11, colorClass: "line-green" },
-      { id: 12, title: "記憶の構造", url: "#", date: "2026.03.20", length: "15,600文字", popularRank: 12, colorClass: "line-blue" }
+    const articles = [
+      { id: 5, title: "作品タイトル5", url: "article5.html", date: "2026.08.27", length: "約1,500字", colorClass: "line-blue", genre: "blue" },
+      { id: 4, title: "作品タイトル4", url: "article4.html", date: "2026.08.26", length: "約1,000字", colorClass: "line-red", genre: "red" },
+      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.26", length: "約1,200字", colorClass: "line-blue", genre: "blue" },
+      { id: "h", title: "はじめに", url: "hajimene.html", date: "2026.08.21", length: "約300字", colorClass: "line-green", genre: "green" },
+      { id: 1, title: "旧作品1", url: "article1.html", date: "2026.07.29", length: "約2,000字", colorClass: "line-yellow", genre: "yellow" },
+      { id: 0, title: "旧作品2", url: "article0.html", date: "2026.07.15", length: "約800字", colorClass: "line-green", genre: "green" }
     ];
 
-    let currentPage = 1;
-    const itemsPerPage = 10;
-    let currentSort = "date";
-    let isDescending = true;
-    let currentColorFilter = "all";
-
-    /* URLパラメータ解析・読み込み機能 */
-    function initParams() {
-      const params = new URLSearchParams(window.location.search);
-      
-      /* 並び順パラメータ check */
-      if (params.get('sort') === 'popular') {
-        currentSort = 'popular';
-        document.getElementById('sort-select').value = 'popular';
+    function shareArticle(event, title, url) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(window.location.origin + '/' + url);
+        alert('作品リンクをクリップボードにコピーしました');
       }
+    }
 
-      /* ジャンル絞り込みパラメータ check */
+    function renderArticles(filter = 'all') {
+      const container = document.getElementById('articles-list');
+      container.innerHTML = '';
+      
+      const filtered = filter === 'all' 
+        ? articles 
+        : articles.filter(a => a.genre === filter);
+
+      filtered.forEach(item => {
+        container.innerHTML += `
+          <a href="${item.url}" class="article-card">
+            <span class="card-title"><span class="${item.colorClass}">${item.title}</span></span>
+            <div class="card-meta-row">
+              <span>${item.date}｜${item.length}</span>
+              <button class="share-btn" onclick="shareArticle(event, '${item.title}', '${item.url}')">…</button>
+            </div>
+          </a>
+        `;
+      });
+    }
+
+    function filterGenre(genre, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderArticles(genre);
+    }
+
+    /* URLクエリパラメータ(?genre=blue等)の読み込み処理 */
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
       const genreParam = params.get('genre');
       if (genreParam) {
-        if (genreParam === 'blue') currentColorFilter = 'line-blue';
-        if (genreParam === 'green') currentColorFilter = 'line-green';
-        if (genreParam === 'red') currentColorFilter = 'line-red';
-        if (genreParam === 'yellow') currentColorFilter = 'line-yellow';
-      }
-    }
-
-    function getProcessedArticles() {
-      let list = [...allArticles];
-
-      if (currentColorFilter !== "all") {
-        list = list.filter(item => item.colorClass === currentColorFilter);
-      }
-
-      list.sort((a, b) => {
-        let valA, valB;
-        if (currentSort === "date") {
-          valA = new Date(a.date.replace(/\./g, '/'));
-          valB = new Date(b.date.replace(/\./g, '/'));
-        } else {
-          valA = a.popularRank;
-          valB = b.popularRank;
+        const targetBtn = document.querySelector(`.filter-btn[onclick*="'${genreParam}'"]`);
+        if (targetBtn) {
+          filterGenre(genreParam, targetBtn);
+          return;
         }
-
-        if (isDescending) {
-          return currentSort === "date" ? valB - valA : valA - valB;
-        } else {
-          return currentSort === "date" ? valA - valB : valB - valA;
-        }
-      });
-
-      return list;
-    }
-
-    function render() {
-      const articles = getProcessedArticles();
-      const totalPages = Math.ceil(articles.length / itemsPerPage) || 1;
-
-      if (currentPage > totalPages) currentPage = totalPages;
-      if (currentPage < 1) currentPage = 1;
-
-      const container = document.getElementById('article-list-container');
-      container.innerHTML = '';
-
-      const start = (currentPage - 1) * itemsPerPage;
-      const pageArticles = articles.slice(start, start + itemsPerPage);
-
-      if (pageArticles.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding: 40px 0; color:#888;">該当する作品がありません。</p>';
-      } else {
-        pageArticles.forEach(item => {
-          container.innerHTML += `
-            <a href="${item.url}" class="article-item">
-              <div class="article-title-wrap">
-                <span class="article-title"><span class="${item.colorClass}">${item.title}</span></span>
-              </div>
-              <div class="article-meta-row">
-                <span>${item.date}</span>
-                <span>${item.length}</span>
-              </div>
-            </a>
-          `;
-        });
       }
-
-      const pagination = document.getElementById('pagination-container');
-      pagination.innerHTML = '';
-
-      for (let i = 1; i <= totalPages; i++) {
-        pagination.innerHTML += `
-          <span class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</span>
-        `;
-      }
-      if (totalPages > 5) {
-        pagination.innerHTML += `<span style="color:#888;">...</span>`;
-      }
-    }
-
-    function changeSort() {
-      currentSort = document.getElementById('sort-select').value;
-      currentPage = 1;
-      render();
-    }
-
-    function toggleOrder() {
-      isDescending = !isDescending;
-      const btn = document.getElementById('order-toggle-btn');
-      btn.innerText = isDescending ? "↓ 降順" : "↑ 昇順";
-      currentPage = 1;
-      render();
-    }
-
-    function goToPage(page) {
-      currentPage = page;
-      render();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function jumpToPage() {
-      const input = document.getElementById('page-input').value;
-      if (input) {
-        goToPage(parseInt(input, 10));
-      }
-    }
-
-    function openFilterModal() {
-      document.getElementById('filter-modal').classList.add('active');
-    }
-    function closeFilterModal(e) {
-      document.getElementById('filter-modal').classList.remove('active');
-    }
-    function applyColorFilter(color) {
-      currentColorFilter = color;
-      closeFilterModal();
-      currentPage = 1;
-      render();
-    }
+      renderArticles('all');
+    });
 
     function toggleMenu() {
       document.getElementById('overlay-menu').classList.toggle('active');
     }
-
-    /* 初期処理 */
-    initParams();
-    render();
   </script>
 </body>
 </html>
