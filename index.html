@@ -36,7 +36,7 @@
       animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
-    /* ナビゲーションバー（下に線を配置） */
+    /* ナビゲーションバー */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
@@ -129,17 +129,27 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル */
+    /* ジャンル（白枠に囲まれた黒文字＝袋文字仕様） */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 20px; margin-bottom: 12px; text-decoration: none;
-      font-weight: 800; font-size: 1.02rem; border-radius: 0px;
+      font-weight: 800; font-size: 1.05rem; border-radius: 0px;
       color: #000000 !important; 
+      
+      /* くっきりした白い縁取り（袋文字）処理 */
+      -webkit-text-stroke: 1.2px #ffffff;
+      paint-order: stroke fill;
       text-shadow: 
-        0 0 6px rgba(255, 255, 255, 0.9),
-        0 0 10px rgba(255, 255, 255, 0.8),
-        1px 1px 1px rgba(255, 255, 255, 1);
+        2px  2px 0 #fff,
+       -2px  2px 0 #fff,
+        2px -2px 0 #fff,
+       -2px -2px 0 #fff,
+        2px  0px 0 #fff,
+       -2px  0px 0 #fff,
+        0px  2px 0 #fff,
+        0px -2px 0 #fff;
+
       letter-spacing: 0.08em;
       transition: transform 0.15s ease, opacity 0.2s;
     }
@@ -218,7 +228,7 @@
     </div>
   </div>
 
-  <!-- メニュー（お問い合わせの下に「感想を送る」を追加） -->
+  <!-- メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
@@ -248,7 +258,7 @@
     </div>
     <a href="list.html" class="btn-shincho">文章一覧 ＞</a>
 
-    <!-- ジャンル -->
+    <!-- ジャンル（白枠＋黒文字） -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
