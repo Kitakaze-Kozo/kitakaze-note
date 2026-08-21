@@ -101,8 +101,8 @@
     /* 最新の文章 */
     .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
-      min-width: 230px; max-width: 230px; border: 1px solid #e0e0e0;
-      padding: 28px 20px; text-decoration: none; color: inherit; background: #fff;
+      min-width: 230px; max-width: 230px; min-height: 200px; border: 1px solid #e0e0e0;
+      padding: 38px 20px; text-decoration: none; color: inherit; background: #fff;
       display: flex; flex-direction: column; justify-content: space-between;
       transition: border-color 0.2s;
     }
@@ -129,12 +129,12 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル */
+    /* ジャンル（文字を少しだけ太く: font-weight: 600） */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 20px; margin-bottom: 12px; text-decoration: none;
-      font-weight: 500; font-size: 0.92rem; border-radius: 0px;
+      font-weight: 600; font-size: 0.92rem; border-radius: 0px;
       color: #000000 !important; 
       letter-spacing: 0.08em;
       transition: transform 0.15s ease, opacity 0.2s;
@@ -242,9 +242,9 @@
     <div class="card-scroll" id="latest-container">
       <!-- JavaScriptで自動描画 -->
     </div>
-    <a href="list.html" class="btn-shincho">文章一覧 ＞</a>
+    <a href="list.html" class="btn-shincho">作品一覧 ＞</a>
 
-    <!-- ジャンル（各ジャンルごとに絞り込んだ文章一覧へ移動） -->
+    <!-- ジャンル -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
@@ -262,9 +262,8 @@
       <span class="section-sub">POPULAR</span>
     </div>
     <div class="popular-list" id="popular-container">
-      <!-- JavaScriptで自動描画（上位5件表示） -->
+      <!-- JavaScriptで自動描画 -->
     </div>
-    <!-- 人気順で並べられた文章一覧ページへ遷移するリンク -->
     <a href="list.html?sort=popular" class="btn-shincho">すべて見る ＞</a>
 
     <!-- 感想を送る -->
