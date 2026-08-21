@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -50,7 +50,7 @@
     .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
     /* メインコンテンツ枠 */
-    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 50px; }
+    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 50px; min-height: 50vh; }
 
     /* ページタイトル */
     .page-title {
@@ -67,28 +67,12 @@
       margin-bottom: 30px;
     }
 
-    /* セクション */
-    .about-section { margin-bottom: 40px; }
-    .section-title {
-      font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #111;
-      padding-bottom: 6px; margin-bottom: 16px; letter-spacing: 0.05em;
+    /* コンテンツ表示エリア */
+    .about-content {
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
     }
-
-    .about-text { font-size: 0.95rem; color: #222; text-align: justify; margin-bottom: 16px; }
-
-    /* プロフィール詳細リスト */
-    .profile-list { list-style: none; font-size: 0.9rem; margin-top: 10px; }
-    .profile-list li {
-      display: flex; border-bottom: 1px dashed #e0e0e0; padding: 10px 0;
-    }
-    .profile-label { width: 100px; font-weight: bold; color: #555; flex-shrink: 0; }
-    .profile-val { color: #111; }
-
-    /* 年表リスト */
-    .timeline { list-style: none; font-size: 0.9rem; margin-top: 10px; }
-    .timeline li { display: flex; padding: 8px 0; border-bottom: 1px dashed #e0e0e0; }
-    .timeline-date { width: 90px; color: #666; font-weight: bold; flex-shrink: 0; }
-    .timeline-content { color: #111; }
 
     /* フッター黒エリア */
     .footer-dark-section {
@@ -151,49 +135,8 @@
 
     <hr class="thin-divider">
 
-    <!-- 概念・ステートメント -->
-    <div class="about-section">
-      <div class="section-title">コンセプト</div>
-      <p class="about-text">
-        言葉の隙間にこぼれ落ちる思考や、日常の裏側に潜む違和感を静かにすくい上げる場所として本ウェブサイトを開設しました。
-      </p>
-      <p class="about-text">
-        評論、随筆、小説、詩歌など、形式にとらわれずその時々に適した表現方法で思考を展開しています。
-      </p>
-    </div>
-
-    <!-- プロフィール情報 -->
-    <div class="about-section">
-      <div class="section-title">プロフィール</div>
-      <ul class="profile-list">
-        <li>
-          <span class="profile-label">筆名</span>
-          <span class="profile-val">北風小僧（Kitakaze Kozo）</span>
-        </li>
-        <li>
-          <span class="profile-label">関心領域</span>
-          <span class="profile-val">現代文学、思考実験、構造分析、レトロカルチャー</span>
-        </li>
-        <li>
-          <span class="profile-label">主な執筆ジャンル</span>
-          <span class="profile-val">評論風テキスト、随筆、短編小説、詩歌</span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- 略歴・活動履歴 -->
-    <div class="about-section">
-      <div class="section-title">略歴・活動</div>
-      <ul class="timeline">
-        <li>
-          <span class="timeline-date">2026.04</span>
-          <span class="timeline-content">個人ウェブサイト「北風小僧」を開設</span>
-        </li>
-        <li>
-          <span class="timeline-date">2026.01</span>
-          <span class="timeline-content">短編作品のアーカイブ作業を開始</span>
-        </li>
-      </ul>
+    <div class="about-content">
+      <p>1999.12.31生まれ。</p>
     </div>
 
   </div>
