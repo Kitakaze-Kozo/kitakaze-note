@@ -295,22 +295,21 @@
   <script>
     /* 
       共通マスターデータベース 
-      ※ 新規作品を追加する場合はここへオブジェクトを追記するだけで、
-         トップ・一覧・カウント・人気順・文字数すべてに完全連動します。
+      ※ genreを "blue", "green", "red", "yellow" に完全統一
     */
     const allArticles = [
-      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, colorClass: "line-green" },
-      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, colorClass: "line-blue" },
-      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, colorClass: "line-blue" },
-      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, colorClass: "line-red" },
-      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, colorClass: "line-yellow" },
-      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, colorClass: "line-green" },
-      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, colorClass: "line-green" },
-      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, colorClass: "line-blue" },
-      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, colorClass: "line-yellow" },
-      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, colorClass: "line-red" },
-      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, colorClass: "line-green" },
-      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, colorClass: "line-blue" }
+      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, genre: "green" },
+      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, genre: "blue" },
+      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, genre: "blue" },
+      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, genre: "red" },
+      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, genre: "yellow" },
+      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, genre: "green" },
+      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, genre: "green" },
+      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, genre: "blue" },
+      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, genre: "yellow" },
+      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, genre: "red" },
+      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, genre: "green" },
+      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, genre: "blue" }
     ];
 
     /* カラーバー自動切り替え */
@@ -356,7 +355,7 @@
       latestContainer.innerHTML += `
         <a href="${item.url}" class="card-item">
           <div class="card-title-wrap">
-            <span class="card-title"><span class="${item.colorClass}">${item.title}</span></span>
+            <span class="card-title"><span class="line-${item.genre}">${item.title}</span></span>
           </div>
           <div>
             <div style="font-size:0.78rem; color:#888;">${item.date}</div>
@@ -369,19 +368,19 @@
       `;
     });
 
-    /* ジャンル別の作品数をマスターデータから動的かつ正確に算出 */
+    /* ジャンル別の作品数をマスターデータから動的に算出 */
     function updateGenreCounts() {
-      const counts = { 'line-blue': 0, 'line-green': 0, 'line-red': 0, 'line-yellow': 0 };
+      const counts = { blue: 0, green: 0, red: 0, yellow: 0 };
       allArticles.forEach(item => {
-        if (counts.hasOwnProperty(item.colorClass)) {
-          counts[item.colorClass]++;
+        if (counts.hasOwnProperty(item.genre)) {
+          counts[item.genre]++;
         }
       });
 
-      document.getElementById('count-blue').innerText = `${counts['line-blue']} ＞`;
-      document.getElementById('count-green').innerText = `${counts['line-green']} ＞`;
-      document.getElementById('count-red').innerText = `${counts['line-red']} ＞`;
-      document.getElementById('count-yellow').innerText = `${counts['line-yellow']} ＞`;
+      document.getElementById('count-blue').innerText = `${counts.blue} ＞`;
+      document.getElementById('count-green').innerText = `${counts.green} ＞`;
+      document.getElementById('count-red').innerText = `${counts.red} ＞`;
+      document.getElementById('count-yellow').innerText = `${counts.yellow} ＞`;
     }
     updateGenreCounts();
 
@@ -394,7 +393,7 @@
       sortedByPopular.slice(0, 5).forEach((item, index) => {
         container.innerHTML += `
           <a href="${item.url}" class="popular-item">
-            ${index + 1}. <span class="popular-title"><span class="${item.colorClass}">${item.title}</span></span>
+            ${index + 1}. <span class="popular-title"><span class="line-${item.genre}">${item.title}</span></span>
             <div class="card-meta-row">
               <span>${item.date}｜${item.length}</span>
               <button class="share-btn" onclick="shareArticle(event, '${item.title}', '${item.url}')">…</button>
