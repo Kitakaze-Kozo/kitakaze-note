@@ -1,76 +1,201 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>北風小僧の思考ノート</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.8;
-            color: #333;
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: #fafafa;
-        }
-        header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
-        h1 {
-            font-size: 1.8rem;
-            font-weight: normal;
-            margin: 0;
-            color: #111;
-        }
-        p.subtitle {
-            font-size: 0.9rem;
-            color: #777;
-            margin-top: 5px;
-        }
-        article {
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            margin-bottom: 24px;
-        }
-        .date {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        article h2 {
-            font-size: 1.3rem;
-            margin: 8px 0 16px 0;
-        }
-        footer {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>北風小僧の思考ノート</title>
+  <style>
+    /* 全体設定 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* オープニング演出 */
+    #opening {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #1a1a1a;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 0.8s ease forwards;
+      animation-delay: 2.2s;
+    }
+
+    .opening-text {
+      font-size: 1.2rem;
+      letter-spacing: 0.15em;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInUp 1.2s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    /* メインコンテンツ */
+    #main-content {
+      opacity: 0;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      animation: fadeInMain 1s ease forwards;
+      animation-delay: 2.6s;
+    }
+
+    /* タイトルヘッダー */
+    header {
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    /* アコーディオン型ノート・カード */
+    .note-item {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom: 16px;
+      overflow: hidden;
+      border: 1px solid #eaeaea;
+    }
+
+    /* クリック・タップできるヘッダー部分 */
+    summary {
+      padding: 20px 24px;
+      font-weight: bold;
+      font-size: 1.15rem;
+      cursor: pointer;
+      list-style: none; /* デフォルトの矢印を非表示 */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* 日付表示 */
+    .note-date {
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: normal;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    /* 開閉矢印アイコン */
+    summary::after {
+      content: "＋";
+      font-size: 1.2rem;
+      color: #888;
+      transition: transform 0.3s ease;
+      margin-left: 12px;
+    }
+    details[open] summary::after {
+      content: "－";
+    }
+
+    /* 本文領域 */
+    .note-content {
+      padding: 0 24px 24px 24px;
+      color: #444;
+      font-size: 0.98rem;
+      line-height: 1.8;
+      border-top: 1px solid #f0f0f0;
+      margin-top: 8px;
+      padding-top: 16px;
+    }
+
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.8rem;
+      margin-top: 40px;
+    }
+
+    /* アニメーション定義 */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+    @keyframes fadeInMain {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- オープニング画面 -->
+  <div id="opening">
+    <p class="opening-text">思考を紡ぐ場所へ。</p>
+  </div>
+
+  <!-- メイン画面 -->
+  <div id="main-content">
     <header>
-        <h1>北風小僧の思考ノート</h1>
-        <p class="subtitle">日々の独り言と日記</p>
+      <h1>北風小僧の思考ノート</h1>
+      <p class="subtitle">日々の独り言日記</p>
     </header>
 
     <main>
-        <article>
-            <div class="date">2026.08.21</div>
-            <h2>はじめに</h2>
-            <p>ホームページを開設しました。ここには日々の思考や日記を自由に綴っていきます。</p>
-        </article>
+      <!-- 1番上：はじめに（最初から本文が開いた状態にしたい場合は <details open> にします） -->
+      <details class="note-item" open>
+        <summary>
+          <div>
+            <span class="note-date">2026.08.21</span>
+            はじめに
+          </div>
+        </summary>
+        <div class="note-content">
+          <p>ホームページを開設しました。ここには日々の思考や日記を自由に綴っていきます。</p>
+        </div>
+      </details>
+
+      <!-- 2番目のノート例（見出しタップで本文が開きます） -->
+      <details class="note-item">
+        <summary>
+          <div>
+            <span class="note-date">2026.08.22</span>
+            サイトのデザインについて
+          </div>
+        </summary>
+        <div class="note-content">
+          <p>タップすると本文がひらくアコーディオン形式にしてみました。ノートの目次のように一覧で記事を見渡せるのがお気に入りです。</p>
+        </div>
+      </details>
     </main>
 
-    <footer>
-        &copy; 北風小僧
-    </footer>
+    <footer>&copy; 北風小僧</footer>
+  </div>
 
 </body>
 </html>
