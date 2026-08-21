@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>北風小僧の思考ノート</title>
-  <!-- 荘厳な明朝体 ＆ サイトタイトル用の装飾フォントを読み込み -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,7 +15,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 1. 最上部の自動切替カラーバー */
+    /* 1. 最上部ランダムカラーバー */
     #top-color-bar {
       height: 5px;
       width: 100%;
@@ -37,7 +36,7 @@
       animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
-    /* 上部ナビゲーション */
+    /* ナビゲーションバー */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
@@ -45,109 +44,142 @@
       backdrop-filter: blur(5px);
     }
     
-    /* 他の大きな見出しと差別化させた荘厳な「北風小僧」ロゴ */
     .brand-logo {
       font-size: 1.5rem; font-weight: 800; text-decoration: none; color: #000;
       letter-spacing: 0.18em; text-transform: uppercase;
-      text-shadow: 0.5px 0 0 #000; /* 文字の線を太く・強調 */
+      text-shadow: 0.5px 0 0 #000;
     }
 
-    .nav-right { display: flex; align-items: center; gap: 18px; }
-    .search-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #111; }
-    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.4rem; color: #111; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    
+    /* シンプルなSVG虫眼鏡アイコン */
+    .search-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .search-btn svg { width: 18px; height: 18px; stroke: #111; stroke-width: 2.2; fill: none; }
 
-    /* 全画面メニュー */
+    /* 少し大きめにしたメニュー3本線 */
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
+
+    /* 全画面メニュー（ホーム削除、お問い合わせへ変更） */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background-color: rgba(10, 10, 10, 0.95); color: #fff;
+      background-color: rgba(10, 10, 10, 0.96); color: #fff;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     #overlay-menu.active { opacity: 1; visibility: visible; }
     .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
     .menu-list { list-style: none; text-align: center; }
-    .menu-list li { margin: 24px 0; }
-    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
+    .menu-list li { margin: 28px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.3rem; letter-spacing: 0.15em; }
 
     /* コンテナ */
-    .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 60px; }
-    
+    .container { max-width: 680px; margin: 0 auto; padding: 0 24px 60px; }
+
+    /* 北風小僧と最新文章の間の画像スライダー */
+    .hero-slider-wrapper {
+      margin: 25px 0 35px;
+      position: relative;
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #f4f4f4;
+    }
+    .hero-slide {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity 0.8s ease-in-out;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slider-hint {
+      position: absolute; bottom: 10px; right: 12px;
+      background: rgba(0, 0, 0, 0.6); color: #fff;
+      font-size: 0.7rem; padding: 3px 8px; letter-spacing: 0.05em; pointer-events: none;
+    }
+
+    /* 見出しヘッダー */
     .section-header {
       display: flex; justify-content: space-between; align-items: flex-end;
-      margin-top: 50px; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 8px;
+      margin-top: 45px; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 8px;
     }
     .section-h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.08em; }
     .section-sub { font-size: 0.75rem; color: #777; }
 
-    /* 最新の文章（見出し・日付の上下に十分な余白を設定） */
+    /* 最新の文章（上下余白つき） */
     .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
       min-width: 230px; max-width: 230px; border: 1px solid #e0e0e0;
-      padding: 28px 20px; /* 上下にゆったりとした余白 */
-      text-decoration: none; color: inherit; background: #fff;
+      padding: 28px 20px; text-decoration: none; color: inherit; background: #fff;
       display: flex; flex-direction: column; justify-content: space-between;
       transition: border-color 0.2s;
     }
     .card-item:hover { border-color: #111; }
-    
-    /* 見出し下の余白 */
     .card-title-wrap { margin-bottom: 20px; }
     .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
-    
-    /* 日付・文字数の上の余白 */
     .card-meta { font-size: 0.78rem; color: #888; margin-top: 15px; }
-    
-    .btn-all {
-      display: block; text-align: center; border: 1px solid #111; padding: 12px;
+
+    /* 新潮社風：タップ/クリックすると背景が「黒」になるボタン */
+    .btn-shincho {
+      display: block; text-align: center; border: 1px solid #111; padding: 14px;
       margin: 10px 0 45px; text-decoration: none; color: #111; font-size: 0.9rem;
-      font-weight: bold; letter-spacing: 0.08em; background: none; cursor: pointer; width: 100%;
+      font-weight: bold; letter-spacing: 0.1em; background: #fff; cursor: pointer; width: 100%;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .btn-shincho:hover, .btn-shincho:active {
+      background-color: #111111 !important;
+      color: #ffffff !important;
     }
 
-    /* カラーバー（下線） */
-    .line-blue   { border-bottom: 3px solid #33b5e5; padding-bottom: 2px; }
-    .line-green  { border-bottom: 3px solid #2bbd7e; padding-bottom: 2px; }
-    .line-red    { border-bottom: 3px solid #ff527b; padding-bottom: 2px; }
-    .line-yellow { border-bottom: 3px solid #f7c948; padding-bottom: 2px; }
+    /* カラーアンダーライン */
+    .line-blue   { border-bottom: 3px solid #4ba3e3; padding-bottom: 2px; }
+    .line-green  { border-bottom: 3px solid #3cb878; padding-bottom: 2px; }
+    .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
+    .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル（落ち着いた和テイストの少し薄め・単色・長方形） */
+    /* ジャンル（文字色はすべて黒で統一） */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 20px; margin-bottom: 12px; text-decoration: none;
       font-weight: 700; font-size: 1rem; border-radius: 0px;
+      color: #111111 !important; /* 文字色はすべて黒色統一 */
+      transition: opacity 0.2s;
     }
-    .genre-blue   { background-color: #4ba3e3; color: #fff; }  /* 薄めの上品な青 */
-    .genre-green  { background-color: #3cb878; color: #fff; }  /* 薄めの和風な緑 */
-    .genre-red    { background-color: #f06292; color: #fff; }  /* 鮮やかさを抑えた落ち着いたピンク赤 */
-    .genre-yellow { background-color: #f6d155; color: #111; }  /* 目に優しい落ち着いた黄 */
+    .genre-item:hover { opacity: 0.85; }
+    
+    .genre-blue   { background-color: #4ba3e3; }
+    .genre-green  { background-color: #3cb878; }
+    .genre-red    { background-color: #f06292; }
+    .genre-yellow { background-color: #f6d155; }
 
     /* 人気の文章 */
     .popular-list { list-style: none; margin-bottom: 15px; }
     .popular-item { padding: 16px 0; border-bottom: 1px dashed #ddd; text-decoration: none; color: inherit; display: block; }
     .popular-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: inline-block; }
 
-    /* 感想を送るコーナー（同列のデザイン） */
+    /* 感想を送る */
     .feedback-box { margin-bottom: 45px; }
-    .feedback-btn {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 18px 24px; border: 1px solid #111; text-decoration: none;
-      color: #111; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.05em;
-      transition: background 0.2s, color 0.2s;
-    }
-    .feedback-btn:hover { background: #111; color: #fff; }
 
-    /* このサイトについて（枠なし・上のライン1本のみ） */
-    .about-site-section {
-      border-top: 1px solid #111; /* 上に分けるラインを1本配置 */
-      padding-top: 35px;
+    /* 新潮社風：完全に黒背景の「私について / このサイトについて」領域 */
+    .about-black-section {
+      background-color: #111111;
+      color: #ffffff;
+      padding: 40px 24px;
       margin-top: 60px;
       margin-bottom: 40px;
       text-align: center;
     }
-    .about-site-section h3 { font-size: 1.15rem; margin-bottom: 16px; font-weight: 700; letter-spacing: 0.08em; }
-    .sns-links { font-size: 0.88rem; color: #555; line-height: 2.2; }
+    .about-black-section h3 {
+      font-size: 1.2rem; margin-bottom: 18px; font-weight: 700;
+      letter-spacing: 0.12em; border-bottom: 1px dashed #444;
+      padding-bottom: 12px; display: inline-block;
+    }
+    .about-black-section .info-text {
+      font-size: 0.9rem; color: #ccc; line-height: 2.2; margin-bottom: 20px;
+    }
+    .about-black-section a { color: #fff; text-decoration: underline; }
 
-    /* フッター */
+    /* フッターリンク */
     .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.4; margin-bottom: 35px; }
     .footer-links a { color: #444; text-decoration: none; }
     
@@ -167,27 +199,37 @@
     <p class="opening-text">思考を紡ぐ場所へ</p>
   </div>
 
-  <!-- ナビゲーション（太く荘厳な北風小僧ロゴ） -->
+  <!-- ナビゲーション -->
   <div class="top-nav">
     <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <button class="search-btn" title="検索">🔍</button>
+      <button class="search-btn" title="検索">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
+      </button>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- メニュー -->
+  <!-- メニュー（ホーム削除、お問い合わせに変更） -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
-      <li><a href="index.html">ホーム</a></li>
       <li><a href="list.html">文章一覧</a></li>
       <li><a href="about.html">私について</a></li>
-      <li><a href="contact.html">お問合せ</a></li>
+      <li><a href="contact.html">お問い合わせ</a></li>
     </ul>
   </div>
 
   <div class="container">
+
+    <!-- 北風小僧と最新文章の間の画像スライダー（5秒自動 ＆ タップ変更） -->
+    <div class="hero-slider-wrapper" onclick="nextSlide()" title="タップで画像変更">
+      <!-- 写真URLは自由に差し替え可能です -->
+      <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80');"></div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1000&q=80');"></div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1000&q=80');"></div>
+      <div class="hero-slider-hint">TAP TO CHANGE</div>
+    </div>
 
     <!-- 最新の文章 -->
     <div class="section-header" style="margin-top:0;">
@@ -195,11 +237,11 @@
       <span class="section-sub">NEW</span>
     </div>
     <div class="card-scroll" id="latest-container">
-      <!-- JavaScriptで描画されます -->
+      <!-- JavaScriptで自動描画 -->
     </div>
-    <a href="list.html" class="btn-all">文章一覧 ＞</a>
+    <a href="list.html" class="btn-shincho">文章一覧 ＞</a>
 
-    <!-- ジャンル（ビビット感を薄めた落ち着いたカラー） -->
+    <!-- ジャンル（文字色はすべて黒統一） -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
@@ -217,37 +259,35 @@
       <span class="section-sub">POPULAR</span>
     </div>
     <div class="popular-list" id="popular-container">
-      <!-- JavaScriptで描画されます -->
+      <!-- JavaScriptで自動描画 -->
     </div>
-    <button id="popular-toggle-btn" class="btn-all" onclick="togglePopular()">すべて見る ＞</button>
+    <button id="popular-toggle-btn" class="btn-shincho" onclick="togglePopular()">すべて見る ＞</button>
 
-    <!-- 感想を送る（同列の別コーナー） -->
+    <!-- 感想を送る -->
     <div class="section-header">
       <h2 class="section-h2">感想を送る</h2>
       <span class="section-sub">FEEDBACK</span>
     </div>
     <div class="feedback-box">
-      <a href="contact.html" class="feedback-btn">
-        <span>作品の感想・メッセージを送る</span>
-        <span>＞</span>
-      </a>
+      <a href="contact.html" class="btn-shincho">作品の感想・メッセージを送る ＞</a>
     </div>
 
-    <!-- このサイトについて（枠なし・上に1本線） -->
-    <div class="about-site-section">
-      <h3>このサイトについて</h3>
-      <div class="sns-links">
-        <p>Gmail: xxx@gmail.com</p>
-        <p>X (Twitter): @xxx</p>
+    <!-- 黒背景：私について / このサイトについて 統合領域 -->
+    <div class="about-black-section">
+      <h3>私について / このサイトについて</h3>
+      <div class="info-text">
+        <p>北风小僧（きたかぜこぞう）の思考と創作の記録領域。</p>
+        <p>Gmail: xxx@gmail.com ｜ X: @xxx</p>
       </div>
+      <a href="about.html" style="font-size:0.85rem; letter-spacing:0.08em;">詳しいプロフィールを見る ＞</a>
     </div>
 
-    <!-- フッターリンク -->
+    <!-- フッターリンク（お問い合わせ表記に統一） -->
     <ul class="footer-links">
       <li><a href="about.html">私について</a></li>
       <li><a href="terms.html">サイトのご利用</a></li>
       <li><a href="help.html">ヘルプ</a></li>
-      <li><a href="contact.html">お問合せ</a></li>
+      <li><a href="contact.html">お問い合わせ</a></li>
     </ul>
 
     <footer>&copy; 北風小僧</footer>
@@ -279,7 +319,7 @@
       { rank: 10, title: "人気の文章 10", url: "#", date: "2026.04.30", length: "約2,500字", colorClass: "line-blue" }
     ];
 
-    /* カラーバー（少し薄めのトーンに合わせた色指定） */
+    /* カラーバー自動切り替え */
     const colors = ['#4ba3e3', '#3cb878', '#f06292', '#f6d155'];
     function changeBarColor() {
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -288,7 +328,24 @@
     changeBarColor();
     setInterval(changeBarColor, 20000);
 
-    /* 最新の文章を描画（上下余白付き） */
+    /* 画像スライダー制御（5秒自動 ＆ タップ切替） */
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    
+    function nextSlide() {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+    let slideTimer = setInterval(nextSlide, 5000);
+
+    // 手動タップ時はタイマーをリセットして5秒カウントを再スタート
+    document.querySelector('.hero-slider-wrapper').addEventListener('click', () => {
+      clearInterval(slideTimer);
+      slideTimer = setInterval(nextSlide, 5000);
+    });
+
+    /* 最新文章の描画 */
     const latestContainer = document.getElementById('latest-container');
     const latestArticles = articles.slice(0, 5);
     latestArticles.forEach(item => {
@@ -302,7 +359,7 @@
       `;
     });
 
-    /* 人気の文章（開く／閉じる 切り替え機能） */
+    /* 人気文章（開く／閉じる） */
     let isPopularExpanded = false;
     function renderPopular() {
       const container = document.getElementById('popular-container');
