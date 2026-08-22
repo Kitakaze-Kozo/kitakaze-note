@@ -34,7 +34,7 @@
       align-items: center;
     }
 
-    /* 上部操作UI（等間隔配置） */
+    /* 上部操作UI */
     .top-navbar {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 2000;
       background: var(--ui-bg); border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -71,6 +71,7 @@
       overflow: hidden;
       border-radius: 2px;
       transition: background-color 0.3s;
+      touch-action: pan-y;
     }
 
     /* ページ上部の柱 */
@@ -91,7 +92,7 @@
       width: 100%; height: 100%;
       display: flex;
       flex-direction: row-reverse;
-      transition: transform 0.3s ease-out;
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .page-sheet {
@@ -117,41 +118,34 @@
       writing-mode: horizontal-tb !important;
     }
     .tobira-genre { font-size: 0.85rem; letter-spacing: 0.15em; }
-    
-    /* タイトル（佳人）の位置をほんの少し下げ */
     .tobira-title { font-size: 1.7rem; font-weight: bold; margin-top: 22px; margin-bottom: 8px; letter-spacing: 0.1em; }
-    
     .tobira-meta-group { display: flex; flex-direction: column; gap: 4px; align-items: center; }
     .tobira-date { font-size: 0.8rem; }
     .tobira-count { font-size: 0.8rem; }
-    
-    /* 北風小僧の位置を少し上げる */
     .tobira-author { 
       font-size: 1rem; 
       font-weight: bold; 
       border-bottom: 1px solid var(--text-color); 
       padding-bottom: 2px; 
       margin-top: auto; 
-      margin-bottom: 25px; /* 下部余白を増やして位置を上に調整 */
+      margin-bottom: 25px;
     }
 
     /* 本文ページ */
     .body-text-page {
-      padding: 50px 30px 30px;
+      padding: 45px 25px 25px;
       height: 100%; width: 100%;
       writing-mode: vertical-rl;
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
-      line-height: 1.7;          /* 文章間隔を狭く設定 */
+      line-height: 1.8;
       letter-spacing: 0.04em;
-      column-width: calc(100% - 60px);
-      column-gap: 60px;
       column-fill: auto;
       overflow: hidden;
     }
     .body-text-page p {
-      text-indent: 1em; margin-left: 0.6em; word-break: break-all;
+      text-indent: 1em; margin-left: 0.5em; word-break: break-all;
     }
 
     /* 下部操作UI */
@@ -166,13 +160,25 @@
     }
     .bottom-navbar.active { transform: translateY(0); }
 
+    /* ページ表示バブル（通常時） */
     .page-bubble {
-      background: #111; color: #fff; font-size: 0.78rem; padding: 4px 10px;
+      background: #111111; color: #ffffff; font-size: 0.78rem; padding: 4px 12px;
       border-radius: 12px; position: relative; font-weight: bold;
+      transition: background-color 0.2s, color 0.2s;
     }
     .page-bubble::after {
       content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
-      border-width: 5px 5px 0; border-style: solid; border-color: #111 transparent;
+      border-width: 5px 5px 0; border-style: solid; border-color: #111111 transparent;
+      transition: border-color 0.2s;
+    }
+
+    /* しおり位置の赤色強調表示 */
+    .page-bubble.is-bookmarked {
+      background: #d93838 !important;
+      color: #ffffff !important;
+    }
+    .page-bubble.is-bookmarked::after {
+      border-color: #d93838 transparent !important;
     }
 
     .slider-input {
@@ -187,8 +193,8 @@
   <div class="top-navbar" id="top-nav">
     <div class="nav-container">
       <button class="btn-ui" onclick="javascript:history.back()">＜ 戻る</button>
-      <button class="btn-ui" onclick="changeFontSize(0.08)">A ↑</button>
-      <button class="btn-ui" onclick="changeFontSize(-0.08)">A ↓</button>
+      <button class="btn-ui" onclick="changeFontSize(0.06)">A ↑</button>
+      <button class="btn-ui" onclick="changeFontSize(-0.06)">A ↓</button>
       <button class="btn-ui" onclick="toggleTheme()" id="theme-btn">紙色：生成り</button>
       <button class="btn-ui" onclick="toggleBookmark()" id="bm-btn">しおり</button>
     </div>
@@ -206,7 +212,7 @@
     <!-- ビューポート -->
     <div class="page-viewport-container" id="viewport-container">
       
-      <!-- 扉ページ（1ページ目） -->
+      <!-- 扉ページ（0ページ目） -->
       <div class="page-sheet">
         <div class="sketch-tobira-page">
           <div class="tobira-border-box">
@@ -221,11 +227,11 @@
         </div>
       </div>
 
-      <!-- 本文ページ（★ここに直接文章を書いてください★） -->
+      <!-- 本文ページ（直接記述用） -->
       <div class="page-sheet body-text-page" id="novel-text">
         <p>ここに本文の第一段落を記述します。文字サイズや行間は自動で最適な縦書きレイアウトに調整されます。</p>
         <p>ここに第二段落を記述します。文章が長くなると自動的に次のページへ送られ、文字サイズを変更（A↑/A↓）するとページ数が連動して動的に再計算されます。</p>
-        <p>画面の中央をタップすると上部の「＜戻る」ボタンや操作メニューが表示され、左側をタップすると次のページへ進み、右側をタップすると前のページ（扉ページ）へ戻ります。</p>
+        <p>画面の中央をタップすると上部の「＜戻る」ボタンや操作メニューが表示され、左右へのスライド（フリック）またはタップでページをめくることができます。</p>
       </div>
 
     </div>
@@ -233,7 +239,7 @@
 
   <!-- 下部操作UI -->
   <div class="bottom-navbar" id="bottom-nav">
-    <div class="page-bubble" id="page-bubble-text">1 / 1 ページ</div>
+    <div class="page-bubble" id="page-bubble-text">扉ページ</div>
     <input type="range" class="slider-input" id="page-slider" min="0" max="1" value="0" oninput="onSliderChange(this.value)">
   </div>
 
@@ -247,7 +253,7 @@
     const novelText = document.getElementById('novel-text');
     const paperEl = document.getElementById('book-paper-el');
 
-    // 文字数の自動計算＆表示同期
+    // 文字数同期処理
     function syncCharCount() {
       const fullText = novelText.innerText.replace(/\s+/g, '');
       const countStr = fullText.length.toLocaleString() + '文字';
@@ -269,26 +275,28 @@
     let bodyPages = 1;
     let currentSheetIndex = 0;
 
-    // URLのpageパラメータがある場合はそのページから開始（しおりから読む）
     const initialPage = params.get('page');
     if (initialPage !== null) {
       currentSheetIndex = parseInt(initialPage);
     }
 
-    // 文字サイズに応じた動的ページ数計算
+    // 縦書きレイアウトにおける段組み幅の動的調整
     function recalcPages() {
       syncCharCount();
       setTimeout(() => {
+        const pWidth = paperEl.clientWidth - 50;
+        novelText.style.columnWidth = `${pWidth}px`;
+        novelText.style.columnGap = '50px';
+
         const textScrollWidth = novelText.scrollWidth;
-        const textClientWidth = novelText.clientWidth;
-        bodyPages = Math.max(1, Math.round(textScrollWidth / textClientWidth));
+        bodyPages = Math.max(1, Math.round(textScrollWidth / (pWidth + 50)));
         
         const slider = document.getElementById('page-slider');
         slider.max = bodyPages;
         
         if (currentSheetIndex > bodyPages) currentSheetIndex = bodyPages;
         updateDisplay();
-      }, 200);
+      }, 150);
     }
 
     function updateDisplay() {
@@ -297,51 +305,82 @@
       const slider = document.getElementById('page-slider');
       const bmSaved = localStorage.getItem(`bm_${articleId}`);
 
+      const isCurrentBookmarked = (bmSaved !== null && parseInt(bmSaved) === currentSheetIndex);
+
+      if (isCurrentBookmarked) {
+        bubble.classList.add('is-bookmarked');
+      } else {
+        bubble.classList.remove('is-bookmarked');
+      }
+
       if (currentSheetIndex === 0) {
         header.classList.add('hide');
-        bubble.innerText = `扉ページ`;
+        bubble.innerText = isCurrentBookmarked ? `扉ページ (しおり位置)` : `扉ページ`;
         slider.value = 0;
       } else {
         header.classList.remove('hide');
         document.getElementById('header-page').innerText = `${currentSheetIndex}ページ`;
         
-        if (bmSaved && parseInt(bmSaved) === currentSheetIndex) {
-          bubble.innerText = `しおり位置 (${currentSheetIndex} / ${bodyPages} ページ)`;
+        if (isCurrentBookmarked) {
+          bubble.innerText = `🔖 ${currentSheetIndex} / ${bodyPages} ページ (しおり)`;
         } else {
           bubble.innerText = `${currentSheetIndex} / ${bodyPages} ページ`;
         }
         slider.value = currentSheetIndex;
       }
 
-      if (bmSaved && parseInt(bmSaved) === currentSheetIndex) {
-        document.getElementById('bm-btn').innerText = 'しおり中';
-      } else {
-        document.getElementById('bm-btn').innerText = 'しおり';
-      }
+      document.getElementById('bm-btn').innerText = isCurrentBookmarked ? 'しおり解除' : 'しおり';
 
       const offsetPercent = currentSheetIndex * 100;
       container.style.transform = `translateX(${offsetPercent}%)`;
     }
 
-    // 画面タップ処理（中央：メニュー開閉 / 左：次ページ / 右：前ページ）
-    paperEl.addEventListener('click', function(e) {
-      const rect = paperEl.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const width = rect.width;
+    // タップ & スライド（フリック）移動処理
+    let startX = 0;
+    let startY = 0;
 
-      if (clickX > width * 0.3 && clickX < width * 0.7) {
-        document.getElementById('top-nav').classList.toggle('active');
-        document.getElementById('bottom-nav').classList.toggle('active');
+    paperEl.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    paperEl.addEventListener('touchend', function(e) {
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = endX - startX;
+      const diffY = endY - startY;
+
+      // 横スライド（30px以上のスライド判定）
+      if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0) { // 右へスライド（前ページ）
+          if (currentSheetIndex > 0) currentSheetIndex--;
+        } else { // 左へスライド（次ページ）
+          if (currentSheetIndex < bodyPages) currentSheetIndex++;
+        }
+        updateDisplay();
         return;
       }
 
-      if (clickX <= width * 0.3) {
-        if (currentSheetIndex < bodyPages) currentSheetIndex++;
-      } else if (clickX >= width * 0.7) {
-        if (currentSheetIndex > 0) currentSheetIndex--;
-      }
+      // タップ判定
+      if (Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
+        const rect = paperEl.getBoundingClientRect();
+        const clickX = endX - rect.left;
+        const width = rect.width;
 
-      updateDisplay();
+        if (clickX > width * 0.3 && clickX < width * 0.7) {
+          document.getElementById('top-nav').classList.toggle('active');
+          document.getElementById('bottom-nav').classList.toggle('active');
+          return;
+        }
+
+        if (clickX <= width * 0.3) {
+          if (currentSheetIndex < bodyPages) currentSheetIndex++;
+        } else if (clickX >= width * 0.7) {
+          if (currentSheetIndex > 0) currentSheetIndex--;
+        }
+
+        updateDisplay();
+      }
     });
 
     function onSliderChange(val) {
@@ -351,7 +390,7 @@
 
     let currentFontSize = 1.05;
     function changeFontSize(delta) {
-      currentFontSize = Math.max(0.6, Math.min(1.4, currentFontSize + delta));
+      currentFontSize = Math.max(0.7, Math.min(1.3, currentFontSize + delta));
       novelText.style.fontSize = `${currentFontSize}rem`;
       recalcPages();
     }
@@ -361,17 +400,12 @@
       document.getElementById('theme-btn').innerText = isWhite ? '紙色：純白' : '紙色：生成り';
     }
 
-    // しおり機能（1作品1箇所制限）
     function toggleBookmark() {
       const saved = localStorage.getItem(`bm_${articleId}`);
-      
-      if (saved && parseInt(saved) === currentSheetIndex) {
+      if (saved !== null && parseInt(saved) === currentSheetIndex) {
         localStorage.removeItem(`bm_${articleId}`);
-        alert('しおりを外しました');
       } else {
         localStorage.setItem(`bm_${articleId}`, currentSheetIndex);
-        const pageLabel = currentSheetIndex === 0 ? '扉ページ' : `${currentSheetIndex}ページ`;
-        alert(`${pageLabel}にしおりを挟みました`);
       }
       updateDisplay();
     }
