@@ -15,14 +15,12 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 最上部ランダムカラーバー */
     #top-color-bar {
       height: 5px;
       width: 100%;
       transition: background-color 1s ease;
     }
 
-    /* オープニング演出 */
     #opening {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: #111111; color: #ffffff;
@@ -36,7 +34,6 @@
       animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
-    /* ナビゲーションバー */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
@@ -57,7 +54,6 @@
 
     .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
 
-    /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(10, 10, 10, 0.96); color: #fff;
@@ -70,7 +66,6 @@
     .menu-list li { margin: 24px 0; }
     .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
-    /* 横余白なしのフルサイズ画像スライダー */
     .hero-slider-wrapper {
       width: 100%;
       height: 260px;
@@ -87,10 +82,8 @@
     }
     .hero-slide.active { opacity: 1; }
 
-    /* メインコンテンツ枠 */
     .container { max-width: 680px; margin: 0 auto; padding: 0 24px 45px; }
 
-    /* 見出しヘッダー */
     .section-header {
       display: flex; justify-content: space-between; align-items: flex-end;
       margin-top: 45px; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 8px;
@@ -98,7 +91,6 @@
     .section-h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.08em; }
     .section-sub { font-size: 0.75rem; color: #777; }
 
-    /* 最新の文章 */
     .card-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 35px; -webkit-overflow-scrolling: touch; }
     .card-item {
       min-width: 230px; max-width: 230px; min-height: 200px; border: 1px solid #e0e0e0;
@@ -111,14 +103,12 @@
     .card-title { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
     .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; font-size: 0.78rem; color: #888; }
     
-    /* 共有ボタン (…) */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
       padding: 2px 6px; border-radius: 4px; line-height: 1;
     }
     .share-btn:hover { background-color: #f0f0f0; color: #000; }
 
-    /* 新潮社風ボタン */
     .btn-shincho {
       display: block; text-align: center; border: 1px solid #111; padding: 14px;
       margin: 10px 0 45px; text-decoration: none; color: #111; font-size: 0.9rem;
@@ -130,13 +120,11 @@
       color: #ffffff !important;
     }
 
-    /* カラーアンダーライン */
     .line-blue   { border-bottom: 3px solid #4ba3e3; padding-bottom: 2px; }
     .line-green  { border-bottom: 3px solid #3cb878; padding-bottom: 2px; }
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* ジャンル */
     .genre-list { list-style: none; margin-bottom: 45px; }
     .genre-item {
       display: flex; justify-content: space-between; align-items: center;
@@ -153,15 +141,12 @@
     .genre-red    { background-color: #f1789a; }
     .genre-yellow { background-color: #f7d358; }
 
-    /* 人気の作品 */
     .popular-list { list-style: none; margin-bottom: 15px; }
     .popular-item { padding: 16px 0; border-bottom: 1px dashed #ddd; text-decoration: none; color: inherit; display: block; }
     .popular-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; display: inline-block; }
 
-    /* 感想を送る */
     .feedback-box { margin-bottom: 0px; }
 
-    /* フッター黒エリア */
     .footer-dark-section {
       background-color: #111111;
       color: #ffffff;
@@ -191,32 +176,45 @@
     
     .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
 
+    /* 検索モーダルスタイル */
+    #search-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: rgba(10, 10, 10, 0.95); z-index: 20000; display: none;
+      align-items: center; justify-content: center; padding: 20px; color: #fff;
+    }
+    #search-modal.active { display: flex; }
+    .search-box { width: 100%; max-width: 500px; }
+    .search-input {
+      width: 100%; padding: 14px; font-size: 1.1rem; background: #222; border: 1px solid #444;
+      color: #fff; font-family: inherit; outline: none; margin-bottom: 20px;
+    }
+    .search-results { list-style: none; max-height: 300px; overflow-y: auto; text-align: left; }
+    .search-results li { border-bottom: 1px solid #333; padding: 12px 0; }
+    .search-results a { text-decoration: none; color: #fff; display: block; }
+    .search-close-btn { background: none; border: 1px solid #fff; color: #fff; padding: 10px 20px; margin-top: 20px; cursor: pointer; width: 100%; font-family: inherit; }
+
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
   </style>
 </head>
 <body>
 
-  <!-- 最上部カラーバー -->
   <div id="top-color-bar"></div>
 
-  <!-- 全画面オープニング -->
   <div id="opening">
     <p class="opening-text">思考を紡ぐ場所へ</p>
   </div>
 
-  <!-- ナビゲーション -->
   <div class="top-nav">
     <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <button class="search-btn" title="検索">
+      <button class="search-btn" title="検索" onclick="toggleSearch()">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
       </button>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
@@ -227,7 +225,15 @@
     </ul>
   </div>
 
-  <!-- フルサイズ写真スライダー -->
+  <!-- 検索モーダル -->
+  <div id="search-modal">
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="作品名やキーワードを入力..." oninput="execSearch()">
+      <ul class="search-results" id="search-results"></ul>
+      <button class="search-close-btn" onclick="toggleSearch()">閉じる</button>
+    </div>
+  </div>
+
   <div class="hero-slider-wrapper" onclick="nextSlide()">
     <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=80');"></div>
     <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1000&q=80');"></div>
@@ -236,7 +242,6 @@
 
   <div class="container">
 
-    <!-- 最新の作品 -->
     <div class="section-header" style="margin-top:0;">
       <h2 class="section-h2">最新の作品</h2>
       <span class="section-sub">NEW</span>
@@ -244,7 +249,6 @@
     <div class="card-scroll" id="latest-container"></div>
     <a href="list.html" class="btn-shincho">作品一覧 ＞</a>
 
-    <!-- ジャンル -->
     <div class="section-header">
       <h2 class="section-h2">ジャンル</h2>
       <span class="section-sub">CATEGORIES</span>
@@ -256,7 +260,6 @@
       <a href="list.html?genre=yellow" class="genre-item genre-yellow"><span>詩歌</span><span id="count-yellow">0 ＞</span></a>
     </div>
 
-    <!-- 人気の作品 -->
     <div class="section-header">
       <h2 class="section-h2">人気の作品</h2>
       <span class="section-sub">POPULAR</span>
@@ -264,7 +267,6 @@
     <div class="popular-list" id="popular-container"></div>
     <a href="list.html?sort=popular" class="btn-shincho">すべて見る ＞</a>
 
-    <!-- 感想を送る -->
     <div class="section-header">
       <h2 class="section-h2">感想を送る</h2>
       <span class="section-sub">FEEDBACK</span>
@@ -275,7 +277,6 @@
 
   </div>
 
-  <!-- フッター黒エリア -->
   <div class="footer-dark-section">
     <div class="footer-dark-inner">
       <div class="contact-info-box">
@@ -292,28 +293,8 @@
     </div>
   </div>
 
+  <script src="data.js"></script>
   <script>
-    /* 
-      共通マスターデータベース 
-      ※ genreを "blue", "green", "red", "yellow" に完全統一
-    */
-    const allArticles = [
-      { id: 13, title: "佳人", url: "novel-cover.html", date:"2026.08.21",length:"50,000文字",popularRank: 13, genre: "red" }
-      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, genre: "green" },
-      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, genre: "blue" },
-      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, genre: "blue" },
-      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, genre: "red" },
-      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, genre: "yellow" },
-      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, genre: "green" },
-      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, genre: "green" },
-      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, genre: "blue" },
-      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, genre: "yellow" },
-      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, genre: "red" },
-      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, genre: "green" },
-      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, genre: "blue" }
-    ];
-
-    /* カラーバー自動切り替え */
     const colors = ['#5baed7', '#52be80', '#f1789a', '#f7d358'];
     function changeBarColor() {
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -322,7 +303,6 @@
     changeBarColor();
     setInterval(changeBarColor, 20000);
 
-    /* 画像スライダー制御 */
     let currentSlide = 0;
     const slides = document.querySelectorAll('.hero-slide');
     function nextSlide() {
@@ -337,7 +317,6 @@
       slideTimer = setInterval(nextSlide, 5000);
     });
 
-    /* 共有機能 */
     function shareArticle(event, title, url) {
       event.preventDefault();
       event.stopPropagation();
@@ -349,7 +328,7 @@
       }
     }
 
-    /* 最新作品の描画（新着順ソートで上から5件表示） */
+    // 1. 最新の作品描画
     const latestContainer = document.getElementById('latest-container');
     const sortedByDate = [...allArticles].sort((a, b) => new Date(b.date.replace(/\./g, '/')) - new Date(a.date.replace(/\./g, '/')));
     sortedByDate.slice(0, 5).forEach(item => {
@@ -369,15 +348,12 @@
       `;
     });
 
-    /* ジャンル別の作品数をマスターデータから動的に算出 */
+    // 2. ジャンル別件数の動的算出
     function updateGenreCounts() {
       const counts = { blue: 0, green: 0, red: 0, yellow: 0 };
       allArticles.forEach(item => {
-        if (counts.hasOwnProperty(item.genre)) {
-          counts[item.genre]++;
-        }
+        if (counts.hasOwnProperty(item.genre)) counts[item.genre]++;
       });
-
       document.getElementById('count-blue').innerText = `${counts.blue} ＞`;
       document.getElementById('count-green').innerText = `${counts.green} ＞`;
       document.getElementById('count-red').innerText = `${counts.red} ＞`;
@@ -385,11 +361,10 @@
     }
     updateGenreCounts();
 
-    /* 人気作品（popularRank順にソートしてTOP5を表示） */
+    // 3. 人気作品の描画
     function renderPopular() {
       const container = document.getElementById('popular-container');
       container.innerHTML = '';
-      
       const sortedByPopular = [...allArticles].sort((a, b) => a.popularRank - b.popularRank);
       sortedByPopular.slice(0, 5).forEach((item, index) => {
         container.innerHTML += `
@@ -405,9 +380,47 @@
     }
     renderPopular();
 
-    /* メニュー開閉 */
+    // 4. メニュー機能
     function toggleMenu() {
       document.getElementById('overlay-menu').classList.toggle('active');
+    }
+
+    // 5. 検索機能
+    function toggleSearch() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) {
+        document.getElementById('search-input').focus();
+      }
+    }
+
+    function execSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      
+      if (!query) return;
+
+      const filtered = allArticles.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        (genreNames[item.genre] && genreNames[item.genre].includes(query))
+      );
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<li style="color:#aaa;">該当する作品が見つかりません</li>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        resultsContainer.innerHTML += `
+          <li>
+            <a href="${item.url}">
+              <strong>${item.title}</strong>
+              <div style="font-size:0.8rem; color:#888;">${item.date}｜${genreNames[item.genre]}｜${item.length}</div>
+            </a>
+          </li>
+        `;
+      });
     }
   </script>
 </body>
