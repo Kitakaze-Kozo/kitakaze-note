@@ -12,7 +12,6 @@
       --bg-color: #fcfbf9;
       --text-color: #2b2b2b;
       --border-color: #e0e0e0;
-      /* ジャンルカラー（blue: 評論風, green: 随筆 など） */
       --genre-color: #2b5b84; 
     }
 
@@ -21,10 +20,12 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.8;
-      padding-bottom: 60px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ヘッダー（サイトタイトル） */
+    /* --- トップページと共通のヘッダー --- */
     .site-header {
       display: flex;
       justify-content: space-between;
@@ -32,30 +33,43 @@
       padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
       background-color: #ffffff;
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: 'Shippori Mincho', serif;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .site-title {
+    .site-title-a {
       font-size: 1.25rem;
       font-weight: bold;
       letter-spacing: 0.05em;
+      color: var(--text-color);
+      text-decoration: none;
     }
     .header-icons {
       display: flex;
       gap: 16px;
       font-size: 1.2rem;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
       cursor: pointer;
+      color: var(--text-color);
     }
 
     /* 記事メインエリア */
     .article-container {
       max-width: 680px;
+      width: 100%;
       margin: 0 auto;
-      padding: 24px 20px;
+      padding: 36px 20px 40px; /* 上部余白を広げてゆとりを持たせる */
+      flex: 1;
     }
 
     /* タイトルエリア */
     .article-header {
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
     .title-row {
       display: flex;
@@ -68,6 +82,7 @@
       font-weight: bold;
       line-height: 1.3;
       letter-spacing: 0.05em;
+      display: inline-block;
     }
     .share-btn {
       background: none;
@@ -78,22 +93,28 @@
       color: #666;
     }
 
-    /* ジャンル毎のカラーライン */
+    /* タイトル文字列の長さに合わせたカラーライン */
+    .genre-line-wrap {
+      margin-top: 8px;
+      margin-bottom: 6px;
+    }
     .genre-line {
       height: 3px;
       background-color: var(--genre-color);
-      margin: 12px 0 16px 0;
+      display: inline-block;
+      min-width: 3em; /* 最低保証幅 */
       border-radius: 2px;
     }
 
-    /* メタ情報（著者、文字数、更新日） */
+    /* メタ情報（著者、更新日、文字数） */
     .meta-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      font-size: 0.88rem;
-      color: #555;
-      font-family: 'Noto Sans JP', sans-serif;
+      align-items: flex-start;
+      font-size: 0.95rem;
+      color: #333;
+      font-family: 'Shippori Mincho', serif; /* 明朝体に統一 */
+      margin-top: 4px;
     }
     .author-name {
       font-weight: 500;
@@ -102,13 +123,15 @@
     .meta-right {
       text-align: right;
       line-height: 1.4;
+      font-size: 0.88rem;
+      color: #555;
     }
 
     /* 本文エリア */
     .article-body {
       font-size: 1.05rem;
       letter-spacing: 0.03em;
-      margin-top: 20px;
+      margin-top: 32px;
       margin-bottom: 40px;
       word-break: break-word;
     }
@@ -137,7 +160,6 @@
       font-family: 'Noto Sans JP', sans-serif;
     }
 
-    /* アコーディオン開閉ボタン */
     .comment-toggle-btn {
       width: 100%;
       padding: 12px 16px;
@@ -157,7 +179,6 @@
       background-color: #f0f0f0;
     }
 
-    /* コメントコンテンツ（初期状態は非表示） */
     .comment-content {
       display: none;
       margin-top: 16px;
@@ -170,12 +191,11 @@
       display: block;
     }
 
-    /* コメント入力フォーム */
     .comment-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .comment-input {
       width: 100%;
@@ -198,7 +218,6 @@
       cursor: pointer;
     }
 
-    /* コメント一覧 */
     .comment-list {
       display: flex;
       flex-direction: column;
@@ -215,16 +234,28 @@
       color: #888;
       margin-bottom: 4px;
     }
+
+    /* --- トップページと共通のフッター --- */
+    .site-footer {
+      border-top: 1px solid var(--border-color);
+      background-color: #ffffff;
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #777;
+      font-family: 'Noto Sans JP', sans-serif;
+      margin-top: auto;
+    }
   </style>
 </head>
 <body>
 
-  <!-- ヘッダー -->
+  <!-- トップページ共通ヘッダー -->
   <header class="site-header">
-    <div class="site-title">北風小僧</div>
+    <a href="index.html" class="site-title-a">北風小僧</a>
     <div class="header-icons">
-      <span>🔍</span>
-      <span>☰</span>
+      <button class="icon-btn" title="検索">🔍</button>
+      <button class="icon-btn" title="メニュー">☰</button>
     </div>
   </header>
 
@@ -238,15 +269,17 @@
         <button class="share-btn" onclick="shareArticle()" title="共有">⋮</button>
       </div>
 
-      <!-- ジャンル毎のカラーライン -->
-      <div class="genre-line" id="genre-line"></div>
+      <!-- タイトルの文字数に連動するカラーライン -->
+      <div class="genre-line-wrap">
+        <div class="genre-line" id="genre-line"></div>
+      </div>
 
-      <!-- メタ情報 -->
+      <!-- メタ情報（更新日・文字数を入れ替え＆明朝体へ） -->
       <div class="meta-row">
         <div class="author-name">北風小僧</div>
         <div class="meta-right">
-          <div id="char-count">0文字</div>
           <div id="update-date">2026.08.21</div>
+          <div id="char-count">0文字</div>
         </div>
       </div>
     </article>
@@ -269,7 +302,7 @@
 
     <div class="divider">〜〜〜</div>
 
-    <!-- コメントコーナー -->
+    <!-- コメントコーナー（サクラ削除済み） -->
     <section class="comment-section">
       <button class="comment-toggle-btn" onclick="toggleComments()">
         <span>💬 コメント...</span>
@@ -283,17 +316,17 @@
           <button class="comment-submit-btn" onclick="addComment()">送信</button>
         </div>
 
-        <!-- コメント一覧 -->
-        <div class="comment-list" id="comment-list">
-          <div class="comment-item">
-            <div class="comment-meta">匿名さん ・ 2026/08/21 14:00</div>
-            <div>素晴らしい評論でした！考察が非常に深いです。</div>
-          </div>
-        </div>
+        <!-- コメント一覧（初期表示は空） -->
+        <div class="comment-list" id="comment-list"></div>
       </div>
     </section>
 
   </main>
+
+  <!-- トップページ共通フッター -->
+  <footer class="site-footer">
+    <p>&copy; 北風小僧 All Rights Reserved.</p>
+  </footer>
 
   <script src="data.js"></script>
   <script>
@@ -302,8 +335,16 @@
     const currentArticle = typeof allArticles !== 'undefined' ? allArticles.find(item => item.id === articleId) : null;
 
     const bodyEl = document.getElementById('article-body');
+    const titleEl = document.getElementById('article-title');
+    const genreLine = document.getElementById('genre-line');
 
-    // 本文のみの文字数を計測して自動反映
+    // カラーラインの長さをタイトルの文字幅に合わせる
+    function adjustLineLength() {
+      const titleWidth = titleEl.offsetWidth;
+      genreLine.style.width = `${titleWidth}px`;
+    }
+
+    // 本文のみの文字数を自動カウント
     function updateCharCount() {
       const fullText = bodyEl.innerText.replace(/\s+/g, '');
       const count = fullText.length;
@@ -312,20 +353,19 @@
       localStorage.setItem(`charCount_${articleId}`, count);
     }
 
-    // データファイル(data.js)との連動設定
+    // データファイル(data.js)との連動
     if (currentArticle) {
       document.title = `${currentArticle.title}｜北風小僧`;
-      document.getElementById('article-title').innerText = currentArticle.title;
+      titleEl.innerText = currentArticle.title;
       document.getElementById('update-date').innerText = currentArticle.date;
 
-      // ジャンルカラーの設定（blue: 評論風, green: 随筆 など）
       const genreColorMap = {
         "blue": "#2b5b84",
         "green": "#3b7a57",
         "red": "#9e3d3d"
       };
       if (genreColorMap[currentArticle.genre]) {
-        document.getElementById('genre-line').style.backgroundColor = genreColorMap[currentArticle.genre];
+        genreLine.style.backgroundColor = genreColorMap[currentArticle.genre];
       }
     }
 
@@ -342,7 +382,7 @@
       }
     }
 
-    // コメントエリアの開閉 toggle
+    // コメント開閉
     function toggleComments() {
       const content = document.getElementById('comment-content');
       const icon = document.getElementById('toggle-icon');
@@ -355,7 +395,7 @@
       }
     }
 
-    // 簡易匿名コメント追加（ブラウザ保存）
+    // 匿名コメント追加
     function addComment() {
       const input = document.getElementById('comment-input');
       const text = input.value.trim();
@@ -376,7 +416,10 @@
       input.value = '';
     }
 
-    window.onload = updateCharCount;
+    window.onload = () => {
+      adjustLineLength();
+      updateCharCount();
+    };
   </script>
 </body>
 </html>
