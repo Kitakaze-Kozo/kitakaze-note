@@ -57,7 +57,6 @@
       text-align: center;
     }
 
-    /* 元のカード・枠線を完全保持 */
     .book-cover-card {
       border: 1px solid #111;
       background-color: #fff;
@@ -130,7 +129,7 @@
       background-color: #333;
     }
 
-    /* しおりから読むボタン（🔖マーク削除） */
+    /* しおりから読むボタン（元の統一感を残した枠線ボタン） */
     .btn-bookmark {
       display: none;
       width: 100%;
@@ -141,7 +140,7 @@
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: bold;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       text-align: center;
       transition: background-color 0.2s;
       cursor: pointer;
@@ -222,16 +221,13 @@
   <div class="cover-container">
     <div class="book-cover-card">
       <div class="book-genre-tag" id="cover-genre">― 小説 ―</div>
-      <h1 class="book-title" id="cover-title">佳人</h1>
+      <h1 class="book-title" id="cover-title">作品タイトル</h1>
       <div class="book-author">北風小僧</div>
-      <div class="book-meta" id="cover-meta">2026.08.21｜0文字</div>
+      <div class="book-meta" id="cover-meta">2026.00.00｜0,000文字</div>
     </div>
 
     <div class="btn-group">
-      <!-- 作品を読むボタン -->
       <a href="#" id="read-btn" class="btn-read">作品を読む ＞</a>
-      
-      <!-- しおりを指している場合のみ表示されるボタン（アイコンなし） -->
       <a href="#" id="bookmark-btn" class="btn-bookmark">しおりから読む</a>
     </div>
   </div>
@@ -272,7 +268,7 @@
       document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${charStr}`;
       document.getElementById('read-btn').href = `novel-reader.html?id=${currentArticle.id}`;
 
-      // しおり判定とボタン制御
+      // しおり情報の判定
       const savedBookmark = localStorage.getItem(`bm_${currentArticle.id}`);
       if (savedBookmark !== null) {
         const pageNum = parseInt(savedBookmark);
@@ -282,6 +278,9 @@
         bmBtn.innerText = `しおりから読む (${pageNum === 0 ? '扉' : pageNum + 'ページ'})`;
         bmBtn.href = `novel-reader.html?id=${currentArticle.id}&page=${pageNum}`;
       }
+    } else {
+      document.getElementById('cover-title').innerText = '作品が見つかりません';
+      document.getElementById('read-btn').style.display = 'none';
     }
 
     function toggleMenu() {
