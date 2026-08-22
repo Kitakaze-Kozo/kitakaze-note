@@ -131,7 +131,7 @@
       margin-bottom: 25px;
     }
 
-    /* 本文ページ */
+    /* 本文ページ（行間を1.6へ調整） */
     .body-text-page {
       padding: 45px 25px 25px;
       height: 100%; width: 100%;
@@ -139,13 +139,13 @@
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
-      line-height: 1.8;
+      line-height: 1.6;
       letter-spacing: 0.04em;
       column-fill: auto;
       overflow: hidden;
     }
     .body-text-page p {
-      text-indent: 1em; margin-left: 0.5em; word-break: break-all;
+      text-indent: 1em; margin-left: 0.4em; word-break: break-all;
     }
 
     /* 下部操作UI */
@@ -160,7 +160,6 @@
     }
     .bottom-navbar.active { transform: translateY(0); }
 
-    /* ページ表示バブル（通常時） */
     .page-bubble {
       background: #111111; color: #ffffff; font-size: 0.78rem; padding: 4px 12px;
       border-radius: 12px; position: relative; font-weight: bold;
@@ -172,7 +171,6 @@
       transition: border-color 0.2s;
     }
 
-    /* しおり位置の赤色強調表示 */
     .page-bubble.is-bookmarked {
       background: #d93838 !important;
       color: #ffffff !important;
@@ -203,16 +201,14 @@
   <!-- 文庫本用紙本体 -->
   <div class="book-paper" id="book-paper-el">
     
-    <!-- ページ上部の柱 -->
     <div class="page-header-柱 hide" id="page-header">
       <span id="header-title">佳人</span>
       <span id="header-page">1ページ</span>
     </div>
 
-    <!-- ビューポート -->
     <div class="page-viewport-container" id="viewport-container">
       
-      <!-- 扉ページ（0ページ目） -->
+      <!-- 扉ページ -->
       <div class="page-sheet">
         <div class="sketch-tobira-page">
           <div class="tobira-border-box">
@@ -227,7 +223,7 @@
         </div>
       </div>
 
-      <!-- 本文ページ（直接記述用） -->
+      <!-- 本文ページ -->
       <div class="page-sheet body-text-page" id="novel-text">
         <p>ここに本文の第一段落を記述します。文字サイズや行間は自動で最適な縦書きレイアウトに調整されます。</p>
         <p>ここに第二段落を記述します。文章が長くなると自動的に次のページへ送られ、文字サイズを変更（A↑/A↓）するとページ数が連動して動的に再計算されます。</p>
@@ -253,11 +249,13 @@
     const novelText = document.getElementById('novel-text');
     const paperEl = document.getElementById('book-paper-el');
 
-    // 文字数同期処理
     function syncCharCount() {
       const fullText = novelText.innerText.replace(/\s+/g, '');
-      const countStr = fullText.length.toLocaleString() + '文字';
-      document.getElementById('tobira-count-text').innerText = countStr;
+      const count = fullText.length;
+      document.getElementById('tobira-count-text').innerText = count.toLocaleString() + '文字';
+      
+      // カバー用に文字数をローカルストレージへも保存
+      localStorage.setItem(`charCount_${articleId}`, count);
     }
 
     if (currentArticle) {
@@ -280,7 +278,6 @@
       currentSheetIndex = parseInt(initialPage);
     }
 
-    // 縦書きレイアウトにおける段組み幅の動的調整
     function recalcPages() {
       syncCharCount();
       setTimeout(() => {
@@ -335,7 +332,7 @@
       container.style.transform = `translateX(${offsetPercent}%)`;
     }
 
-    // タップ & スライド（フリック）移動処理
+    // タップ & スライド（右へスライド＝進む、左へスライド＝戻る）
     let startX = 0;
     let startY = 0;
 
@@ -350,12 +347,12 @@
       const diffX = endX - startX;
       const diffY = endY - startY;
 
-      // 横スライド（30px以上のスライド判定）
+      // 横スライド判定（30px以上）
       if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX > 0) { // 右へスライド（前ページ）
-          if (currentSheetIndex > 0) currentSheetIndex--;
-        } else { // 左へスライド（次ページ）
+        if (diffX > 0) { // 右へスライド（次のページへ進む）
           if (currentSheetIndex < bodyPages) currentSheetIndex++;
+        } else { // 左へスライド（前のページへ戻る）
+          if (currentSheetIndex > 0) currentSheetIndex--;
         }
         updateDisplay();
         return;
