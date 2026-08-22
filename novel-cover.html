@@ -101,6 +101,14 @@
       margin-top: 15px;
     }
 
+    /* ボタンエリアグループ */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
     /* 読むボタン */
     .btn-read {
       display: block;
@@ -119,6 +127,26 @@
     }
     .btn-read:hover {
       background-color: #333;
+    }
+
+    /* しおりから読むボタン */
+    .btn-bookmark {
+      display: none; /* 初期状態は非表示 */
+      width: 100%;
+      border: 1px solid #111;
+      background-color: #fff;
+      color: #111;
+      padding: 14px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-align: center;
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+    .btn-bookmark:hover {
+      background-color: #f0f0f0;
     }
 
     /* ダークフッター */
@@ -195,10 +223,16 @@
       <div class="book-genre-tag" id="cover-genre">― 小説 ―</div>
       <h1 class="book-title" id="cover-title">作品タイトル</h1>
       <div class="book-author">北風小僧</div>
-      <div class="book-meta" id="cover-meta">2026.00.00｜0,000文字</div>
+      <div class="book-meta" id="cover-meta">2026.00.00｜0文字</div>
     </div>
 
-    <a href="#" id="read-btn" class="btn-read">作品を読む ＞</a>
+    <div class="btn-group">
+      <!-- 作品を読むボタン -->
+      <a href="#" id="read-btn" class="btn-read">作品を読む ＞</a>
+      
+      <!-- しおりを指している場合のみ表示されるボタン -->
+      <a href="#" id="bookmark-btn" class="btn-bookmark">🔖 しおりから読む</a>
+    </div>
   </div>
 
   <!-- フッター -->
@@ -231,10 +265,28 @@
       document.title = `${currentArticle.title}｜北風小僧`;
       document.getElementById('cover-genre').innerText = `― ${genreNames[currentArticle.genre] || '小説'} ―`;
       document.getElementById('cover-title').innerText = currentArticle.title;
-      document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${currentArticle.length}`;
       
-      // 縦書きリーダー画面へのリンク（IDと読み込みファイルパスを渡す）
+      // リーダー画面と統一された文字数表示（charCountの数値フォーマット変換またはlength）
+      const charCountStr = currentArticle.charCount !== undefined 
+        ? `${currentArticle.charCount.toLocaleString()}文字` 
+        : (currentArticle.length || '0文字');
+
+      document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${charCountStr}`;
+      
+      // 縦書きリーダー画面へのリンク
       document.getElementById('read-btn').href = `novel-reader.html?id=${currentArticle.id}`;
+
+      // しおり情報の判定と処理（1作品につき1箇所）
+      const savedBookmark = localStorage.getItem(`bm_${currentArticle.id}`);
+      if (savedBookmark !== null) {
+        const pageNum = parseInt(savedBookmark);
+        const pageText = pageNum === 0 ? '扉' : `${pageNum}ページ`;
+        const bmBtn = document.getElementById('bookmark-btn');
+        
+        bmBtn.style.display = 'block';
+        bmBtn.innerText = `🔖 しおりから読む (${pageText})`;
+        bmBtn.href = `novel-reader.html?id=${currentArticle.id}&page=${pageNum}`;
+      }
     } else {
       document.getElementById('cover-title').innerText = '作品が見つかりません';
       document.getElementById('read-btn').style.display = 'none';
