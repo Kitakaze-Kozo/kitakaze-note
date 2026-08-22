@@ -2,213 +2,165 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>恐怖の構造｜北風小僧</title>
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恐怖の構造｜北風小僧の思考ノート</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Shippori+Mincho:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg-color: #ffffff;
-      --text-color: #2b2b2b;
-      --border-color: #e0e0e0;
-      /* 評論用：少し明るめのブルーに変更 */
-      --genre-color: #3b82f6; 
-    }
-
+    
     body {
-      font-family: 'Shippori Mincho', "Yu Mincho", serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.8;
+      font-family: 'Shippori Mincho', "Yu Mincho", "MS PMincho", serif;
+      background-color: #fcfbf9; /* 背景色を前回の上質なトーンに戻す */
+      color: #111111;
+      line-height: 1.9;
+      -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* ==========================================
-       1. トップページと完全共通のヘッダー・モーダル
-       ========================================== */
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border-color);
-      background-color: #ffffff;
-      font-family: 'Shippori Mincho', serif;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .site-title-a {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text-color);
-      text-decoration: none;
-    }
-    .header-icons {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-    .icon-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .icon-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--text-color);
+    /* --- トップページ共通：最上部カラーバー --- */
+    #top-color-bar {
+      height: 5px;
+      width: 100%;
+      transition: background-color 1s ease;
     }
 
-    /* 検索モーダル・オーバーレイ */
-    .search-modal {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      z-index: 2000;
-      display: none;
-      flex-direction: column;
-      padding: 20px;
+    /* --- トップページ共通：オープニング --- */
+    #opening {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background-color: #111111; color: #ffffff;
+      display: flex; justify-content: center; align-items: center;
+      z-index: 99999;
+      animation: fadeOut 0.8s ease forwards; animation-delay: 2.2s;
+    }
+    .opening-text {
+      font-size: 1.3rem; letter-spacing: 0.25em;
+      opacity: 0; transform: translateY(15px);
+      animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
+    }
+
+    /* --- トップページ共通：ナビゲーションヘッダー --- */
+    .top-nav {
+      position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px; border-bottom: 1px solid #111111;
       backdrop-filter: blur(5px);
     }
-    .search-modal.active { display: flex; }
-    .search-modal-header {
-      display: flex; justify-content: flex-end; margin-bottom: 20px;
-    }
-    .close-btn {
-      background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-color);
-    }
-    .search-input-wrap {
-      width: 100%; max-width: 600px; margin: 40px auto 0;
-    }
-    .search-input {
-      width: 100%; padding: 14px 18px; font-size: 1.1rem;
-      border: 1px solid var(--border-color); border-radius: 8px;
-      font-family: 'Noto Sans JP', sans-serif; outline: none;
+    
+    .brand-logo {
+      font-size: 1.75rem; font-weight: 800; text-decoration: none; color: #000;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-shadow: 0.5px 0 0 #000;
     }
 
-    /* サイドナビゲーション（ハンバーガーメニュー） */
-    .nav-drawer {
-      position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
-      background: #ffffff; z-index: 3000;
-      box-shadow: -5px 0 25px rgba(0,0,0,0.15);
-      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 30px 24px;
-      display: flex; flex-direction: column;
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    
+    .search-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .search-btn svg { width: 18px; height: 18px; stroke: #111; stroke-width: 2.2; fill: none; }
+
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
+
+    /* --- トップページ共通：オーバーレイメニュー --- */
+    #overlay-menu {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background-color: rgba(10, 10, 10, 0.96); color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .nav-drawer.active { right: 0; }
-    .drawer-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4); z-index: 2500;
-      display: none; transition: opacity 0.3s;
+    #overlay-menu.active { opacity: 1; visibility: visible; }
+    .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
+    .menu-list { list-style: none; text-align: center; }
+    .menu-list li { margin: 24px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
+
+    /* --- トップページ共通：検索モーダル --- */
+    #search-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: rgba(10, 10, 10, 0.95); z-index: 20000; display: none;
+      align-items: center; justify-content: center; padding: 20px; color: #fff;
     }
-    .drawer-overlay.active { display: block; }
-    .drawer-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+    #search-modal.active { display: flex; }
+    .search-box { width: 100%; max-width: 500px; }
+    .search-input {
+      width: 100%; padding: 14px; font-size: 1.1rem; background: #222; border: 1px solid #444;
+      color: #fff; font-family: inherit; outline: none; margin-bottom: 20px;
     }
-    .drawer-title { font-size: 1.2rem; font-weight: bold; }
-    .drawer-menu { list-style: none; display: flex; flex-direction: column; gap: 20px; }
-    .drawer-menu a {
-      text-decoration: none; color: var(--text-color); font-size: 1.05rem;
-      font-family: 'Noto Sans JP', sans-serif; transition: color 0.2s;
-    }
+    .search-results { list-style: none; max-height: 300px; overflow-y: auto; text-align: left; }
+    .search-results li { border-bottom: 1px solid #333; padding: 12px 0; }
+    .search-results a { text-decoration: none; color: #fff; display: block; }
+    .search-close-btn { background: none; border: 1px solid #fff; color: #fff; padding: 10px 20px; margin-top: 20px; cursor: pointer; width: 100%; font-family: inherit; }
 
     /* ==========================================
-       2. 記事コンテンツエリア（レイアウト調整）
+       記事ページ固有レイアウト
        ========================================== */
-    .article-container {
+    .container {
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 50px 20px 40px; /* タイトル上に広めのゆとり(50px)を配置 */
+      padding: 50px 24px 45px; /* タイトル上にしっかりとしたゆとり */
       flex: 1;
     }
 
+    /* タイトル & カラーライン（トップページのカードと同じスタイル距離感） */
     .article-header {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
-    .title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
+    .article-title-wrap {
+      margin-bottom: 12px;
     }
     .article-title {
-      font-size: 1.9rem;
-      font-weight: 700;
-      line-height: 1.3;
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.4;
       letter-spacing: 0.05em;
-      display: inline-block;
-    }
-    
-    /* 三点リーダー（共有ボタン） */
-    .share-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      color: #666;
-      display: flex;
-      align-items: center;
-      margin-top: 4px;
-    }
-    .share-btn svg { width: 20px; height: 20px; fill: #666; }
-
-    /* タイトルの文字幅に完全に合わせたカラーライン */
-    .genre-line-wrap {
-      margin-top: 4px; /* タイトルとの間隔を詰める */
-      margin-bottom: 4px; /* カラーラインと北風小僧の間隔を極限まで詰める */
-    }
-    .genre-line {
-      height: 3px;
-      background-color: var(--genre-color);
-      display: inline-block;
-      min-width: 3em;
-      border-radius: 2px;
+      display: inline;
     }
 
-    /* メタ情報（著者名、更新日、文字数） */
-    .meta-row {
+    /* トップページ共通のラインスタイル */
+    .line-blue   { border-bottom: 3px solid #4ba3e3; padding-bottom: 2px; }
+    .line-green  { border-bottom: 3px solid #3cb878; padding-bottom: 2px; }
+    .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
+    .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
+
+    /* 著者名（カラーライン直下） */
+    .author-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-top: 8px;
+    }
+
+    /* メタ情報行（日付・文字数 ＋ 右側に共有ボタン） */
+    .article-meta-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      font-family: 'Shippori Mincho', serif;
+      align-items: center;
+      margin-top: -6px; /* 位置を上に引き上げ */
+      font-size: 0.85rem;
+      color: #777777;
     }
-    
-    /* 「北風小僧」の太字化・差別化 */
-    .author-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
-      margin-top: 2px; /* カラーライン直下に配置 */
-    }
-
-    /* 位置を上に移動（margin-topマイナス調整） */
-    .meta-right {
-      text-align: right;
-      line-height: 1.35;
-      font-size: 0.88rem;
-      color: #555;
-      margin-top: -10px; /* 更に上部へ移動 */
+    .meta-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
     }
 
-    /* 本文エリア：開始位置をしっかり下に下げる */
+    /* 共有ボタン（トップページ共通スタイル） */
+    .share-btn {
+      background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
+      padding: 2px 6px; border-radius: 4px; line-height: 1;
+    }
+    .share-btn:hover { background-color: #f0f0f0; color: #000; }
+
+    /* 本文エリア（下から開始） */
     .article-body {
       font-size: 1.05rem;
       letter-spacing: 0.03em;
-      margin-top: 55px; /* 本文の開始位置を下に下げる */
-      margin-bottom: 50px;
+      margin-top: 55px; /* しっかりと間隔を離して開始 */
+      margin-bottom: 45px;
       word-break: break-word;
     }
-
     .article-body p {
       margin-bottom: 1.8em;
       text-indent: 1em;
@@ -219,221 +171,158 @@
 
     .divider {
       text-align: center;
-      margin: 50px 0;
+      margin: 45px 0;
       color: #ccc;
       letter-spacing: 0.5em;
     }
 
-    /* ==========================================
-       3. コメントコーナー（絵文字排除）
-       ========================================== */
+    /* コメントコーナー（絵文字なし） */
     .comment-section {
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid #e0e0e0;
       padding-top: 28px;
       font-family: 'Noto Sans JP', sans-serif;
     }
-
     .comment-toggle-btn {
       width: 100%;
       padding: 12px 18px;
       background-color: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #333;
+      border: 1px solid #111111;
+      border-radius: 0px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #111111;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, color 0.2s;
     }
     .comment-toggle-btn:hover {
-      background-color: #f7f7f7;
+      background-color: #111111;
+      color: #ffffff;
     }
-
     .comment-content {
       display: none;
-      margin-top: 16px;
+      margin-top: 18px;
       padding: 20px;
       background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
+      border: 1px solid #e0e0e0;
     }
-    .comment-content.open {
-      display: block;
-    }
-
+    .comment-content.open { display: block; }
     .comment-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 16px;
+      display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;
     }
     .comment-input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      resize: vertical;
-      min-height: 80px;
-      outline: none;
+      width: 100%; padding: 12px; border: 1px solid #ccc; font-family: inherit; font-size: 0.9rem;
+      resize: vertical; min-height: 80px; outline: none;
     }
     .comment-submit-btn {
-      align-self: flex-end;
-      padding: 8px 20px;
-      background-color: #2b2b2b;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      cursor: pointer;
+      align-self: flex-end; padding: 10px 24px; background-color: #111; color: #fff;
+      border: none; font-size: 0.85rem; cursor: pointer; font-weight: bold;
     }
+    .comment-list { display: flex; flex-direction: column; gap: 12px; }
+    .comment-item { padding: 12px; background-color: #f4f4f4; font-size: 0.88rem; }
+    .comment-meta { font-size: 0.75rem; color: #888; margin-bottom: 4px; }
 
-    .comment-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    /* --- トップページ共通：ダークフッター --- */
+    .footer-dark-section {
+      background-color: #111111;
+      color: #ffffff;
+      width: 100%;
+      padding: 50px 24px 40px;
+      margin-top: 60px;
     }
-    .comment-item {
-      padding: 12px;
-      background-color: #f9f9f9;
-      border-radius: 6px;
-      font-size: 0.88rem;
-    }
-    .comment-meta {
-      font-size: 0.75rem;
-      color: #888;
-      margin-bottom: 4px;
-    }
-
-    /* ==========================================
-       4. トップページと完全共通のフッター（黒背景）
-       ========================================== */
-    .site-footer {
-      background-color: #121212;
-      color: #cccccc;
-      padding: 50px 20px 40px;
-      font-family: 'Shippori Mincho', serif;
-      margin-top: auto;
-    }
-    .footer-inner {
+    .footer-dark-inner {
       max-width: 680px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 28px;
       text-align: center;
     }
-    .footer-contacts {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 0.92rem;
+
+    .contact-info-box {
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px dashed #333333;
+      font-size: 0.88rem;
+      color: #cccccc;
+      line-height: 2.2;
     }
-    .footer-contacts a {
-      color: #ffffff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .footer-nav {
-      width: 100%;
-      border-top: 1px dashed #333333;
-      border-bottom: 1px solid #222222;
-      padding: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      font-size: 0.95rem;
-    }
-    .footer-nav a {
-      color: #dddddd;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-copyright {
-      font-size: 0.8rem;
-      color: #666666;
-      margin-top: 10px;
-    }
+    .contact-info-box a { color: #ffffff; text-decoration: underline; }
+
+    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
+    .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #ffffff; }
+    
+    .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
+
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
   </style>
 </head>
 <body>
 
-  <!-- 1. ヘッダー -->
-  <header class="site-header">
-    <a href="index.html" class="site-title-a">北風小僧</a>
-    <div class="header-icons">
-      <!-- 検索ボタン -->
-      <button class="icon-btn" onclick="openSearch()" title="検索">
-        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      </button>
-      <!-- メニューボタン -->
-      <button class="icon-btn" onclick="toggleDrawer()" title="メニュー">
-        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-      </button>
-    </div>
-  </header>
+  <!-- トップページ共通：カラーバー -->
+  <div id="top-color-bar"></div>
 
-  <!-- 検索モーダル -->
-  <div class="search-modal" id="search-modal">
-    <div class="search-modal-header">
-      <button class="close-btn" onclick="closeSearch()">×</button>
-    </div>
-    <div class="search-input-wrap">
-      <input type="text" class="search-input" placeholder="キーワードを入力して検索..." id="search-input">
+  <!-- トップページ共通：オープニング -->
+  <div id="opening">
+    <p class="opening-text">思考を紡ぐ場所へ</p>
+  </div>
+
+  <!-- トップページ共通：ナビゲーション -->
+  <div class="top-nav">
+    <a href="index.html" class="brand-logo">北風小僧</a>
+    <div class="nav-right">
+      <button class="search-btn" title="検索" onclick="toggleSearch()">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
+      </button>
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- ナビゲーションドロワー -->
-  <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
-  <div class="nav-drawer" id="nav-drawer">
-    <div class="drawer-header">
-      <span class="drawer-title">メニュー</span>
-      <button class="close-btn" onclick="toggleDrawer()">×</button>
-    </div>
-    <ul class="drawer-menu">
-      <li><a href="index.html">トップページ</a></li>
-      <li><a href="#">私について</a></li>
-      <li><a href="#">サイトのご利用について</a></li>
-      <li><a href="#">ヘルプ</a></li>
-      <li><a href="#">お問い合わせ</a></li>
+  <!-- トップページ共通：オーバーレイメニュー -->
+  <div id="overlay-menu">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+    <ul class="menu-list">
+      <li><a href="list.html">作品一覧</a></li>
+      <li><a href="about.html">私について</a></li>
+      <li><a href="contact.html">お問い合わせ</a></li>
+      <li><a href="contact.html">感想を送る</a></li>
     </ul>
   </div>
 
-  <!-- 2. 記事メインエリア -->
-  <main class="article-container">
-    
+  <!-- トップページ共通：検索モーダル -->
+  <div id="search-modal">
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="作品名やキーワードを入力..." oninput="execSearch()">
+      <ul class="search-results" id="search-results"></ul>
+      <button class="search-close-btn" onclick="toggleSearch()">閉じる</button>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <div class="container">
+
     <article class="article-header">
-      <!-- タイトル & 共有ボタン -->
-      <div class="title-row">
-        <h1 class="article-title" id="article-title">恐怖の構造</h1>
-        <button class="share-btn" onclick="shareArticle()" title="共有">
-          <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        </button>
+      <!-- タイトル ＆ カラーライン（トップページカードと同等の精密な距離感） -->
+      <div class="article-title-wrap">
+        <h1 class="article-title"><span class="line-blue" id="article-title-span">恐怖の構造</span></h1>
       </div>
 
-      <!-- タイトルの文字幅に連動するカラーライン -->
-      <div class="genre-line-wrap">
-        <div class="genre-line" id="genre-line"></div>
-      </div>
+      <!-- 著者名（カラーライン直下に隙間なく配置） -->
+      <div class="author-name">北風小僧</div>
 
-      <!-- メタ情報 -->
-      <div class="meta-row">
-        <div class="author-name">北風小僧</div>
-        <div class="meta-right">
-          <div id="char-count">0文字</div>
-          <div id="update-date">2026.08.21</div>
+      <!-- メタ情報（日付・文字数 ＋ 右端に共有ボタン） -->
+      <div class="article-meta-row">
+        <div class="meta-left">
+          <span id="update-date">2026.08.21</span>
+          <span>｜</span>
+          <span id="char-count">0文字</span>
         </div>
+        <button class="share-btn" onclick="shareArticle(event)" title="共有">…</button>
       </div>
     </article>
 
-    <!-- ===================================================
-         【本文エリア】ここから下へ本文を入力してください
-         =================================================== -->
+    <!-- 本文エリア（位置を下から開始） -->
     <div class="article-body" id="article-body">
 
       <p>ここに評論や随筆の本文を記述します。改行は &lt;p&gt; タグで囲むことで段落分けが行われ、読みやすい余白と一文字下げが適用されます。</p>
@@ -443,132 +332,142 @@
       <p>見出しや特定の強調表現を使いたい場合も、シンプルな横書きフォーマットのため柔軟に対応できます。</p>
 
     </div>
-    <!-- ===================================================
-         【本文エリア】ここまで
-         =================================================== -->
 
     <div class="divider">〜〜〜</div>
 
-    <!-- 3. コメントコーナー（絵文字非表示） -->
+    <!-- コメントコーナー（絵文字一切なし） -->
     <section class="comment-section">
       <button class="comment-toggle-btn" onclick="toggleComments()">
-        <span>コメント...</span>
+        <span>コメントを残す</span>
         <span id="toggle-icon">開く ▼</span>
       </button>
 
       <div class="comment-content" id="comment-content">
         <div class="comment-form">
-          <textarea class="comment-input" id="comment-input" placeholder="匿名でコメントを残す..."></textarea>
-          <button class="comment-submit-btn" onclick="addComment()">送信</button>
+          <textarea class="comment-input" id="comment-input" placeholder="匿名でコメントを入力..."></textarea>
+          <button class="comment-submit-btn" onclick="addComment()">送信する</button>
         </div>
 
         <div class="comment-list" id="comment-list"></div>
       </div>
     </section>
 
-  </main>
+  </div>
 
-  <!-- 4. フッター（トップページと完全共通仕様） -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-contacts">
-        <div>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></div>
-        <div>Twitter (X): <a href="https://twitter.com" target="_blank">@xxx</a></div>
+  <!-- トップページ共通：ダークフッター -->
+  <div class="footer-dark-section">
+    <div class="footer-dark-inner">
+      <div class="contact-info-box">
+        <p>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></p>
+        <p>Twitter (X): <a href="https://twitter.com/xxx" target="_blank" rel="noopener">@xxx</a></p>
       </div>
-
-      <nav class="footer-nav">
-        <div><a href="#">私について</a></div>
-        <div><a href="#">サイトのご利用について</a></div>
-        <div><a href="#">ヘルプ</a></div>
-        <div><a href="#">お問い合わせ</a></div>
-      </nav>
-
-      <div class="footer-copyright">
-        &copy; 北風小僧
-      </div>
+      <ul class="footer-links">
+        <li><a href="about.html">私について</a></li>
+        <li><a href="terms.html">サイトのご利用について</a></li>
+        <li><a href="help.html">ヘルプ</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+      <div class="dark-copyright">&copy; 北風小僧</div>
     </div>
-  </footer>
+  </div>
 
   <script src="data.js"></script>
   <script>
+    // 1. トップページ共通：カラーバー自動変化
+    const colors = ['#5baed7', '#52be80', '#f1789a', '#f7d358'];
+    function changeBarColor() {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById('top-color-bar').style.backgroundColor = randomColor;
+    }
+    changeBarColor();
+    setInterval(changeBarColor, 20000);
+
+    // 2. トップページ共通：メニュー開閉
+    function toggleMenu() {
+      document.getElementById('overlay-menu').classList.toggle('active');
+    }
+
+    // 3. トップページ共通：検索機能
+    function toggleSearch() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) {
+        document.getElementById('search-input').focus();
+      }
+    }
+
+    function execSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      
+      if (!query || typeof allArticles === 'undefined') return;
+
+      const genreNames = { blue: '評論風', green: '随筆', red: '小説', yellow: '詩歌' };
+      const filtered = allArticles.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        (genreNames[item.genre] && genreNames[item.genre].includes(query))
+      );
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<li style="color:#aaa;">該当する作品が見つかりません</li>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        resultsContainer.innerHTML += `
+          <li>
+            <a href="${item.url}">
+              <strong>${item.title}</strong>
+              <div style="font-size:0.8rem; color:#888;">${item.date}｜${genreNames[item.genre]}｜${item.length}</div>
+            </a>
+          </li>
+        `;
+      });
+    }
+
+    // 4. 共有機能（トップページ準拠）
+    function shareArticle(event) {
+      event.preventDefault();
+      const title = document.title;
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ title: title, url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url);
+        alert('作品リンクをクリップボードにコピーしました');
+      }
+    }
+
+    // 5. 本文文字数自動カウント
+    function updateCharCount() {
+      const bodyEl = document.getElementById('article-body');
+      const count = bodyEl.innerText.replace(/\s+/g, '').length;
+      document.getElementById('char-count').innerText = count.toLocaleString() + '文字';
+    }
+
+    // 6. data.js 記事連携
     const params = new URLSearchParams(window.location.search);
     const articleId = params.get('id') || 'article2';
-    const currentArticle = typeof allArticles !== 'undefined' ? allArticles.find(item => item.id === articleId) : null;
-
-    const bodyEl = document.getElementById('article-body');
-    const titleEl = document.getElementById('article-title');
-    const genreLine = document.getElementById('genre-line');
-
-    // カラーラインの長さをタイトルの文字幅に正確に同期
-    function adjustLineLength() {
-      const titleWidth = titleEl.offsetWidth;
-      genreLine.style.width = `${titleWidth}px`;
-    }
-
-    // 本文文字数のカウント
-    function updateCharCount() {
-      const fullText = bodyEl.innerText.replace(/\s+/g, '');
-      const count = fullText.length;
-      document.getElementById('char-count').innerText = count.toLocaleString() + '文字';
-      localStorage.setItem(`charCount_${articleId}`, count);
-    }
-
-    // data.js との連携設定
-    if (currentArticle) {
-      document.title = `${currentArticle.title}｜北風小僧`;
-      titleEl.innerText = currentArticle.title;
-      document.getElementById('update-date').innerText = currentArticle.date;
-
-      const genreColorMap = {
-        "blue": "#3b82f6",  // 明るめのブルー
-        "green": "#10b981", // 明るめのグリーン
-        "red": "#ef4444"    // 明るめのレッド
-      };
-      if (genreColorMap[currentArticle.genre]) {
-        genreLine.style.backgroundColor = genreColorMap[currentArticle.genre];
+    if (typeof allArticles !== 'undefined') {
+      const currentArticle = allArticles.find(item => item.id === articleId);
+      if (currentArticle) {
+        document.title = `${currentArticle.title}｜北風小僧の思考ノート`;
+        const titleSpan = document.getElementById('article-title-span');
+        titleSpan.innerText = currentArticle.title;
+        titleSpan.className = `line-${currentArticle.genre}`;
+        document.getElementById('update-date').innerText = currentArticle.date;
       }
     }
 
-    /* --- ヘッダー機能（検索 & メニュー） --- */
-    function openSearch() {
-      document.getElementById('search-modal').classList.add('active');
-      document.getElementById('search-input').focus();
-    }
-    function closeSearch() {
-      document.getElementById('search-modal').classList.remove('active');
-    }
-    function toggleDrawer() {
-      document.getElementById('nav-drawer').classList.toggle('active');
-      document.getElementById('drawer-overlay').classList.toggle('active');
-    }
-
-    // 共有機能
-    function shareArticle() {
-      if (navigator.share) {
-        navigator.share({
-          title: document.title,
-          url: window.location.href
-        }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('URLをコピーしました。');
-      }
-    }
-
-    // コメントエリア開閉
+    // 7. コメント開閉・追加
     function toggleComments() {
       const content = document.getElementById('comment-content');
       const icon = document.getElementById('toggle-icon');
-      
       content.classList.toggle('open');
-      if (content.classList.contains('open')) {
-        icon.innerText = '閉じる ▲';
-      } else {
-        icon.innerText = '開く ▼';
-      }
+      icon.innerText = content.classList.contains('open') ? '閉じる ▲' : '開く ▼';
     }
 
-    // 匿名コメント追加
     function addComment() {
       const input = document.getElementById('comment-input');
       const text = input.value.trim();
@@ -590,7 +489,6 @@
     }
 
     window.onload = () => {
-      adjustLineLength();
       updateCharCount();
     };
   </script>
