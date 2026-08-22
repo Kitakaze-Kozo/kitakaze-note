@@ -15,7 +15,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ナビゲーションバー */
     .top-nav {
       position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
       display: flex; justify-content: space-between; align-items: center;
@@ -36,7 +35,6 @@
 
     .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
 
-    /* 全画面メニュー */
     #overlay-menu {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background-color: rgba(10, 10, 10, 0.96); color: #fff;
@@ -49,16 +47,13 @@
     .menu-list li { margin: 24px 0; }
     .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
 
-    /* メインコンテンツ枠 */
     .container { max-width: 680px; margin: 0 auto; padding: 30px 24px 50px; }
 
-    /* ページタイトル */
     .page-title {
       font-size: 1.4rem; font-weight: 700; letter-spacing: 0.08em;
       margin-bottom: 20px;
     }
 
-    /* 横幅いっぱいの薄い線 */
     .thin-divider {
       border: 0;
       border-top: 1px solid #e0e0e0;
@@ -66,7 +61,6 @@
       margin-right: -24px;
     }
 
-    /* コントロールエリア */
     .control-bar {
       display: flex; justify-content: space-between; align-items: center;
       padding: 12px 0;
@@ -90,13 +84,11 @@
     }
     .filter-icon { font-size: 1rem; line-height: 1; }
 
-    /* カラー別下線 */
     .line-blue   { border-bottom: 2px solid #4ba3e3; padding-bottom: 2px; }
     .line-green  { border-bottom: 2px solid #3cb878; padding-bottom: 2px; }
     .line-red    { border-bottom: 2px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 2px solid #f6d155; padding-bottom: 2px; }
 
-    /* 作品リスト */
     .article-list { list-style: none; margin-bottom: 30px; }
     .article-item {
       padding: 16px 0; border-bottom: 1px dashed #e0e0e0; text-decoration: none;
@@ -115,14 +107,12 @@
       display: flex; gap: 12px; align-items: center;
     }
 
-    /* 共有ボタン */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
       padding: 0 4px; line-height: 1; font-family: inherit;
     }
     .share-btn:hover { color: #000; }
 
-    /* ページネーション */
     .pagination {
       display: flex; justify-content: center; align-items: center; gap: 12px;
       margin: 35px 0 25px; font-size: 1rem;
@@ -134,7 +124,6 @@
       border: 1px solid #111; font-weight: bold;
     }
 
-    /* ページ検索 */
     .page-search-box {
       display: flex; justify-content: center; align-items: center; gap: 10px;
       margin-bottom: 40px; font-size: 0.88rem;
@@ -148,7 +137,6 @@
       cursor: pointer; font-family: inherit; font-size: 0.85rem; color: #111;
     }
 
-    /* 絞り込みモーダル */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
@@ -182,7 +170,6 @@
       background: #333;
     }
 
-    /* フッター黒エリア */
     .footer-dark-section {
       background-color: #111111;
       color: #ffffff;
@@ -211,22 +198,36 @@
     .footer-links a:hover { color: #ffffff; }
     
     .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
+
+    #search-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: rgba(10, 10, 10, 0.95); z-index: 20000; display: none;
+      align-items: center; justify-content: center; padding: 20px; color: #fff;
+    }
+    #search-modal.active { display: flex; }
+    .search-box { width: 100%; max-width: 500px; }
+    .search-input {
+      width: 100%; padding: 14px; font-size: 1.1rem; background: #222; border: 1px solid #444;
+      color: #fff; font-family: inherit; outline: none; margin-bottom: 20px;
+    }
+    .search-results { list-style: none; max-height: 300px; overflow-y: auto; text-align: left; }
+    .search-results li { border-bottom: 1px solid #333; padding: 12px 0; }
+    .search-results a { text-decoration: none; color: #fff; display: block; }
+    .search-close-btn { background: none; border: 1px solid #fff; color: #fff; padding: 10px 20px; margin-top: 20px; cursor: pointer; width: 100%; font-family: inherit; }
   </style>
 </head>
 <body>
 
-  <!-- ナビゲーション -->
   <div class="top-nav">
     <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <button class="search-btn" title="検索">
+      <button class="search-btn" title="検索" onclick="toggleSearch()">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
       </button>
       <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <!-- メニュー -->
   <div id="overlay-menu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul class="menu-list">
@@ -237,13 +238,18 @@
     </ul>
   </div>
 
+  <div id="search-modal">
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="作品名やキーワードを入力..." oninput="execSearch()">
+      <ul class="search-results" id="search-results"></ul>
+      <button class="search-close-btn" onclick="toggleSearch()">閉じる</button>
+    </div>
+  </div>
+
   <div class="container">
-
     <h1 class="page-title">作品一覧</h1>
-
     <hr class="thin-divider">
 
-    <!-- コントロールバー -->
     <div class="control-bar">
       <div class="sort-controls">
         <select id="sort-select" class="select-box" onchange="changeSort()">
@@ -260,22 +266,16 @@
 
     <hr class="thin-divider" style="margin-bottom: 15px;">
 
-    <!-- 作品一覧リスト -->
     <div class="article-list" id="article-list-container"></div>
-
-    <!-- ページネーション -->
     <div class="pagination" id="pagination-container"></div>
 
-    <!-- ページ検索 -->
     <div class="page-search-box">
       <span>ページ検索</span>
       <input type="number" id="page-input" class="page-input" min="1">
       <button class="page-submit-btn" onclick="jumpToPage()">移動</button>
     </div>
-
   </div>
 
-  <!-- 絞り込みモーダル（複数選択対応） -->
   <div class="modal-overlay" id="filter-modal" onclick="closeFilterModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="modal-title">ジャンル絞り込み</div>
@@ -330,7 +330,6 @@
     </div>
   </div>
 
-  <!-- フッター黒エリア -->
   <div class="footer-dark-section">
     <div class="footer-dark-inner">
       <div class="contact-info-box">
@@ -347,89 +346,53 @@
     </div>
   </div>
 
+  <script src="data.js"></script>
   <script>
-    /* 共通マスターデータベース */
-    const allArticles = [
-      { id: 1, title: "はじめに", url: "hajimene.html", date: "2026.04.29", length: "56,213文字", popularRank: 2, genre: "green" },
-      { id: 2, title: "恐怖の構造", url: "article2.html", date: "2026.08.21", length: "14,296文字", popularRank: 1, genre: "blue" },
-      { id: 3, title: "一般化の罠", url: "article3.html", date: "2026.08.14", length: "23,412文字", popularRank: 4, genre: "blue" },
-      { id: 4, title: "作品論", url: "article4.html", date: "2026.07.29", length: "11,342文字", popularRank: 3, genre: "red" },
-      { id: 5, title: "嫉妬", url: "article5.html", date: "2026.07.14", length: "21,432文字", popularRank: 5, genre: "yellow" },
-      { id: 6, title: "忘却の地平", url: "article6.html", date: "2026.06.30", length: "12,314文字", popularRank: 6, genre: "green" },
-      { id: 7, title: "言葉の余白", url: "article7.html", date: "2026.06.15", length: "8,900文字", popularRank: 7, genre: "green" },
-      { id: 8, title: "夜の思考実験", url: "article8.html", date: "2026.05.28", length: "19,200文字", popularRank: 8, genre: "blue" },
-      { id: 9, title: "断章", url: "article9.html", date: "2026.05.10", length: "4,500文字", popularRank: 9, genre: "yellow" },
-      { id: 10, title: "夏至の日に", url: "article10.html", date: "2026.04.30", length: "12,314文字", popularRank: 10, genre: "red" },
-      { id: 11, title: "春の終わり", url: "article11.html", date: "2026.04.15", length: "9,800文字", popularRank: 11, genre: "green" },
-      { id: 12, title: "記憶の構造", url: "article12.html", date: "2026.03.20", length: "15,600文字", popularRank: 12, genre: "blue" }
-    ];
-
     let currentPage = 1;
     const itemsPerPage = 10;
     let currentSort = "date";
     let isDescending = true;
-    let selectedGenres = ["all"]; // 配列で複数ジャンルを保持
+    let selectedGenres = ["all"];
 
-    /* URLパラメータ解析・読み込み機能 */
     function initParams() {
       const params = new URLSearchParams(window.location.search);
-      
       if (params.get('sort') === 'popular') {
         currentSort = 'popular';
         document.getElementById('sort-select').value = 'popular';
       }
-
       const genreParam = params.get('genre');
-      if (genreParam) {
-        selectedGenres = [genreParam];
-      }
+      if (genreParam) selectedGenres = [genreParam];
       syncCheckboxesWithState();
     }
 
-    /* チェックボックスの状態を現在のselectedGenresと同期 */
     function syncCheckboxesWithState() {
       const chkAll = document.getElementById('chk-all');
       const genreChks = document.querySelectorAll('input[name="genre-chk"]');
-
       if (selectedGenres.includes("all") || selectedGenres.length === 0) {
         chkAll.checked = true;
         genreChks.forEach(chk => chk.checked = false);
       } else {
         chkAll.checked = false;
-        genreChks.forEach(chk => {
-          chk.checked = selectedGenres.includes(chk.value);
-        });
+        genreChks.forEach(chk => chk.checked = selectedGenres.includes(chk.value));
       }
     }
 
-    /* 「すべて表示」を押したときの制御 */
     function toggleAllCheck(allInput) {
       if (allInput.checked) {
-        const genreChks = document.querySelectorAll('input[name="genre-chk"]');
-        genreChks.forEach(chk => chk.checked = false);
+        document.querySelectorAll('input[name="genre-chk"]').forEach(chk => chk.checked = false);
       }
     }
 
-    /* 個別ジャンルを押したときの制御 */
     function toggleGenreCheck() {
-      const chkAll = document.getElementById('chk-all');
       const genreChks = document.querySelectorAll('input[name="genre-chk"]:checked');
-      if (genreChks.length > 0) {
-        chkAll.checked = false;
-      } else {
-        chkAll.checked = true;
-      }
+      document.getElementById('chk-all').checked = (genreChks.length === 0);
     }
 
-    /* モーダル表示用の作品数計算・表示機能 */
     function updateModalCounts() {
       const counts = { all: allArticles.length, blue: 0, green: 0, red: 0, yellow: 0 };
       allArticles.forEach(item => {
-        if (counts.hasOwnProperty(item.genre)) {
-          counts[item.genre]++;
-        }
+        if (counts.hasOwnProperty(item.genre)) counts[item.genre]++;
       });
-
       document.getElementById('modal-count-all').innerText = `(${counts.all})`;
       document.getElementById('modal-count-blue').innerText = `(${counts.blue})`;
       document.getElementById('modal-count-green').innerText = `(${counts.green})`;
@@ -439,38 +402,23 @@
 
     function getProcessedArticles() {
       let list = [...allArticles];
-
       if (!selectedGenres.includes("all") && selectedGenres.length > 0) {
         list = list.filter(item => selectedGenres.includes(item.genre));
       }
-
       list.sort((a, b) => {
-        let valA, valB;
-        if (currentSort === "date") {
-          valA = new Date(a.date.replace(/\./g, '/'));
-          valB = new Date(b.date.replace(/\./g, '/'));
-        } else {
-          valA = a.popularRank;
-          valB = b.popularRank;
-        }
-
-        if (isDescending) {
-          return currentSort === "date" ? valB - valA : valA - valB;
-        } else {
-          return currentSort === "date" ? valA - valB : valB - valA;
-        }
+        let valA = currentSort === "date" ? new Date(a.date.replace(/\./g, '/')) : a.popularRank;
+        let valB = currentSort === "date" ? new Date(b.date.replace(/\./g, '/')) : b.popularRank;
+        if (isDescending) return currentSort === "date" ? valB - valA : valA - valB;
+        else return currentSort === "date" ? valA - valB : valB - valA;
       });
-
       return list;
     }
 
-    /* 共有処理機能 */
     function shareArticle(event, title, url) {
       event.preventDefault();
       event.stopPropagation();
-      if (navigator.share) {
-        navigator.share({ title: title, url: url }).catch(() => {});
-      } else {
+      if (navigator.share) navigator.share({ title: title, url: url }).catch(() => {});
+      else {
         navigator.clipboard.writeText(window.location.origin + '/' + url);
         alert('作品リンクをクリップボードにコピーしました');
       }
@@ -512,14 +460,8 @@
 
       const pagination = document.getElementById('pagination-container');
       pagination.innerHTML = '';
-
       for (let i = 1; i <= totalPages; i++) {
-        pagination.innerHTML += `
-          <span class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</span>
-        `;
-      }
-      if (totalPages > 5) {
-        pagination.innerHTML += `<span style="color:#888;">...</span>`;
+        pagination.innerHTML += `<span class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</span>`;
       }
     }
 
@@ -531,8 +473,7 @@
 
     function toggleOrder() {
       isDescending = !isDescending;
-      const btn = document.getElementById('order-toggle-btn');
-      btn.innerText = isDescending ? "↓ 降順" : "↑ 昇順";
+      document.getElementById('order-toggle-btn').innerText = isDescending ? "↓ 降順" : "↑ 昇順";
       currentPage = 1;
       render();
     }
@@ -545,9 +486,7 @@
 
     function jumpToPage() {
       const input = document.getElementById('page-input').value;
-      if (input) {
-        goToPage(parseInt(input, 10));
-      }
+      if (input) goToPage(parseInt(input, 10));
     }
 
     function openFilterModal() {
@@ -558,17 +497,11 @@
       document.getElementById('filter-modal').classList.remove('active');
     }
 
-    /* 「適用する」ボタンを押して絞り込みを実行 */
     function applyColorFilter() {
       const chkAll = document.getElementById('chk-all');
       const genreChks = document.querySelectorAll('input[name="genre-chk"]:checked');
-
-      if (chkAll.checked || genreChks.length === 0) {
-        selectedGenres = ["all"];
-      } else {
-        selectedGenres = Array.from(genreChks).map(chk => chk.value);
-      }
-
+      if (chkAll.checked || genreChks.length === 0) selectedGenres = ["all"];
+      else selectedGenres = Array.from(genreChks).map(chk => chk.value);
       closeFilterModal();
       currentPage = 1;
       render();
@@ -578,7 +511,40 @@
       document.getElementById('overlay-menu').classList.toggle('active');
     }
 
-    /* 初期処理 */
+    function toggleSearch() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) document.getElementById('search-input').focus();
+    }
+
+    function execSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      if (!query) return;
+
+      const filtered = allArticles.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        (genreNames[item.genre] && genreNames[item.genre].includes(query))
+      );
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<li style="color:#aaa;">該当する作品が見つかりません</li>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        resultsContainer.innerHTML += `
+          <li>
+            <a href="${item.url}">
+              <strong>${item.title}</strong>
+              <div style="font-size:0.8rem; color:#888;">${item.date}｜${genreNames[item.genre]}｜${item.length}</div>
+            </a>
+          </li>
+        `;
+      });
+    }
+
     initParams();
     updateModalCounts();
     render();
