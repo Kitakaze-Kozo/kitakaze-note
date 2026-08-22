@@ -2,17 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>恐怖の構造｜北風小僧</title>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-color: #fcfbf9;
+      --bg-color: #ffffff;
       --text-color: #2b2b2b;
       --border-color: #e0e0e0;
-      --genre-color: #2b5b84; 
+      /* 評論用：少し明るめのブルーに変更 */
+      --genre-color: #3b82f6; 
     }
 
     body {
@@ -25,51 +26,114 @@
       flex-direction: column;
     }
 
-    /* --- トップページと共通のヘッダー --- */
+    /* ==========================================
+       1. トップページと完全共通のヘッダー・モーダル
+       ========================================== */
     .site-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 18px 20px;
       border-bottom: 1px solid var(--border-color);
       background-color: #ffffff;
       font-family: 'Shippori Mincho', serif;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
     }
     .site-title-a {
-      font-size: 1.25rem;
-      font-weight: bold;
-      letter-spacing: 0.05em;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       color: var(--text-color);
       text-decoration: none;
     }
     .header-icons {
       display: flex;
-      gap: 16px;
-      font-size: 1.2rem;
+      gap: 20px;
+      align-items: center;
     }
     .icon-btn {
       background: none;
       border: none;
-      font-size: 1.2rem;
       cursor: pointer;
-      color: var(--text-color);
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-color);
     }
 
-    /* 記事メインエリア */
+    /* 検索モーダル・オーバーレイ */
+    .search-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+    .search-modal.active { display: flex; }
+    .search-modal-header {
+      display: flex; justify-content: flex-end; margin-bottom: 20px;
+    }
+    .close-btn {
+      background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-color);
+    }
+    .search-input-wrap {
+      width: 100%; max-width: 600px; margin: 40px auto 0;
+    }
+    .search-input {
+      width: 100%; padding: 14px 18px; font-size: 1.1rem;
+      border: 1px solid var(--border-color); border-radius: 8px;
+      font-family: 'Noto Sans JP', sans-serif; outline: none;
+    }
+
+    /* サイドナビゲーション（ハンバーガーメニュー） */
+    .nav-drawer {
+      position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+      background: #ffffff; z-index: 3000;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 30px 24px;
+      display: flex; flex-direction: column;
+    }
+    .nav-drawer.active { right: 0; }
+    .drawer-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4); z-index: 2500;
+      display: none; transition: opacity 0.3s;
+    }
+    .drawer-overlay.active { display: block; }
+    .drawer-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+    }
+    .drawer-title { font-size: 1.2rem; font-weight: bold; }
+    .drawer-menu { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+    .drawer-menu a {
+      text-decoration: none; color: var(--text-color); font-size: 1.05rem;
+      font-family: 'Noto Sans JP', sans-serif; transition: color 0.2s;
+    }
+
+    /* ==========================================
+       2. 記事コンテンツエリア（レイアウト調整）
+       ========================================== */
     .article-container {
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 36px 20px 40px; /* 上部余白を広げてゆとりを持たせる */
+      padding: 50px 20px 40px; /* タイトル上に広めのゆとり(50px)を配置 */
       flex: 1;
     }
 
-    /* タイトルエリア */
     .article-header {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .title-row {
       display: flex;
@@ -78,91 +142,100 @@
       gap: 12px;
     }
     .article-title {
-      font-size: 1.8rem;
-      font-weight: bold;
+      font-size: 1.9rem;
+      font-weight: 700;
       line-height: 1.3;
       letter-spacing: 0.05em;
       display: inline-block;
     }
+    
+    /* 三点リーダー（共有ボタン） */
     .share-btn {
       background: none;
       border: none;
-      font-size: 1.3rem;
       cursor: pointer;
       padding: 4px;
       color: #666;
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
     }
+    .share-btn svg { width: 20px; height: 20px; fill: #666; }
 
-    /* タイトル文字列の長さに合わせたカラーライン */
+    /* タイトルの文字幅に完全に合わせたカラーライン */
     .genre-line-wrap {
-      margin-top: 8px;
-      margin-bottom: 6px;
+      margin-top: 4px; /* タイトルとの間隔を詰める */
+      margin-bottom: 4px; /* カラーラインと北風小僧の間隔を極限まで詰める */
     }
     .genre-line {
       height: 3px;
       background-color: var(--genre-color);
       display: inline-block;
-      min-width: 3em; /* 最低保証幅 */
+      min-width: 3em;
       border-radius: 2px;
     }
 
-    /* メタ情報（著者、更新日、文字数） */
+    /* メタ情報（著者名、更新日、文字数） */
     .meta-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      font-size: 0.95rem;
-      color: #333;
-      font-family: 'Shippori Mincho', serif; /* 明朝体に統一 */
-      margin-top: 4px;
+      font-family: 'Shippori Mincho', serif;
     }
+    
+    /* 「北風小僧」の太字化・差別化 */
     .author-name {
-      font-weight: 500;
-      font-size: 1rem;
-    }
-    .meta-right {
-      text-align: right;
-      line-height: 1.4;
-      font-size: 0.88rem;
-      color: #555;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      margin-top: 2px; /* カラーライン直下に配置 */
     }
 
-    /* 本文エリア */
+    /* 位置を上に移動（margin-topマイナス調整） */
+    .meta-right {
+      text-align: right;
+      line-height: 1.35;
+      font-size: 0.88rem;
+      color: #555;
+      margin-top: -10px; /* 更に上部へ移動 */
+    }
+
+    /* 本文エリア：開始位置をしっかり下に下げる */
     .article-body {
       font-size: 1.05rem;
       letter-spacing: 0.03em;
-      margin-top: 32px;
-      margin-bottom: 40px;
+      margin-top: 55px; /* 本文の開始位置を下に下げる */
+      margin-bottom: 50px;
       word-break: break-word;
     }
 
-    /* 段落の改行調整 */
     .article-body p {
-      margin-bottom: 1.6em;
+      margin-bottom: 1.8em;
       text-indent: 1em;
     }
     .article-body p.no-indent {
       text-indent: 0;
     }
 
-    /* セクション区切り線 */
     .divider {
       text-align: center;
-      margin: 40px 0;
+      margin: 50px 0;
       color: #ccc;
       letter-spacing: 0.5em;
     }
 
-    /* コメントコーナー */
+    /* ==========================================
+       3. コメントコーナー（絵文字排除）
+       ========================================== */
     .comment-section {
       border-top: 1px solid var(--border-color);
-      padding-top: 24px;
+      padding-top: 28px;
       font-family: 'Noto Sans JP', sans-serif;
     }
 
     .comment-toggle-btn {
       width: 100%;
-      padding: 12px 16px;
+      padding: 12px 18px;
       background-color: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 24px;
@@ -176,13 +249,13 @@
       transition: background-color 0.2s;
     }
     .comment-toggle-btn:hover {
-      background-color: #f0f0f0;
+      background-color: #f7f7f7;
     }
 
     .comment-content {
       display: none;
       margin-top: 16px;
-      padding: 16px;
+      padding: 20px;
       background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -194,23 +267,24 @@
     .comment-form {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 16px;
     }
     .comment-input {
       width: 100%;
-      padding: 10px 12px;
+      padding: 12px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
       font-family: inherit;
       font-size: 0.9rem;
       resize: vertical;
-      min-height: 70px;
+      min-height: 80px;
+      outline: none;
     }
     .comment-submit-btn {
       align-self: flex-end;
-      padding: 6px 16px;
-      background-color: #333;
+      padding: 8px 20px;
+      background-color: #2b2b2b;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -224,7 +298,7 @@
       gap: 12px;
     }
     .comment-item {
-      padding: 10px 12px;
+      padding: 12px;
       background-color: #f9f9f9;
       border-radius: 6px;
       font-size: 0.88rem;
@@ -235,57 +309,130 @@
       margin-bottom: 4px;
     }
 
-    /* --- トップページと共通のフッター --- */
+    /* ==========================================
+       4. トップページと完全共通のフッター（黒背景）
+       ========================================== */
     .site-footer {
-      border-top: 1px solid var(--border-color);
-      background-color: #ffffff;
-      padding: 24px 20px;
-      text-align: center;
-      font-size: 0.8rem;
-      color: #777;
-      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #121212;
+      color: #cccccc;
+      padding: 50px 20px 40px;
+      font-family: 'Shippori Mincho', serif;
       margin-top: auto;
+    }
+    .footer-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+    }
+    .footer-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.92rem;
+    }
+    .footer-contacts a {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .footer-nav {
+      width: 100%;
+      border-top: 1px dashed #333333;
+      border-bottom: 1px solid #222222;
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 0.95rem;
+    }
+    .footer-nav a {
+      color: #dddddd;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-copyright {
+      font-size: 0.8rem;
+      color: #666666;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- トップページ共通ヘッダー -->
+  <!-- 1. ヘッダー -->
   <header class="site-header">
     <a href="index.html" class="site-title-a">北風小僧</a>
     <div class="header-icons">
-      <button class="icon-btn" title="検索">🔍</button>
-      <button class="icon-btn" title="メニュー">☰</button>
+      <!-- 検索ボタン -->
+      <button class="icon-btn" onclick="openSearch()" title="検索">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+      <!-- メニューボタン -->
+      <button class="icon-btn" onclick="toggleDrawer()" title="メニュー">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
     </div>
   </header>
 
-  <!-- 記事メイン -->
+  <!-- 検索モーダル -->
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <button class="close-btn" onclick="closeSearch()">×</button>
+    </div>
+    <div class="search-input-wrap">
+      <input type="text" class="search-input" placeholder="キーワードを入力して検索..." id="search-input">
+    </div>
+  </div>
+
+  <!-- ナビゲーションドロワー -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+  <div class="nav-drawer" id="nav-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">メニュー</span>
+      <button class="close-btn" onclick="toggleDrawer()">×</button>
+    </div>
+    <ul class="drawer-menu">
+      <li><a href="index.html">トップページ</a></li>
+      <li><a href="#">私について</a></li>
+      <li><a href="#">サイトのご利用について</a></li>
+      <li><a href="#">ヘルプ</a></li>
+      <li><a href="#">お問い合わせ</a></li>
+    </ul>
+  </div>
+
+  <!-- 2. 記事メインエリア -->
   <main class="article-container">
     
     <article class="article-header">
       <!-- タイトル & 共有ボタン -->
       <div class="title-row">
         <h1 class="article-title" id="article-title">恐怖の構造</h1>
-        <button class="share-btn" onclick="shareArticle()" title="共有">⋮</button>
+        <button class="share-btn" onclick="shareArticle()" title="共有">
+          <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        </button>
       </div>
 
-      <!-- タイトルの文字数に連動するカラーライン -->
+      <!-- タイトルの文字幅に連動するカラーライン -->
       <div class="genre-line-wrap">
         <div class="genre-line" id="genre-line"></div>
       </div>
 
-      <!-- メタ情報（更新日・文字数を入れ替え＆明朝体へ） -->
+      <!-- メタ情報 -->
       <div class="meta-row">
         <div class="author-name">北風小僧</div>
         <div class="meta-right">
-          <div id="update-date">2026.08.21</div>
           <div id="char-count">0文字</div>
+          <div id="update-date">2026.08.21</div>
         </div>
       </div>
     </article>
 
     <!-- ===================================================
-         【本文を打つ場所】ここから下へ本文を入力してください
+         【本文エリア】ここから下へ本文を入力してください
          =================================================== -->
     <div class="article-body" id="article-body">
 
@@ -297,35 +444,49 @@
 
     </div>
     <!-- ===================================================
-         【本文を打つ場所】ここまで
+         【本文エリア】ここまで
          =================================================== -->
 
     <div class="divider">〜〜〜</div>
 
-    <!-- コメントコーナー（サクラ削除済み） -->
+    <!-- 3. コメントコーナー（絵文字非表示） -->
     <section class="comment-section">
       <button class="comment-toggle-btn" onclick="toggleComments()">
-        <span>💬 コメント...</span>
+        <span>コメント...</span>
         <span id="toggle-icon">開く ▼</span>
       </button>
 
       <div class="comment-content" id="comment-content">
-        <!-- 投稿フォーム -->
         <div class="comment-form">
           <textarea class="comment-input" id="comment-input" placeholder="匿名でコメントを残す..."></textarea>
           <button class="comment-submit-btn" onclick="addComment()">送信</button>
         </div>
 
-        <!-- コメント一覧（初期表示は空） -->
         <div class="comment-list" id="comment-list"></div>
       </div>
     </section>
 
   </main>
 
-  <!-- トップページ共通フッター -->
+  <!-- 4. フッター（トップページと完全共通仕様） -->
   <footer class="site-footer">
-    <p>&copy; 北風小僧 All Rights Reserved.</p>
+    <div class="footer-inner">
+      <div class="footer-contacts">
+        <div>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></div>
+        <div>Twitter (X): <a href="https://twitter.com" target="_blank">@xxx</a></div>
+      </div>
+
+      <nav class="footer-nav">
+        <div><a href="#">私について</a></div>
+        <div><a href="#">サイトのご利用について</a></div>
+        <div><a href="#">ヘルプ</a></div>
+        <div><a href="#">お問い合わせ</a></div>
+      </nav>
+
+      <div class="footer-copyright">
+        &copy; 北風小僧
+      </div>
+    </div>
   </footer>
 
   <script src="data.js"></script>
@@ -338,35 +499,47 @@
     const titleEl = document.getElementById('article-title');
     const genreLine = document.getElementById('genre-line');
 
-    // カラーラインの長さをタイトルの文字幅に合わせる
+    // カラーラインの長さをタイトルの文字幅に正確に同期
     function adjustLineLength() {
       const titleWidth = titleEl.offsetWidth;
       genreLine.style.width = `${titleWidth}px`;
     }
 
-    // 本文のみの文字数を自動カウント
+    // 本文文字数のカウント
     function updateCharCount() {
       const fullText = bodyEl.innerText.replace(/\s+/g, '');
       const count = fullText.length;
       document.getElementById('char-count').innerText = count.toLocaleString() + '文字';
-      
       localStorage.setItem(`charCount_${articleId}`, count);
     }
 
-    // データファイル(data.js)との連動
+    // data.js との連携設定
     if (currentArticle) {
       document.title = `${currentArticle.title}｜北風小僧`;
       titleEl.innerText = currentArticle.title;
       document.getElementById('update-date').innerText = currentArticle.date;
 
       const genreColorMap = {
-        "blue": "#2b5b84",
-        "green": "#3b7a57",
-        "red": "#9e3d3d"
+        "blue": "#3b82f6",  // 明るめのブルー
+        "green": "#10b981", // 明るめのグリーン
+        "red": "#ef4444"    // 明るめのレッド
       };
       if (genreColorMap[currentArticle.genre]) {
         genreLine.style.backgroundColor = genreColorMap[currentArticle.genre];
       }
+    }
+
+    /* --- ヘッダー機能（検索 & メニュー） --- */
+    function openSearch() {
+      document.getElementById('search-modal').classList.add('active');
+      document.getElementById('search-input').focus();
+    }
+    function closeSearch() {
+      document.getElementById('search-modal').classList.remove('active');
+    }
+    function toggleDrawer() {
+      document.getElementById('nav-drawer').classList.toggle('active');
+      document.getElementById('drawer-overlay').classList.toggle('active');
     }
 
     // 共有機能
@@ -378,11 +551,11 @@
         }).catch(() => {});
       } else {
         navigator.clipboard.writeText(window.location.href);
-        alert('記事のURLをコピーしました！');
+        alert('URLをコピーしました。');
       }
     }
 
-    // コメント開閉
+    // コメントエリア開閉
     function toggleComments() {
       const content = document.getElementById('comment-content');
       const icon = document.getElementById('toggle-icon');
