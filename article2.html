@@ -10,7 +10,7 @@
     
     body {
       font-family: 'Shippori Mincho', "Yu Mincho", "MS PMincho", serif;
-      background-color: #fcfbf9; /* 背景色を前回の上質なトーンに戻す */
+      background-color: #fcfbf9;
       color: #111111;
       line-height: 1.9;
       -webkit-font-smoothing: antialiased;
@@ -24,20 +24,6 @@
       height: 5px;
       width: 100%;
       transition: background-color 1s ease;
-    }
-
-    /* --- トップページ共通：オープニング --- */
-    #opening {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background-color: #111111; color: #ffffff;
-      display: flex; justify-content: center; align-items: center;
-      z-index: 99999;
-      animation: fadeOut 0.8s ease forwards; animation-delay: 2.2s;
-    }
-    .opening-text {
-      font-size: 1.3rem; letter-spacing: 0.25em;
-      opacity: 0; transform: translateY(15px);
-      animation: fadeInUp 1.2s ease forwards; animation-delay: 0.4s;
     }
 
     /* --- トップページ共通：ナビゲーションヘッダー --- */
@@ -98,11 +84,11 @@
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 50px 24px 45px; /* タイトル上にしっかりとしたゆとり */
+      padding: 50px 24px 45px;
       flex: 1;
     }
 
-    /* タイトル & カラーライン（トップページのカードと同じスタイル距離感） */
+    /* タイトル & カラーライン */
     .article-header {
       margin-bottom: 25px;
     }
@@ -123,22 +109,24 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* 著者名（カラーライン直下） */
+    /* 著者名（カラーライン直下へさらに引き上げ） */
     .author-name {
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: 0.05em;
-      margin-top: 8px;
+      margin-top: 1px;
+      transform: translateY(-3px);
     }
 
-    /* メタ情報行（日付・文字数 ＋ 右側に共有ボタン） */
+    /* メタ情報行（日付・文字数 ＋ 右端に共有ボタン） */
     .article-meta-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* 左右いっぱいに振り分け */
       align-items: center;
-      margin-top: -6px; /* 位置を上に引き上げ */
+      margin-top: -3px;
       font-size: 0.85rem;
       color: #777777;
+      width: 100%;
     }
     .meta-left {
       display: flex;
@@ -146,18 +134,18 @@
       align-items: center;
     }
 
-    /* 共有ボタン（トップページ共通スタイル） */
+    /* 共有ボタン（右端へピタッと寄せる） */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
-      padding: 2px 6px; border-radius: 4px; line-height: 1;
+      padding: 2px 0 2px 10px; border-radius: 4px; line-height: 1; margin-left: auto;
     }
-    .share-btn:hover { background-color: #f0f0f0; color: #000; }
+    .share-btn:hover { color: #000; }
 
-    /* 本文エリア（下から開始） */
+    /* 本文エリア */
     .article-body {
       font-size: 1.05rem;
       letter-spacing: 0.03em;
-      margin-top: 55px; /* しっかりと間隔を離して開始 */
+      margin-top: 55px;
       margin-bottom: 45px;
       word-break: break-word;
     }
@@ -176,7 +164,7 @@
       letter-spacing: 0.5em;
     }
 
-    /* コメントコーナー（絵文字なし） */
+    /* コメントコーナー */
     .comment-section {
       border-top: 1px solid #e0e0e0;
       padding-top: 28px;
@@ -253,20 +241,12 @@
     .footer-links a:hover { color: #ffffff; }
     
     .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
-
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
   </style>
 </head>
 <body>
 
   <!-- トップページ共通：カラーバー -->
   <div id="top-color-bar"></div>
-
-  <!-- トップページ共通：オープニング -->
-  <div id="opening">
-    <p class="opening-text">思考を紡ぐ場所へ</p>
-  </div>
 
   <!-- トップページ共通：ナビゲーション -->
   <div class="top-nav">
@@ -303,12 +283,12 @@
   <div class="container">
 
     <article class="article-header">
-      <!-- タイトル ＆ カラーライン（トップページカードと同等の精密な距離感） -->
+      <!-- タイトル ＆ カラーライン -->
       <div class="article-title-wrap">
         <h1 class="article-title"><span class="line-blue" id="article-title-span">恐怖の構造</span></h1>
       </div>
 
-      <!-- 著者名（カラーライン直下に隙間なく配置） -->
+      <!-- 著者名（直下に配置） -->
       <div class="author-name">北風小僧</div>
 
       <!-- メタ情報（日付・文字数 ＋ 右端に共有ボタン） -->
@@ -322,7 +302,7 @@
       </div>
     </article>
 
-    <!-- 本文エリア（位置を下から開始） -->
+    <!-- 本文エリア -->
     <div class="article-body" id="article-body">
 
       <p>ここに評論や随筆の本文を記述します。改行は &lt;p&gt; タグで囲むことで段落分けが行われ、読みやすい余白と一文字下げが適用されます。</p>
@@ -335,7 +315,7 @@
 
     <div class="divider">〜〜〜</div>
 
-    <!-- コメントコーナー（絵文字一切なし） -->
+    <!-- コメントコーナー -->
     <section class="comment-section">
       <button class="comment-toggle-btn" onclick="toggleComments()">
         <span>コメントを残す</span>
@@ -426,7 +406,7 @@
       });
     }
 
-    // 4. 共有機能（トップページ準拠）
+    // 4. 共有機能
     function shareArticle(event) {
       event.preventDefault();
       const title = document.title;
