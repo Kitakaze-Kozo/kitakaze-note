@@ -3,83 +3,279 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>作品詳細｜北風小僧</title>
+  <title>作品カバー｜北風小僧</title>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Shippori Mincho', serif; background-color: #fff; color: #111; line-height: 1.8; }
-    .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid #111; }
-    .brand-logo { font-size: 1.3rem; font-weight: 800; text-decoration: none; color: #111; letter-spacing: 0.15em; }
-    .nav-right { display: flex; gap: 16px; align-items: center; }
-    .icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
-    .container { max-width: 500px; margin: 0 auto; padding: 40px 24px 60px; text-align: center; }
-    .title-area { text-align: left; margin-bottom: 25px; }
-    .work-title { font-size: 2rem; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 8px; }
-    .title-divider { border: 0; border-top: 2px solid #111; margin-bottom: 12px; }
-    .meta-info { display: flex; justify-content: space-between; font-size: 0.9rem; color: #444; }
-    .genre-label { font-size: 1.1rem; font-weight: 700; text-align: left; margin-bottom: 50px; }
-    .btn-group { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-top: 50px; }
-    .read-btn {
-      display: block; width: 100%; max-width: 300px; padding: 16px 0; border: 2px solid #111;
-      background: #fff; color: #111; font-family: inherit; font-size: 1.2rem; font-weight: 700;
-      letter-spacing: 0.2em; text-decoration: none; text-align: center; cursor: pointer;
+    body {
+      font-family: 'Shippori Mincho', "Yu Mincho", "MS PMincho", serif;
+      background-color: #fcfcfc;
+      color: #111111;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    .read-btn.primary { background: #111; color: #fff; }
+
+    /* 上部ナビゲーション */
+    .top-nav {
+      position: sticky; top: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 24px; border-bottom: 1px solid #111111;
+      backdrop-filter: blur(5px);
+    }
+    .brand-logo {
+      font-size: 1.5rem; font-weight: 800; text-decoration: none; color: #000;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-shadow: 0.5px 0 0 #000;
+    }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .search-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
+    .search-btn svg { width: 18px; height: 18px; stroke: #111; stroke-width: 2.2; fill: none; }
+    .menu-btn { background: none; border: none; cursor: pointer; font-size: 1.65rem; color: #111; line-height: 1; padding: 2px; }
+
+    #overlay-menu {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background-color: rgba(10, 10, 10, 0.96); color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    #overlay-menu.active { opacity: 1; visibility: visible; }
+    .close-btn { position: absolute; top: 24px; right: 28px; font-size: 2.2rem; color: #fff; background: none; border: none; cursor: pointer; }
+    .menu-list { list-style: none; text-align: center; }
+    .menu-list li { margin: 24px 0; }
+    .menu-list a { color: #fff; text-decoration: none; font-size: 1.25rem; letter-spacing: 0.15em; }
+
+    /* カバーエリア */
+    .cover-container {
+      max-width: 500px;
+      margin: 40px auto 60px;
+      padding: 0 24px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .book-cover-card {
+      border: 1px solid #111;
+      background-color: #fff;
+      padding: 60px 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      margin-bottom: 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      position: relative;
+    }
+
+    .book-genre-tag {
+      position: absolute;
+      top: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: #666;
+    }
+
+    .book-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      line-height: 1.4;
+      margin: 20px 0;
+      word-break: break-word;
+    }
+
+    .book-author {
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .book-meta {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 15px;
+    }
+
+    /* 読むボタン */
+    .btn-read {
+      display: block;
+      width: 100%;
+      border: 1px solid #111;
+      background-color: #111;
+      color: #fff;
+      padding: 16px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-align: center;
+      transition: background-color 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .btn-read:hover {
+      background-color: #333;
+    }
+
+    /* ダークフッター */
+    .footer-dark-section {
+      background-color: #111111;
+      color: #ffffff;
+      width: 100%;
+      padding: 50px 24px 40px;
+      margin-top: auto;
+    }
+    .footer-dark-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+    .contact-info-box {
+      margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px dashed #333333;
+      font-size: 0.88rem; color: #cccccc; line-height: 2.2;
+    }
+    .contact-info-box a { color: #ffffff; text-decoration: underline; }
+    .footer-links { list-style: none; text-align: center; font-size: 0.88rem; line-height: 2.5; margin-bottom: 35px; }
+    .footer-links a { color: #cccccc; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #ffffff; }
+    .dark-copyright { text-align: center; font-size: 0.82rem; color: #777777; border-top: 1px solid #222222; padding-top: 25px; }
+
+    /* 検索モーダル */
+    #search-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: rgba(10, 10, 10, 0.95); z-index: 20000; display: none;
+      align-items: center; justify-content: center; padding: 20px; color: #fff;
+    }
+    #search-modal.active { display: flex; }
+    .search-box { width: 100%; max-width: 500px; }
+    .search-input {
+      width: 100%; padding: 14px; font-size: 1.1rem; background: #222; border: 1px solid #444;
+      color: #fff; font-family: inherit; outline: none; margin-bottom: 20px;
+    }
+    .search-results { list-style: none; max-height: 300px; overflow-y: auto; text-align: left; }
+    .search-results li { border-bottom: 1px solid #333; padding: 12px 0; }
+    .search-results a { text-decoration: none; color: #fff; display: block; }
+    .search-close-btn { background: none; border: 1px solid #fff; color: #fff; padding: 10px 20px; margin-top: 20px; cursor: pointer; width: 100%; font-family: inherit; }
   </style>
 </head>
 <body>
 
+  <!-- ナビゲーション -->
   <div class="top-nav">
     <a href="index.html" class="brand-logo">北風小僧</a>
     <div class="nav-right">
-      <button class="icon-btn">🔍</button>
-      <button class="icon-btn">☰</button>
+      <button class="search-btn" title="検索" onclick="toggleSearch()">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/></svg>
+      </button>
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 
-  <div class="container">
-    <div class="title-area">
-      <h1 class="work-title" id="work-title">--</h1>
-      <hr class="title-divider">
-      <div class="meta-info">
-        <span id="work-date">--</span>
-        <span id="work-length">--</span>
+  <div id="overlay-menu">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+    <ul class="menu-list">
+      <li><a href="list.html">作品一覧</a></li>
+      <li><a href="about.html">私について</a></li>
+      <li><a href="contact.html">お問い合わせ</a></li>
+      <li><a href="contact.html">感想を送る</a></li>
+    </ul>
+  </div>
+
+  <div id="search-modal">
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="作品名やキーワードを入力..." oninput="execSearch()">
+      <ul class="search-results" id="search-results"></ul>
+      <button class="search-close-btn" onclick="toggleSearch()">閉じる</button>
+    </div>
+  </div>
+
+  <!-- カバーメイン表示 -->
+  <div class="cover-container">
+    <div class="book-cover-card">
+      <div class="book-genre-tag" id="cover-genre">― 小説 ―</div>
+      <h1 class="book-title" id="cover-title">作品タイトル</h1>
+      <div class="book-author">北風小僧</div>
+      <div class="book-meta" id="cover-meta">2026.00.00｜0,000文字</div>
+    </div>
+
+    <a href="#" id="read-btn" class="btn-read">作品を読む ＞</a>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer-dark-section">
+    <div class="footer-dark-inner">
+      <div class="contact-info-box">
+        <p>Gmail: <a href="mailto:xxx@gmail.com">xxx@gmail.com</a></p>
+        <p>Twitter (X): <a href="https://twitter.com/xxx" target="_blank" rel="noopener">@xxx</a></p>
       </div>
+      <ul class="footer-links">
+        <li><a href="about.html">私について</a></li>
+        <li><a href="terms.html">サイトのご利用について</a></li>
+        <li><a href="help.html">ヘルプ</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+      <div class="dark-copyright">&copy; 北風小僧</div>
     </div>
-
-    <div class="genre-label" id="work-genre">--</div>
-
-    <div class="btn-group" id="btn-group"></div>
   </div>
 
-  <!-- データファイルの読み込み -->
   <script src="data.js"></script>
   <script>
-    // URLから作品IDを取得（例: novel-cover.html?id=kajin）
-    const urlParams = new URLSearchParams(window.location.search);
-    const workId = urlParams.get('id') || 'kajin';
-    const work = worksData[workId];
+    // URLから作品IDを取得
+    const params = new URLSearchParams(window.location.search);
+    const articleId = params.get('id');
 
-    if (work) {
-      document.title = `${work.title}｜北風小僧`;
-      document.getElementById('work-title').innerText = work.title;
-      document.getElementById('work-date').innerText = work.date;
-      document.getElementById('work-length').innerText = work.length;
-      document.getElementById('work-genre').innerText = work.genre;
+    // data.js から対象データを検索
+    const currentArticle = allArticles.find(item => item.id === articleId);
 
-      const savedBookmark = localStorage.getItem(`bookmark_${workId}`);
-      const btnGroup = document.getElementById('btn-group');
+    if (currentArticle) {
+      document.title = `${currentArticle.title}｜北風小僧`;
+      document.getElementById('cover-genre').innerText = `― ${genreNames[currentArticle.genre] || '小説'} ―`;
+      document.getElementById('cover-title').innerText = currentArticle.title;
+      document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${currentArticle.length}`;
+      
+      // 縦書きリーダー画面へのリンク（IDと読み込みファイルパスを渡す）
+      document.getElementById('read-btn').href = `novel-reader.html?id=${currentArticle.id}`;
+    } else {
+      document.getElementById('cover-title').innerText = '作品が見つかりません';
+      document.getElementById('read-btn').style.display = 'none';
+    }
 
-      if (savedBookmark) {
-        btnGroup.innerHTML = `
-          <a href="novel-reader.html?id=${workId}&page=${savedBookmark}" class="read-btn primary">続きから読む (P.${savedBookmark})</a>
-          <a href="novel-reader.html?id=${workId}&page=1" class="read-btn">最初から読む</a>
-        `;
-      } else {
-        btnGroup.innerHTML = `
-          <a href="novel-reader.html?id=${workId}&page=1" class="read-btn">読む</a>
-        `;
+    function toggleMenu() {
+      document.getElementById('overlay-menu').classList.toggle('active');
+    }
+
+    function toggleSearch() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) document.getElementById('search-input').focus();
+    }
+
+    function execSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      if (!query) return;
+
+      const filtered = allArticles.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        (genreNames[item.genre] && genreNames[item.genre].includes(query))
+      );
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<li style="color:#aaa;">該当する作品が見つかりません</li>';
+        return;
       }
+
+      filtered.forEach(item => {
+        resultsContainer.innerHTML += `
+          <li>
+            <a href="${item.url}">
+              <strong>${item.title}</strong>
+              <div style="font-size:0.8rem; color:#888;">${item.date}｜${genreNames[item.genre]}｜${item.length}</div>
+            </a>
+          </li>
+        `;
+      });
     }
   </script>
 </body>
