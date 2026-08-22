@@ -109,7 +109,7 @@
     .line-red    { border-bottom: 3px solid #f06292; padding-bottom: 2px; }
     .line-yellow { border-bottom: 3px solid #f6d155; padding-bottom: 2px; }
 
-    /* 著者名（カラーライン直下へさらに引き上げ） */
+    /* 著者名（カラーライン直下） */
     .author-name {
       font-size: 1.05rem;
       font-weight: 700;
@@ -121,7 +121,7 @@
     /* メタ情報行（日付・文字数 ＋ 右端に共有ボタン） */
     .article-meta-row {
       display: flex;
-      justify-content: space-between; /* 左右いっぱいに振り分け */
+      justify-content: space-between;
       align-items: center;
       margin-top: -3px;
       font-size: 0.85rem;
@@ -134,34 +134,25 @@
       align-items: center;
     }
 
-    /* 共有ボタン（右端へピタッと寄せる） */
+    /* 共有ボタン */
     .share-btn {
       background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #666;
       padding: 2px 0 2px 10px; border-radius: 4px; line-height: 1; margin-left: auto;
     }
     .share-btn:hover { color: #000; }
 
-    /* 本文エリア */
+    /* 本文エリア（自動改行・自動インデント対応） */
     .article-body {
       font-size: 1.05rem;
       letter-spacing: 0.03em;
       margin-top: 55px;
-      margin-bottom: 45px;
+      margin-bottom: 60px;
       word-break: break-word;
     }
     .article-body p {
       margin-bottom: 1.8em;
       text-indent: 1em;
-    }
-    .article-body p.no-indent {
-      text-indent: 0;
-    }
-
-    .divider {
-      text-align: center;
-      margin: 45px 0;
-      color: #ccc;
-      letter-spacing: 0.5em;
+      white-space: pre-wrap; /* コード内の改行をそのまま画面に反映させる */
     }
 
     /* コメントコーナー */
@@ -288,10 +279,10 @@
         <h1 class="article-title"><span class="line-blue" id="article-title-span">恐怖の構造</span></h1>
       </div>
 
-      <!-- 著者名（直下に配置） -->
+      <!-- 著者名 -->
       <div class="author-name">北風小僧</div>
 
-      <!-- メタ情報（日付・文字数 ＋ 右端に共有ボタン） -->
+      <!-- メタ情報 -->
       <div class="article-meta-row">
         <div class="meta-left">
           <span id="update-date">2026.08.21</span>
@@ -302,18 +293,28 @@
       </div>
     </article>
 
-    <!-- 本文エリア -->
+
+    <!-- ====================================================
+         【本文入力エリア】
+         ここに直接文章を書いてください！
+         HTMLタグ（<p>など）は書かなくて大丈夫です。
+
+         ・「1行空ける（エンター2回）」で自動的に新しい段落（一文字下げ＋段落間スペース）になります。
+         ・「そのまま改行（エンター1回）」でも画面に改行が反映されます。
+         ==================================================== -->
     <div class="article-body" id="article-body">
+ここに1段落目の文章をそのまま記述します。HTMLタグを入れる必要はありません。
+メモ帳やWordで書いた文章をそのまま貼り付けても大丈夫です。
 
-      <p>ここに評論や随筆の本文を記述します。改行は &lt;p&gt; タグで囲むことで段落分けが行われ、読みやすい余白と一文字下げが適用されます。</p>
+このように1行空けるだけで、自動的に新しい段落として整形され、一文字下げが適用されます。
 
-      <p>長い文章であっても横書きでスムーズにスクロールして読むことができます。改行を多く使いたい場合や、詩的な表現でインデント（一文字下げ）を無くしたい場合は、&lt;p class="no-indent"&gt; を使用することも可能です。</p>
-
-      <p>見出しや特定の強調表現を使いたい場合も、シンプルな横書きフォーマットのため柔軟に対応できます。</p>
-
+改行を入れたい場合も普通にエンターキーを押すだけで、そのまま画面上に改行が表現されます。
+大きなスペースを開けたい場合は、空行を数行入れるだけで自由に行間を空けることができます。
     </div>
+    <!-- ====================================================
+         【本文エリアここまで】
+         ==================================================== -->
 
-    <div class="divider">〜〜〜</div>
 
     <!-- コメントコーナー -->
     <section class="comment-section">
@@ -419,11 +420,18 @@
       }
     }
 
-    // 5. 本文文字数自動カウント
-    function updateCharCount() {
+    // 5. テキストを自動で<p>タグ（段落）に変換＋文字数カウント
+    function formatArticleBodyAndCount() {
       const bodyEl = document.getElementById('article-body');
-      const count = bodyEl.innerText.replace(/\s+/g, '').length;
+      const rawText = bodyEl.innerText.trim();
+
+      // 文字数カウント（空白・改行を除外）
+      const count = rawText.replace(/\s+/g, '').length;
       document.getElementById('char-count').innerText = count.toLocaleString() + '文字';
+
+      // 空行（2つ以上の改行）で分割して段落化
+      const paragraphs = rawText.split(/\n\s*\n/);
+      bodyEl.innerHTML = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
     }
 
     // 6. data.js 記事連携
@@ -469,7 +477,7 @@
     }
 
     window.onload = () => {
-      updateCharCount();
+      formatArticleBodyAndCount();
     };
   </script>
 </body>
