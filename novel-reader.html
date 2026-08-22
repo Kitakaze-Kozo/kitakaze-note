@@ -10,14 +10,14 @@
 
     :root {
       --bg-outer: #333333;
-      --paper-bg: #f8f4e6;        /* 生成り（クリーム色） */
+      --paper-bg: #f8f4e6;        /* 生成り */
       --text-color: #2b2b2b;
       --ui-bg: rgba(255, 255, 255, 0.95);
       --ui-text: #111111;
     }
 
     body.theme-white {
-      --paper-bg: #ffffff;        /* 白色 */
+      --paper-bg: #ffffff;        /* 純白 */
       --text-color: #111111;
     }
 
@@ -48,7 +48,6 @@
 
     .nav-left, .nav-right { display: flex; align-items: center; gap: 8px; }
     
-    /* ボタンの改行を防止して洗練されたデザインに */
     .btn-ui {
       background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.15);
       border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; font-weight: bold;
@@ -82,7 +81,6 @@
       z-index: 10;
       transition: opacity 0.2s;
     }
-    /* 1ページ目（扉）では上部の柱を非表示にして被りを解消 */
     .page-header-柱.hide {
       opacity: 0;
     }
@@ -101,47 +99,46 @@
       flex-shrink: 0;
     }
 
-    /* 1ページ目：横書き扉デザイン */
+    /* 1ページ目：扉（岩波文庫風の枠サイズに縮小） */
     .sketch-tobira-page {
       width: 100%; height: 100%;
-      padding: 5px;
       display: flex; justify-content: center; align-items: center;
       writing-mode: horizontal-tb !important;
     }
     .tobira-border-box {
-      width: 100%; height: 100%;
+      width: 82%;            /* 写真の枠の大きさに合わせて縮小 */
+      height: 78%;           /* 上下に十分な余白を確保 */
       border: 1px solid var(--text-color);
-      padding: 35px 20px 25px;
+      padding: 30px 15px 20px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: space-between;
       text-align: center;
       writing-mode: horizontal-tb !important;
     }
-    .tobira-genre { font-size: 0.85rem; letter-spacing: 0.15em; margin-top: 5px; }
-    
-    /* タイトルの位置を少し下げてゆったり配置 */
-    .tobira-title { font-size: 1.85rem; font-weight: bold; margin-top: 25px; margin-bottom: 15px; letter-spacing: 0.1em; }
-    
-    .tobira-meta-group { display: flex; flex-direction: column; gap: 6px; align-items: center; }
-    .tobira-date { font-size: 0.85rem; }
-    
-    /* 下線を削除した文字数表示 */
-    .tobira-count { font-size: 0.85rem; padding-bottom: 2px; }
-    
-    .tobira-author { font-size: 1.05rem; font-weight: bold; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; margin-top: auto; }
+    .tobira-genre { font-size: 0.85rem; letter-spacing: 0.15em; }
+    .tobira-title { font-size: 1.7rem; font-weight: bold; margin-top: 15px; margin-bottom: 10px; letter-spacing: 0.1em; }
+    .tobira-meta-group { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .tobira-date { font-size: 0.8rem; }
+    .tobira-count { font-size: 0.8rem; }
+    .tobira-author { font-size: 1rem; font-weight: bold; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; margin-top: auto; }
 
-    /* 本文ページ（縦書き） */
+    /* 本文ページ（縦書き・厳密なカラム送りで文庫用紙内に固定） */
     .body-text-page {
       padding-top: 50px;
+      padding-bottom: 35px;
+      padding-left: 30px;
+      padding-right: 30px;
+      height: 100%;
       writing-mode: vertical-rl;
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
       line-height: 2.1;
       letter-spacing: 0.08em;
-      column-width: calc(100% - 50px);
-      column-gap: 50px;
-      column-fill: auto;
+      column-width: calc(100% - 60px);
+      column-gap: 60px;
+      column-fill: auto;      /* あふれた文章をきっちり次のページカラムへ送る */
+      overflow: visible;
     }
     .body-text-page p {
       text-indent: 1em; margin-left: 1.1em; word-break: break-all;
@@ -184,7 +181,6 @@
     <div class="nav-right">
       <button class="btn-ui" onclick="changeFontSize(0.08)">A↑</button>
       <button class="btn-ui" onclick="changeFontSize(-0.08)">A↓</button>
-      <!-- スタイリッシュなボタン表示 -->
       <button class="btn-ui" onclick="toggleTheme()" id="theme-btn">紙色：生成り</button>
       <button class="btn-ui" onclick="toggleBookmark()">しおり <span id="bm-mark"></span></button>
     </div>
@@ -202,7 +198,7 @@
     <!-- ビューポート -->
     <div class="page-viewport-container" id="viewport-container">
       
-      <!-- 1ページ目：横書き扉デザイン -->
+      <!-- 扉ページ（カウント対象外） -->
       <div class="page-sheet">
         <div class="sketch-tobira-page">
           <div class="tobira-border-box">
@@ -210,7 +206,6 @@
             <div class="tobira-title" id="tobira-title-text">佳人</div>
             <div class="tobira-meta-group">
               <div class="tobira-date" id="tobira-date-text">2026.08.21</div>
-              <!-- 下線を廃止した純本文の文字数表示 -->
               <div class="tobira-count" id="tobira-count-text">0文字</div>
             </div>
             <div class="tobira-author">北風小僧</div>
@@ -218,10 +213,8 @@
         </div>
       </div>
 
-      <!-- 本文（2ページ目以降・縦書き） -->
-      <div class="page-sheet body-text-page" id="novel-text">
-        <!-- ★ここに本文テキスト（.txt）が自動流し込みされます★ -->
-      </div>
+      <!-- 本文（ここからが本文1ページ目） -->
+      <div class="page-sheet body-text-page" id="novel-text"></div>
 
     </div>
   </div>
@@ -229,7 +222,7 @@
   <!-- 下部操作UI -->
   <div class="bottom-navbar" id="bottom-nav">
     <div class="page-bubble" id="page-bubble-text">1 / 1 ページ</div>
-    <input type="range" class="slider-input" id="page-slider" min="1" max="1" value="1" oninput="onSliderChange(this.value)">
+    <input type="range" class="slider-input" id="page-slider" min="0" max="1" value="0" oninput="onSliderChange(this.value)">
   </div>
 
   <script src="data.js"></script>
@@ -252,15 +245,20 @@
         document.getElementById('tobira-genre-text').innerText = genreMap[currentArticle.genre];
       }
 
+      if (currentArticle.charCount !== undefined) {
+        document.getElementById('tobira-count-text').innerText = `${currentArticle.charCount.toLocaleString()}文字`;
+      }
+
       if (currentArticle.file) {
         fetch(currentArticle.file)
           .then(res => res.text())
           .then(text => {
             novelText.innerHTML = '';
             
-            // 2ページ目以降の「純粋な本文テキスト」のみで文字数を自動カウント（改行・空白除外）
-            const cleanText = text.replace(/\s+/g, '');
-            document.getElementById('tobira-count-text').innerText = `${cleanText.length.toLocaleString()}文字`;
+            if (currentArticle.charCount === undefined) {
+              const cleanText = text.replace(/\s+/g, '');
+              document.getElementById('tobira-count-text').innerText = `${cleanText.length.toLocaleString()}文字`;
+            }
 
             text.split(/\r?\n/).forEach(line => {
               if (line.trim() !== '') {
@@ -275,38 +273,41 @@
       }
     }
 
-    let totalPages = 1;
-    let currentPage = 1;
+    let bodyPages = 1;       /* 本文の総ページ数 */
+    let currentSheetIndex = 0; /* 0:扉ページ, 1〜:本文ページ */
 
     function recalcPages() {
       setTimeout(() => {
         const textScrollWidth = novelText.scrollWidth;
         const textClientWidth = novelText.clientWidth;
-        const textPages = Math.max(1, Math.round(textScrollWidth / textClientWidth));
-        
-        totalPages = 1 + textPages;
+        bodyPages = Math.max(1, Math.round(textScrollWidth / textClientWidth));
         
         const slider = document.getElementById('page-slider');
-        slider.max = totalPages;
+        slider.max = bodyPages; // シークバーの最大値を本文総ページ数に設定
         updateDisplay();
       }, 250);
     }
 
     function updateDisplay() {
-      document.getElementById('header-page').innerText = `${currentPage}ページ`;
-      document.getElementById('page-bubble-text').innerText = `${currentPage} / ${totalPages} ページ`;
-      document.getElementById('page-slider').value = currentPage;
-
-      // 1ページ目のみ上部ヘッダー（柱）を隠す
       const header = document.getElementById('page-header');
-      if (currentPage === 1) {
+      const bubble = document.getElementById('page-bubble-text');
+      const slider = document.getElementById('page-slider');
+
+      if (currentSheetIndex === 0) {
+        // 扉ページ表示時
         header.classList.add('hide');
+        bubble.innerText = `扉ページ`;
+        slider.value = 0;
       } else {
+        // 本文ページ表示時（本文の最初のページを1ページ目とする）
         header.classList.remove('hide');
+        document.getElementById('header-page').innerText = `${currentSheetIndex}ページ`;
+        bubble.innerText = `${currentSheetIndex} / ${bodyPages} ページ`;
+        slider.value = currentSheetIndex;
       }
 
-      // 右開き移動の適用
-      const offsetPercent = (currentPage - 1) * 100;
+      // 右開き移動（扉＝0、本文1ページ目＝1...）
+      const offsetPercent = currentSheetIndex * 100;
       container.style.transform = `translateX(${offsetPercent}%)`;
     }
 
@@ -321,28 +322,31 @@
         return;
       }
 
+      // 次のページ（左側タップ）
       if (clickX <= width * 0.35) {
-        if (currentPage < totalPages) currentPage++;
-      } else if (clickX >= width * 0.65) {
-        if (currentPage > 1) currentPage--;
+        if (currentSheetIndex < bodyPages) currentSheetIndex++;
+      } 
+      // 前のページ（右側タップ）
+      else if (clickX >= width * 0.65) {
+        if (currentSheetIndex > 0) currentSheetIndex--;
       }
 
       updateDisplay();
     }
 
     function onSliderChange(val) {
-      currentPage = parseInt(val);
+      currentSheetIndex = parseInt(val);
       updateDisplay();
     }
 
     let currentFontSize = 1.05;
     function changeFontSize(delta) {
-      currentFontSize = Math.max(0.8, Math.min(1.4, currentFontSize + delta));
+      // 最小文字サイズを 0.6rem まで小さくできるように拡張
+      currentFontSize = Math.max(0.6, Math.min(1.4, currentFontSize + delta));
       novelText.style.fontSize = `${currentFontSize}rem`;
       recalcPages();
     }
 
-    // スタイリッシュな紙色切り替え
     function toggleTheme() {
       const isWhite = document.body.classList.toggle('theme-white');
       document.getElementById('theme-btn').innerText = isWhite ? '紙色：純白' : '紙色：生成り';
@@ -350,14 +354,14 @@
 
     function toggleBookmark() {
       const saved = localStorage.getItem(`bm_${articleId}`);
-      if (saved == currentPage) {
+      if (saved == currentSheetIndex) {
         localStorage.removeItem(`bm_${articleId}`);
         document.getElementById('bm-mark').innerText = '';
         alert('しおりを外しました');
       } else {
-        localStorage.setItem(`bm_${articleId}`, currentPage);
+        localStorage.setItem(`bm_${articleId}`, currentSheetIndex);
         document.getElementById('bm-mark').innerText = '🔖';
-        alert(`${currentPage}ページにしおりを挟みました`);
+        alert(`${currentSheetIndex === 0 ? '扉' : currentSheetIndex + 'ページ'}にしおりを挟みました`);
       }
     }
   </script>
