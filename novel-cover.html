@@ -57,6 +57,7 @@
       text-align: center;
     }
 
+    /* 元のカード・枠線を完全保持 */
     .book-cover-card {
       border: 1px solid #111;
       background-color: #fff;
@@ -129,9 +130,9 @@
       background-color: #333;
     }
 
-    /* しおりから読むボタン */
+    /* しおりから読むボタン（🔖マーク削除） */
     .btn-bookmark {
-      display: none; /* 初期状態は非表示 */
+      display: none;
       width: 100%;
       border: 1px solid #111;
       background-color: #fff;
@@ -221,17 +222,17 @@
   <div class="cover-container">
     <div class="book-cover-card">
       <div class="book-genre-tag" id="cover-genre">― 小説 ―</div>
-      <h1 class="book-title" id="cover-title">作品タイトル</h1>
+      <h1 class="book-title" id="cover-title">佳人</h1>
       <div class="book-author">北風小僧</div>
-      <div class="book-meta" id="cover-meta">2026.00.00｜0文字</div>
+      <div class="book-meta" id="cover-meta">2026.08.21｜0文字</div>
     </div>
 
     <div class="btn-group">
       <!-- 作品を読むボタン -->
       <a href="#" id="read-btn" class="btn-read">作品を読む ＞</a>
       
-      <!-- しおりを指している場合のみ表示されるボタン -->
-      <a href="#" id="bookmark-btn" class="btn-bookmark">🔖 しおりから読む</a>
+      <!-- しおりを指している場合のみ表示されるボタン（アイコンなし） -->
+      <a href="#" id="bookmark-btn" class="btn-bookmark">しおりから読む</a>
     </div>
   </div>
 
@@ -254,42 +255,33 @@
 
   <script src="data.js"></script>
   <script>
-    // URLから作品IDを取得
     const params = new URLSearchParams(window.location.search);
-    const articleId = params.get('id');
+    const articleId = params.get('id') || 'kajin';
 
-    // data.js から対象データを検索
-    const currentArticle = allArticles.find(item => item.id === articleId);
+    const currentArticle = typeof allArticles !== 'undefined' ? allArticles.find(item => item.id === articleId) : null;
 
     if (currentArticle) {
       document.title = `${currentArticle.title}｜北風小僧`;
       document.getElementById('cover-genre').innerText = `― ${genreNames[currentArticle.genre] || '小説'} ―`;
       document.getElementById('cover-title').innerText = currentArticle.title;
       
-      // リーダー画面と統一された文字数表示（charCountの数値フォーマット変換またはlength）
-      const charCountStr = currentArticle.charCount !== undefined 
+      const charStr = (currentArticle.charCount !== undefined) 
         ? `${currentArticle.charCount.toLocaleString()}文字` 
         : (currentArticle.length || '0文字');
 
-      document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${charCountStr}`;
-      
-      // 縦書きリーダー画面へのリンク
+      document.getElementById('cover-meta').innerText = `${currentArticle.date}｜${charStr}`;
       document.getElementById('read-btn').href = `novel-reader.html?id=${currentArticle.id}`;
 
-      // しおり情報の判定と処理（1作品につき1箇所）
+      // しおり判定とボタン制御
       const savedBookmark = localStorage.getItem(`bm_${currentArticle.id}`);
       if (savedBookmark !== null) {
         const pageNum = parseInt(savedBookmark);
-        const pageText = pageNum === 0 ? '扉' : `${pageNum}ページ`;
         const bmBtn = document.getElementById('bookmark-btn');
         
         bmBtn.style.display = 'block';
-        bmBtn.innerText = `🔖 しおりから読む (${pageText})`;
+        bmBtn.innerText = `しおりから読む (${pageNum === 0 ? '扉' : pageNum + 'ページ'})`;
         bmBtn.href = `novel-reader.html?id=${currentArticle.id}&page=${pageNum}`;
       }
-    } else {
-      document.getElementById('cover-title').innerText = '作品が見つかりません';
-      document.getElementById('read-btn').style.display = 'none';
     }
 
     function toggleMenu() {
