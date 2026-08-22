@@ -74,14 +74,13 @@
       touch-action: pan-y;
     }
 
-    /* ページ上部の柱 */
+    /* ページ上部の柱（横線を削除） */
     .page-header-柱 {
-      position: absolute; top: 15px; left: 35px; right: 35px;
+      position: absolute; top: 16px; left: 30px; right: 30px;
       display: flex; justify-content: space-between; align-items: center;
       font-size: 0.72rem; opacity: 0.65; pointer-events: none;
       writing-mode: horizontal-tb;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      padding-bottom: 4px;
+      padding-bottom: 0;
       z-index: 10;
       transition: opacity 0.2s;
     }
@@ -131,15 +130,15 @@
       margin-bottom: 25px;
     }
 
-    /* 本文ページ（行間を1.6へ調整） */
+    /* 本文ページ（上下左右にゆとりを持たせ、行間を1.45へ） */
     .body-text-page {
-      padding: 45px 25px 25px;
+      padding: 42px 30px 30px;
       height: 100%; width: 100%;
       writing-mode: vertical-rl;
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
-      line-height: 1.6;
+      line-height: 1.45;
       letter-spacing: 0.04em;
       column-fill: auto;
       overflow: hidden;
@@ -203,7 +202,7 @@
     
     <div class="page-header-柱 hide" id="page-header">
       <span id="header-title">佳人</span>
-      <span id="header-page">1ページ</span>
+      <span id="header-page">1</span>
     </div>
 
     <div class="page-viewport-container" id="viewport-container">
@@ -254,7 +253,6 @@
       const count = fullText.length;
       document.getElementById('tobira-count-text').innerText = count.toLocaleString() + '文字';
       
-      // カバー用に文字数をローカルストレージへも保存
       localStorage.setItem(`charCount_${articleId}`, count);
     }
 
@@ -281,12 +279,12 @@
     function recalcPages() {
       syncCharCount();
       setTimeout(() => {
-        const pWidth = paperEl.clientWidth - 50;
+        const pWidth = paperEl.clientWidth - 60;
         novelText.style.columnWidth = `${pWidth}px`;
-        novelText.style.columnGap = '50px';
+        novelText.style.columnGap = '60px';
 
         const textScrollWidth = novelText.scrollWidth;
-        bodyPages = Math.max(1, Math.round(textScrollWidth / (pWidth + 50)));
+        bodyPages = Math.max(1, Math.round(textScrollWidth / (pWidth + 60)));
         
         const slider = document.getElementById('page-slider');
         slider.max = bodyPages;
@@ -316,7 +314,7 @@
         slider.value = 0;
       } else {
         header.classList.remove('hide');
-        document.getElementById('header-page').innerText = `${currentSheetIndex}ページ`;
+        document.getElementById('header-page').innerText = `${currentSheetIndex}`;
         
         if (isCurrentBookmarked) {
           bubble.innerText = `🔖 ${currentSheetIndex} / ${bodyPages} ページ (しおり)`;
@@ -332,7 +330,7 @@
       container.style.transform = `translateX(${offsetPercent}%)`;
     }
 
-    // タップ & スライド（右へスライド＝進む、左へスライド＝戻る）
+    /* タップ & スライド（右へスライド＝進む、左へスライド＝戻る） */
     let startX = 0;
     let startY = 0;
 
@@ -347,18 +345,16 @@
       const diffX = endX - startX;
       const diffY = endY - startY;
 
-      // 横スライド判定（30px以上）
       if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX > 0) { // 右へスライド（次のページへ進む）
+        if (diffX > 0) {
           if (currentSheetIndex < bodyPages) currentSheetIndex++;
-        } else { // 左へスライド（前のページへ戻る）
+        } else {
           if (currentSheetIndex > 0) currentSheetIndex--;
         }
         updateDisplay();
         return;
       }
 
-      // タップ判定
       if (Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
         const rect = paperEl.getBoundingClientRect();
         const clickX = endX - rect.left;
