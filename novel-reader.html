@@ -2,144 +2,212 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>読書｜北風小僧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>縦書きリーダー｜北風小僧</title>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #faf8f5; color: #111; font-family: 'Shippori Mincho', serif; }
     
-    .controls {
-      position: fixed; left: 0; width: 100%; z-index: 200; background: rgba(255, 255, 255, 0.95);
-      transition: opacity 0.25s ease; opacity: 0; pointer-events: none;
+    /* テーマ定義 */
+    :root {
+      --bg-color: #fcfcfc;
+      --text-color: #111111;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --panel-bg: rgba(255, 255, 255, 0.95);
     }
-    .controls.active { opacity: 1; pointer-events: auto; }
-    
-    .reader-header { top: 0; height: 50px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; }
-    .reader-footer { bottom: 0; height: 45px; display: flex; justify-content: center; align-items: center; border-top: 1px solid #ddd; font-size: 0.85rem; }
-    .ctrl-btn { background: none; border: none; font-family: inherit; font-size: 0.95rem; cursor: pointer; color: #111; }
-    .bookmark-btn.bookmarked { color: #d9534f; font-weight: bold; }
+    body.theme-dark {
+      --bg-color: #1a1a1a;
+      --text-color: #e0e0e0;
+      --border-color: rgba(255, 255, 255, 0.15);
+      --panel-bg: rgba(30, 30, 30, 0.95);
+    }
+    body.theme-sepia {
+      --bg-color: #f4ecd8;
+      --text-color: #5b4636;
+      --border-color: rgba(91, 70, 54, 0.15);
+      --panel-bg: rgba(244, 236, 216, 0.95);
+    }
 
-    .touch-zone { position: fixed; top: 0; bottom: 0; z-index: 100; }
-    .zone-left { left: 0; width: 35%; }
-    .zone-center { left: 35%; width: 30%; }
-    .zone-right { right: 0; width: 35%; }
+    body {
+      font-family: 'Shippori Mincho', "Yu Mincho", "MS PMincho", serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      overflow: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
 
-    .book-viewport { width: 100%; height: 100%; padding: 60px 20px; }
-    .pages-container {
-      height: 100%; writing-mode: vertical-rl; -webkit-writing-mode: vertical-rl;
-      display: flex; flex-direction: column; transition: transform 0.3s ease;
+    /* 読書ツールバー（上部固定） */
+    .reader-header {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease;
     }
-    .page {
-      min-width: 100vw; height: 100%; padding: 0 5vw;
-      font-size: 1.05rem; line-height: 2.1; letter-spacing: 0.08em;
-      white-space: pre-wrap; text-align: justify; flex-shrink: 0;
+    .reader-header.hide { transform: translateY(-100%); }
+
+    .back-btn {
+      color: var(--text-color); text-decoration: none; font-size: 0.9rem; font-weight: bold;
     }
-    .cover-page { display: flex; justify-content: center; align-items: center; text-align: center; }
-    .cover-title { font-size: 2.2rem; font-weight: 800; letter-spacing: 0.2em; }
+
+    .controls-group { display: flex; align-items: center; gap: 15px; }
+    .control-btn {
+      background: none; border: 1px solid var(--text-color); color: var(--text-color);
+      padding: 4px 10px; font-size: 0.85rem; cursor: pointer; border-radius: 3px;
+      font-family: inherit;
+    }
+
+    /* 縦書き表示領域（右から左へスクロール） */
+    .reader-wrapper {
+      height: 100vh;
+      padding: 80px 40px 60px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      flex-direction: row-reverse; /* 右から左へ配置 */
+    }
+
+    .novel-content {
+      writing-mode: vertical-rl;
+      -webkit-writing-mode: vertical-rl;
+      text-orientation: upright;
+      font-size: 1.05rem; /* 初期フォントサイズ */
+      line-height: 2.1;
+      letter-spacing: 0.08em;
+      height: 100%;
+      max-height: 100%;
+      word-break: break-all;
+    }
+
+    .novel-title-header {
+      font-size: 1.8em;
+      font-weight: bold;
+      margin-left: 3em; /* 縦書き時の左（後続文章）との余白 */
+    }
+
+    .novel-author-header {
+      font-size: 1em;
+      margin-left: 4em;
+      align-self: flex-end;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    .novel-text-body p {
+      margin-left: 1.5em; /* 縦書き時の段落間余白 */
+      text-indent: 1em;
+    }
+
+    /* カスタムスクロールバー（横スクロール用） */
+    .reader-wrapper::-webkit-scrollbar { height: 6px; }
+    .reader-wrapper::-webkit-scrollbar-track { background: transparent; }
+    .reader-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
   </style>
 </head>
 <body>
 
-  <div class="controls reader-header" id="controls-header">
-    <button class="ctrl-btn" id="back-btn">← 戻る</button>
-    <button class="ctrl-btn bookmark-btn" id="bookmark-btn" onclick="toggleBookmark()">🔖 栞をはさむ</button>
-  </div>
+  <!-- コントロールバー -->
+  <header class="reader-header" id="reader-header">
+    <a href="javascript:history.back()" class="back-btn">＜ 戻る</a>
+    <div class="controls-group">
+      <button class="control-btn" onclick="changeFontSize(-1)">A-</button>
+      <button class="control-btn" onclick="changeFontSize(1)">A+</button>
+      <button class="control-btn" onclick="toggleTheme()">背景切替</button>
+      <button class="control-btn" onclick="toggleFullscreen()">全画面</button>
+    </div>
+  </header>
 
-  <div class="touch-zone zone-left" onclick="nextPage()"></div>
-  <div class="touch-zone zone-center" onclick="toggleControls()"></div>
-  <div class="touch-zone zone-right" onclick="prevPage()"></div>
+  <!-- 縦書き本文エリア -->
+  <main class="reader-wrapper" id="reader-wrapper" onclick="toggleHeader()">
+    <article class="novel-content" id="novel-content">
+      
+      <!-- タイトルと著者名 -->
+      <h1 class="novel-title-header" id="novel-title">作品タイトル</h1>
+      <div class="novel-author-header">北風小僧</div>
 
-  <div class="book-viewport">
-    <div class="pages-container" id="pages-container"></div>
-  </div>
+      <!-- 本文エリア -->
+      <div class="novel-text-body" id="novel-text-body">
+        <p>ここに本文が入ります。テキストファイル（txt/xxx.txt）を自動的に読み込んで、段落ごとに縦書きで表示します。</p>
+        <p>画面をクリック（タップ）すると、上部の操作メニューが非表示になり、読書に没頭できます。</p>
+        <p>右上のボタンから、文字サイズ変更・背景色の切替（白・黒・セピア）・全画面表示が可能です。</p>
+      </div>
 
-  <div class="controls reader-footer" id="controls-footer">
-    <span id="page-counter">1 / 1 ページ</span>
-  </div>
+    </article>
+  </main>
 
   <script src="data.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const workId = urlParams.get('id') || 'kajin';
-    const work = worksData[workId];
-    
-    let currentPage = parseInt(urlParams.get('page')) || 1;
-    let totalPages = 1;
-    const container = document.getElementById('pages-container');
+    // URLから作品IDを取得
+    const params = new URLSearchParams(window.location.search);
+    const articleId = params.get('id');
+    const currentArticle = allArticles.find(item => item.id === articleId);
 
-    if (work && work.pages) {
-      document.title = `${work.title}｜北風小僧`;
-      document.getElementById('back-btn').onclick = () => location.href = `novel-cover.html?id=${workId}`;
+    // 作品データの反映と外部テキストファイルの読み込み
+    if (currentArticle) {
+      document.title = `${currentArticle.title}｜北風小僧`;
+      document.getElementById('novel-title').innerText = currentArticle.title;
 
-      // 表紙ページの生成
-      let html = `
-        <div class="page cover-page">
-          <div>
-            <h1 class="cover-title">${work.title}</h1>
-            <p style="margin-top: 20px;">北風小僧 著</p>
-            <p style="margin-top: 40px; font-size: 0.85rem; color: #666;">${work.date}<br>${work.length}</p>
-          </div>
-        </div>
-      `;
+      // txtファイルが存在する場合はFetchで読み込む
+      if (currentArticle.file) {
+        fetch(currentArticle.file)
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+          })
+          .then(text => {
+            const container = document.getElementById('novel-text-body');
+            container.innerHTML = ''; // 初期化
 
-      // 本文ページの生成
-      work.pages.forEach(pText => {
-        html += `<div class="page">${pText}</div>`;
-      });
-
-      container.innerHTML = html;
-      totalPages = work.pages.length + 1; // 表紙分+1
-      goToPage(currentPage);
+            // 改行ごとに段落（<p>）に分割して挿入
+            const paragraphs = text.split(/\r?\n/);
+            paragraphs.forEach(pText => {
+              if (pText.trim() !== '') {
+                const p = document.createElement('p');
+                p.textContent = pText;
+                container.appendChild(p);
+              }
+            });
+          })
+          .catch(error => {
+            console.error('テキストファイルの読み込みエラー:', error);
+          });
+      }
     }
 
-    function goToPage(page) {
-      currentPage = Math.max(1, Math.min(page, totalPages));
-      const offset = (currentPage - 1) * 100;
-      container.style.transform = `translateX(${offset}vw)`;
-      document.getElementById('page-counter').innerText = `${currentPage} / ${totalPages} ページ`;
-      updateBookmarkUI();
+    // 文字サイズ変更機能
+    let currentFontSize = 1.05;
+    function changeFontSize(delta) {
+      currentFontSize = Math.max(0.8, Math.min(1.6, currentFontSize + (delta * 0.1)));
+      document.getElementById('novel-content').style.fontSize = `${currentFontSize}rem`;
     }
 
-    function nextPage() { if (currentPage < totalPages) goToPage(currentPage + 1); }
-    function prevPage() { if (currentPage > 1) goToPage(currentPage - 1); }
-
-    function toggleControls() {
-      document.getElementById('controls-header').classList.toggle('active');
-      document.getElementById('controls-footer').classList.toggle('active');
+    // テーマ切替機能（白 -> 黒 -> セピア）
+    const themes = ['', 'theme-dark', 'theme-sepia'];
+    let currentThemeIdx = 0;
+    function toggleTheme() {
+      document.body.classList.remove(themes[currentThemeIdx]);
+      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+      if (themes[currentThemeIdx]) {
+        document.body.classList.add(themes[currentThemeIdx]);
+      }
     }
 
-    function toggleBookmark() {
-      const saved = localStorage.getItem(`bookmark_${workId}`);
-      if (saved == currentPage) {
-        localStorage.removeItem(`bookmark_${workId}`);
+    // ヘッダー表示/非表示切替
+    function toggleHeader() {
+      document.getElementById('reader-header').classList.toggle('hide');
+    }
+
+    // 全画面表示切替
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
       } else {
-        localStorage.setItem(`bookmark_${workId}`, currentPage);
-      }
-      updateBookmarkUI();
-    }
-
-    function updateBookmarkUI() {
-      const saved = localStorage.getItem(`bookmark_${workId}`);
-      const btn = document.getElementById('bookmark-btn');
-      if (saved == currentPage) {
-        btn.innerText = "🔖 栞あり";
-        btn.classList.add('bookmarked');
-      } else {
-        btn.innerText = "🔖 栞をはさむ";
-        btn.classList.remove('bookmarked');
+        if (document.exitFullscreen) document.exitFullscreen();
       }
     }
-
-    let touchStartX = 0;
-    document.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
-    document.addEventListener('touchend', e => {
-      const diffX = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diffX) > 50) {
-        if (diffX > 0) prevPage();
-        else nextPage();
-      }
-    });
   </script>
 </body>
 </html>
