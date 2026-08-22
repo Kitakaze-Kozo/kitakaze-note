@@ -10,13 +10,12 @@
 
     :root {
       --bg-outer: #333333;
-      --paper-bg: #f8f4e6;        /* 初期値：淡いクリーム色 */
+      --paper-bg: #f8f4e6;        /* 生成り（クリーム色） */
       --text-color: #2b2b2b;
       --ui-bg: rgba(255, 255, 255, 0.95);
       --ui-text: #111111;
     }
 
-    /* 背景色切り替え：白色テーマ */
     body.theme-white {
       --paper-bg: #ffffff;        /* 白色 */
       --text-color: #111111;
@@ -47,12 +46,14 @@
     }
     .top-navbar.active { transform: translateY(0); }
 
-    .nav-left, .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-left, .nav-right { display: flex; align-items: center; gap: 8px; }
     
+    /* ボタンの改行を防止して洗練されたデザインに */
     .btn-ui {
       background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.15);
       border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; font-weight: bold;
       color: var(--ui-text); cursor: pointer; font-family: inherit;
+      white-space: nowrap;
       display: flex; align-items: center; justify-content: center;
     }
 
@@ -70,7 +71,7 @@
       transition: background-color 0.3s;
     }
 
-    /* ページ上部の柱（タイトル ＆ ページ数） */
+    /* ページ上部の柱（作品名 ＆ ページ数） */
     .page-header-柱 {
       position: absolute; top: 15px; left: 35px; right: 35px;
       display: flex; justify-content: space-between; align-items: center;
@@ -79,56 +80,67 @@
       border-bottom: 1px solid rgba(0,0,0,0.08);
       padding-bottom: 4px;
       z-index: 10;
+      transition: opacity 0.2s;
+    }
+    /* 1ページ目（扉）では上部の柱を非表示にして被りを解消 */
+    .page-header-柱.hide {
+      opacity: 0;
     }
 
-    /* 全体ビューポート（右開き構造） */
+    /* コンテナ構造（右開き） */
     .page-viewport-container {
       width: 100%; height: 100%;
       display: flex;
-      flex-direction: row-reverse; /* 右から左へページが並ぶ構造 */
+      flex-direction: row-reverse;
       transition: transform 0.3s ease-out;
     }
 
-    /* 各ページ枠 */
     .page-sheet {
       min-width: 100%; height: 100%;
-      padding: 50px 30px 30px;
+      padding: 35px 25px 25px;
       flex-shrink: 0;
     }
 
-    /* 【修正点1】1ページ目：完全横書きの扉デザイン */
+    /* 1ページ目：横書き扉デザイン */
     .sketch-tobira-page {
       width: 100%; height: 100%;
-      padding: 10px;
+      padding: 5px;
       display: flex; justify-content: center; align-items: center;
-      writing-mode: horizontal-tb !important; /* 強制的に横書き */
+      writing-mode: horizontal-tb !important;
     }
     .tobira-border-box {
       width: 100%; height: 100%;
       border: 1px solid var(--text-color);
-      padding: 30px 20px;
+      padding: 35px 20px 25px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: space-between;
       text-align: center;
       writing-mode: horizontal-tb !important;
     }
-    .tobira-genre { font-size: 0.9rem; letter-spacing: 0.1em; }
-    .tobira-title { font-size: 1.8rem; font-weight: bold; margin: 15px 0; }
-    .tobira-meta-group { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .tobira-genre { font-size: 0.85rem; letter-spacing: 0.15em; margin-top: 5px; }
+    
+    /* タイトルの位置を少し下げてゆったり配置 */
+    .tobira-title { font-size: 1.85rem; font-weight: bold; margin-top: 25px; margin-bottom: 15px; letter-spacing: 0.1em; }
+    
+    .tobira-meta-group { display: flex; flex-direction: column; gap: 6px; align-items: center; }
     .tobira-date { font-size: 0.85rem; }
-    .tobira-count { font-size: 0.85rem; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; }
+    
+    /* 下線を削除した文字数表示 */
+    .tobira-count { font-size: 0.85rem; padding-bottom: 2px; }
+    
     .tobira-author { font-size: 1.05rem; font-weight: bold; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; margin-top: auto; }
 
     /* 本文ページ（縦書き） */
     .body-text-page {
+      padding-top: 50px;
       writing-mode: vertical-rl;
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
       line-height: 2.1;
       letter-spacing: 0.08em;
-      column-width: calc(100% - 60px);
-      column-gap: 60px;
+      column-width: calc(100% - 50px);
+      column-gap: 50px;
       column-fill: auto;
     }
     .body-text-page p {
@@ -156,10 +168,9 @@
       border-width: 5px 5px 0; border-style: solid; border-color: #111 transparent;
     }
 
-    /* 【修正点3】シークバーを右端起点（右が1ページ目）に設定 */
     .slider-input {
       width: 100%; max-width: 320px; accent-color: #111; cursor: pointer;
-      direction: rtl; /* 右から左（右端が最小値/1ページ目） */
+      direction: rtl;
     }
   </style>
 </head>
@@ -173,8 +184,8 @@
     <div class="nav-right">
       <button class="btn-ui" onclick="changeFontSize(0.08)">A↑</button>
       <button class="btn-ui" onclick="changeFontSize(-0.08)">A↓</button>
-      <!-- 【修正点2】フォーマルなボタン表記（白/生成色の切替） -->
-      <button class="btn-ui" onclick="toggleTheme()">表示 (生成/白)</button>
+      <!-- スタイリッシュなボタン表示 -->
+      <button class="btn-ui" onclick="toggleTheme()" id="theme-btn">紙色：生成り</button>
       <button class="btn-ui" onclick="toggleBookmark()">しおり <span id="bm-mark"></span></button>
     </div>
   </div>
@@ -182,16 +193,16 @@
   <!-- 文庫本用紙本体 -->
   <div class="book-paper" onclick="handlePaperClick(event)">
     
-    <!-- ページ上部：タイトル ＆ ページ数 -->
-    <div class="page-header-柱">
+    <!-- ページ上部の柱 -->
+    <div class="page-header-柱 hide" id="page-header">
       <span id="header-title">作品名</span>
       <span id="header-page">1ページ</span>
     </div>
 
-    <!-- コンテナ -->
+    <!-- ビューポート -->
     <div class="page-viewport-container" id="viewport-container">
       
-      <!-- 1ページ目：手書きスケッチ再現（完全横書き） -->
+      <!-- 1ページ目：横書き扉デザイン -->
       <div class="page-sheet">
         <div class="sketch-tobira-page">
           <div class="tobira-border-box">
@@ -199,6 +210,7 @@
             <div class="tobira-title" id="tobira-title-text">佳人</div>
             <div class="tobira-meta-group">
               <div class="tobira-date" id="tobira-date-text">2026.08.21</div>
+              <!-- 下線を廃止した純本文の文字数表示 -->
               <div class="tobira-count" id="tobira-count-text">0文字</div>
             </div>
             <div class="tobira-author">北風小僧</div>
@@ -208,7 +220,7 @@
 
       <!-- 本文（2ページ目以降・縦書き） -->
       <div class="page-sheet body-text-page" id="novel-text">
-        <!-- ★★★ ここに本文テキスト（.txt）を自動読み込み、または直接記述します ★★★ -->
+        <!-- ★ここに本文テキスト（.txt）が自動流し込みされます★ -->
       </div>
 
     </div>
@@ -246,7 +258,7 @@
           .then(text => {
             novelText.innerHTML = '';
             
-            // 本文のみ（タイトル・日付・スペース除外）の文字数を計測
+            // 2ページ目以降の「純粋な本文テキスト」のみで文字数を自動カウント（改行・空白除外）
             const cleanText = text.replace(/\s+/g, '');
             document.getElementById('tobira-count-text').innerText = `${cleanText.length.toLocaleString()}文字`;
 
@@ -272,7 +284,6 @@
         const textClientWidth = novelText.clientWidth;
         const textPages = Math.max(1, Math.round(textScrollWidth / textClientWidth));
         
-        // 1ページ目（扉） + 本文ページ数
         totalPages = 1 + textPages;
         
         const slider = document.getElementById('page-slider');
@@ -286,30 +297,33 @@
       document.getElementById('page-bubble-text').innerText = `${currentPage} / ${totalPages} ページ`;
       document.getElementById('page-slider').value = currentPage;
 
-      // ページ位置の計算（右開き）
+      // 1ページ目のみ上部ヘッダー（柱）を隠す
+      const header = document.getElementById('page-header');
+      if (currentPage === 1) {
+        header.classList.add('hide');
+      } else {
+        header.classList.remove('hide');
+      }
+
+      // 右開き移動の適用
       const offsetPercent = (currentPage - 1) * 100;
       container.style.transform = `translateX(${offsetPercent}%)`;
     }
 
-    // タップ操作判定（本と同じ：左タップで次ページ、右タップで前ページ）
     function handlePaperClick(e) {
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const width = rect.width;
 
-      // 中央タップで上下UIの表示切替
       if (clickX > width * 0.35 && clickX < width * 0.65) {
         document.getElementById('top-nav').classList.toggle('active');
         document.getElementById('bottom-nav').classList.toggle('active');
         return;
       }
 
-      // 左側タップで次のページへ（進む）
       if (clickX <= width * 0.35) {
         if (currentPage < totalPages) currentPage++;
-      } 
-      // 右側タップで前のページへ（戻る）
-      else if (clickX >= width * 0.65) {
+      } else if (clickX >= width * 0.65) {
         if (currentPage > 1) currentPage--;
       }
 
@@ -328,9 +342,10 @@
       recalcPages();
     }
 
-    /* 淡いクリーム色 ⇔ 白色 の切替 */
+    // スタイリッシュな紙色切り替え
     function toggleTheme() {
-      document.body.classList.toggle('theme-white');
+      const isWhite = document.body.classList.toggle('theme-white');
+      document.getElementById('theme-btn').innerText = isWhite ? '紙色：純白' : '紙色：生成り';
     }
 
     function toggleBookmark() {
