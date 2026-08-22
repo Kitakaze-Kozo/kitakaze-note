@@ -3,25 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>佳人｜文庫リーダー</title>
+  <title>縦書きリーダー｜北風小僧</title>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-outer: #222222;        /* 画面外側の背景色 */
-      --paper-bg: #f8f4e6;        /* 文庫本の紙色（生成り色） */
-      --text-color: #2b2b2b;      /* 墨色 */
-      --border-color: #c8c2b0;
+      --bg-outer: #222222;
+      --paper-bg: #f8f4e6;
+      --text-color: #2b2b2b;
       --ui-bg: rgba(255, 255, 255, 0.92);
       --ui-text: #111111;
     }
 
     body.theme-dark {
       --bg-outer: #0a0a0a;
-      --paper-bg: #1c1c1c;        /* 夜間用 */
+      --paper-bg: #1c1c1c;
       --text-color: #cccccc;
-      --border-color: #333333;
       --ui-bg: rgba(30, 30, 30, 0.92);
       --ui-text: #ffffff;
     }
@@ -39,7 +37,7 @@
       align-items: center;
     }
 
-    /* 上部操作バー（タップで表示） */
+    /* 上部操作UI */
     .top-navbar {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 2000;
       background: var(--ui-bg); border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -61,7 +59,7 @@
     }
     body.theme-dark .btn-ui { background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.2); }
 
-    /* 文庫本紙面コンテナ（文庫本比率 1 : 1.414） */
+    /* 文庫本用紙コンテナ */
     .book-paper {
       width: 92vw;
       height: calc(92vw * 1.414);
@@ -75,62 +73,60 @@
       transition: background-color 0.3s;
     }
 
-    /* ページの段落・縦書きコンテナ */
+    /* ページ上部の柱（作品名 & ページ数） */
+    .page-header-柱 {
+      position: absolute; top: 15px; left: 35px; right: 35px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72rem; opacity: 0.6; pointer-events: none;
+      writing-mode: horizontal-tb;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding-bottom: 4px;
+    }
+    body.theme-dark .page-header-柱 { border-bottom-color: rgba(255,255,255,0.1); }
+
+    /* 縦書きページ送りコンテナ */
     .page-viewport {
       width: 100%; height: 100%;
-      padding: 45px 30px 40px;
+      padding: 50px 30px 30px;
       writing-mode: vertical-rl;
       -webkit-writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 1.05rem;
       line-height: 2.1;
       letter-spacing: 0.08em;
-      column-width: calc(100% - 60px); /* 1ページずつの幅 */
+      column-width: calc(100% - 60px);
       column-gap: 60px;
       column-fill: auto;
     }
 
-    /* 岩波文庫風 扉（1ページ目） */
-    .bunkou-扉 {
+    /* 1ページ目：扉デザイン */
+    .sketch-tobira-page {
       width: 100%; height: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      border: 1px solid var(--text-color);
-      padding: 40px 20px;
-      text-align: center;
+      padding: 10px;
       margin-left: 30px;
+      display: flex; justify-content: center; align-items: center;
     }
-    .tobira-series { font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 5px; }
-    .tobira-code { font-size: 0.75rem; text-decoration: underline; margin-bottom: 40px; }
-    .tobira-title { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; }
-    .tobira-author { font-size: 1rem; margin-bottom: auto; }
-    .tobira-logo {
-      width: 40px; height: 40px; border: 2px solid var(--text-color); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;
-      margin-bottom: 30px;
+    .tobira-border-box {
+      width: 100%; height: 100%;
+      border: 1px solid var(--text-color);
+      padding: 30px 15px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: space-between;
+      text-align: center;
     }
-    .tobira-publisher { font-size: 0.9rem; letter-spacing: 0.3em; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; }
+    .tobira-genre { font-size: 0.9rem; letter-spacing: 0.1em; }
+    .tobira-title { font-size: 1.8rem; font-weight: bold; margin: 15px 0; }
+    .tobira-meta-group { display: flex; flex-direction: column; gap: 4px; }
+    .tobira-date { font-size: 0.85rem; }
+    .tobira-count { font-size: 0.85rem; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; }
+    .tobira-author { font-size: 1.05rem; font-weight: bold; border-bottom: 1px solid var(--text-color); padding-bottom: 2px; margin-top: auto; }
 
     /* 本文表示 */
     .novel-text p {
       text-indent: 1em; margin-left: 1.1em; word-break: break-all;
     }
 
-    /* ヘッダー柱（柱：作品タイトル） */
-    .page-header-柱 {
-      position: absolute; top: 15px; left: 30px; right: 30px;
-      display: flex; justify-content: space-between;
-      font-size: 0.72rem; opacity: 0.6; pointer-events: none;
-      writing-mode: horizontal-tb;
-    }
-
-    /* ノンブル（下部ページ数表示） */
-    .page-footer-ノンブル {
-      position: absolute; bottom: 12px; left: 30px;
-      font-size: 0.75rem; opacity: 0.7; pointer-events: none;
-      font-family: serif; writing-mode: horizontal-tb;
-    }
-
-    /* 下部シークバー（タップで表示） */
+    /* 下部操作UI */
     .bottom-navbar {
       position: fixed; bottom: 0; left: 0; width: 100%; z-index: 2000;
       background: var(--ui-bg); border-top: 1px solid rgba(0,0,0,0.1);
@@ -142,7 +138,7 @@
     }
     .bottom-navbar.active { transform: translateY(0); }
 
-    /* 吹き出し風ページ表示（手書きスケッチ再現） */
+    /* 吹き出し風ページ表示 */
     .page-bubble {
       background: #111; color: #fff; font-size: 0.78rem; padding: 4px 10px;
       border-radius: 12px; position: relative; font-weight: bold;
@@ -162,7 +158,7 @@
   <!-- 上部操作UI -->
   <div class="top-navbar" id="top-nav">
     <div class="nav-left">
-      <button class="btn-ui" onclick="location.href='novel-cover.html?id=kajin'">＜ 戻る</button>
+      <button class="btn-ui" onclick="javascript:history.back()">＜ 戻る</button>
     </div>
     <div class="nav-right">
       <button class="btn-ui" onclick="changeFontSize(0.08)">A↑</button>
@@ -175,45 +171,37 @@
   <!-- 文庫本用紙本体 -->
   <div class="book-paper" onclick="handlePaperClick(event)">
     
-    <!-- 柱（ヘッダー） -->
+    <!-- 本のページ上部：タイトル ＆ ページ数 -->
     <div class="page-header-柱">
-      <span id="pillar-title">佳人</span>
-      <span>北風小僧</span>
+      <span id="header-title">作品名</span>
+      <span id="header-page">1ページ</span>
     </div>
 
     <!-- 縦書きビューポート -->
     <div class="page-viewport" id="viewport">
       
-      <!-- 1ページ目：岩波文庫風 扉 -->
-      <div class="bunkou-扉">
-        <div>
-          <div class="tobira-series">北 風 文 庫</div>
-          <div class="tobira-code">10-001-1</div>
-        </div>
-        <div>
+      <!-- 1ページ目：手書きスケッチ再現 扉 -->
+      <div class="sketch-tobira-page">
+        <div class="tobira-border-box">
+          <div class="tobira-genre" id="tobira-genre-text">ー小説ー</div>
           <div class="tobira-title" id="tobira-title-text">佳人</div>
-          <div class="tobira-author">北 風 小 僧　作</div>
-        </div>
-        <div>
-          <div class="tobira-logo">北風</div>
-          <div class="tobira-publisher">北風書店</div>
+          <div class="tobira-meta-group">
+            <div class="tobira-date" id="tobira-date-text">2026.08.21</div>
+            <div class="tobira-count" id="tobira-count-text">0文字</div>
+          </div>
+          <div class="tobira-author">北風小僧</div>
         </div>
       </div>
 
       <!-- 本文（txtから自動流し込み） -->
-      <div class="novel-text" id="novel-text">
-        <!-- ★ここに本文を打つ（txt/kajin.txt から自動的に読み込まれます）★ -->
-      </div>
+      <div class="novel-text" id="novel-text"></div>
 
     </div>
-
-    <!-- ノンブル（ページ番号） -->
-    <div class="page-footer-ノンブル" id="page-nombre">1</div>
   </div>
 
   <!-- 下部操作UI -->
   <div class="bottom-navbar" id="bottom-nav">
-    <div class="page-bubble" id="page-bubble-text">1ページ</div>
+    <div class="page-bubble" id="page-bubble-text">1 / 1 ページ</div>
     <input type="range" class="slider-input" id="page-slider" min="1" max="1" value="1" oninput="onSliderChange(this.value)">
   </div>
 
@@ -228,14 +216,25 @@
 
     if (currentArticle) {
       document.title = `${currentArticle.title}｜北風小僧`;
-      document.getElementById('pillar-title').innerText = currentArticle.title;
+      document.getElementById('header-title').innerText = currentArticle.title;
       document.getElementById('tobira-title-text').innerText = currentArticle.title;
+      document.getElementById('tobira-date-text').innerText = currentArticle.date;
+
+      const genreMap = { "red": "ー小説ー", "blue": "ー評論風ー", "green": "ー随筆ー" };
+      if (genreMap[currentArticle.genre]) {
+        document.getElementById('tobira-genre-text').innerText = genreMap[currentArticle.genre];
+      }
 
       if (currentArticle.file) {
         fetch(currentArticle.file)
           .then(res => res.text())
           .then(text => {
             novelText.innerHTML = '';
+            
+            // 本文のみの文字数を自動計測
+            const cleanText = text.replace(/\s+/g, '');
+            document.getElementById('tobira-count-text').innerText = `${cleanText.length.toLocaleString()}文字`;
+
             text.split(/\r?\n/).forEach(line => {
               if (line.trim() !== '') {
                 const p = document.createElement('p');
@@ -243,6 +242,7 @@
                 novelText.appendChild(p);
               }
             });
+
             recalcPages();
           });
       }
@@ -256,35 +256,39 @@
         const scrollW = viewport.scrollWidth;
         const clientW = viewport.clientWidth;
         totalPages = Math.max(1, Math.round(scrollW / clientW));
-        document.getElementById('page-slider').max = totalPages;
+        
+        const slider = document.getElementById('page-slider');
+        slider.max = totalPages;
         updateDisplay();
       }, 250);
     }
 
     function updateDisplay() {
-      document.getElementById('page-nombre').innerText = currentPage;
-      document.getElementById('page-bubble-text').innerText = `${currentPage}ページ`;
+      document.getElementById('header-page').innerText = `${currentPage}ページ`;
+      document.getElementById('page-bubble-text').innerText = `${currentPage} / ${totalPages} ページ`;
       document.getElementById('page-slider').value = currentPage;
     }
 
-    // タップ操作判定（中央タップでUI開閉 / 左右タップでページ移動）
+    // タップ操作判定（本と同じ：左タップで次ページ、右タップで前ページ）
     function handlePaperClick(e) {
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const width = rect.width;
 
-      // 中央30%のエリアをタップしたときUIをトグル
+      // 中央タップでUI開閉
       if (clickX > width * 0.35 && clickX < width * 0.65) {
         document.getElementById('top-nav').classList.toggle('active');
         document.getElementById('bottom-nav').classList.toggle('active');
         return;
       }
 
-      // 右側タップで前ページ、左側タップで次ページ（縦書き右開き）
-      if (clickX >= width * 0.65) {
-        if (currentPage > 1) currentPage--;
-      } else {
+      // 左側タップで次のページへ進む（スクロールは左方向へ）
+      if (clickX <= width * 0.35) {
         if (currentPage < totalPages) currentPage++;
+      } 
+      // 右側タップで前のページへ戻る
+      else if (clickX >= width * 0.65) {
+        if (currentPage > 1) currentPage--;
       }
 
       viewport.scrollLeft = -((currentPage - 1) * viewport.clientWidth);
@@ -297,7 +301,6 @@
       updateDisplay();
     }
 
-    // フォントサイズ変更
     let currentFontSize = 1.05;
     function changeFontSize(delta) {
       currentFontSize = Math.max(0.8, Math.min(1.4, currentFontSize + delta));
@@ -305,12 +308,10 @@
       recalcPages();
     }
 
-    // ダーク/クリーム切替
     function toggleTheme() {
       document.body.classList.toggle('theme-dark');
     }
 
-    // しおり
     function toggleBookmark() {
       const saved = localStorage.getItem(`bm_${articleId}`);
       if (saved == currentPage) {
